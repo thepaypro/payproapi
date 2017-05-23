@@ -5,17 +5,25 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
+use AppBundle\Controller\Traits\JWTResponseControllerTrait;
 
 class DefaultController extends Controller
 {
+    use JWTResponseControllerTrait;
+
     /**
-     * @Route("/", name="homepage")
+     * @Security("has_role('ROLE_USER')")
+     * @Route("/test", name="testpage")
      */
-    public function indexAction(Request $request)
+    public function test(UserInterface $user)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ]);
+        $responseData = [
+            'username' => $user->getUsername(),
+            'id'=> $user->getId()
+        ];
+
+        return $this->JWTResponse($user, $responseData);
     }
 }
