@@ -1,6 +1,6 @@
 <?php
 
-namespace UserBundle\EventListener;
+namespace UserBundle\EventSubscriber;
 
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Listener responsible to change the redirection at the end of the password resetting
  */
-class RegistrationSuccessListener implements EventSubscriberInterface
+class RegistrationSuccessSubscriber implements EventSubscriberInterface
 {
     private $router;
     private $JWTManager;

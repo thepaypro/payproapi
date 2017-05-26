@@ -5,10 +5,14 @@ services:
             - AppBundle\Entity\User
         tags:
             - { name: form.type, alias: app_user_registration }
-    payproapi.registration_success_listener:
-        class: UserBundle\EventListener\RegistrationSuccessListener
+    payproapi.registration_success_subscriber:
+        class: UserBundle\EventSubscriber\RegistrationSuccessSubscriber
         arguments: 
             - '@router'
             - '@lexik_jwt_authentication.jwt_manager'
+        tags:
+            - { name: kernel.event_subscriber }
+    payproapi.kernel_request_subscriber:
+        class: AppBundle\EventSubscriber\KernelRequestSubscriber
         tags:
             - { name: kernel.event_subscriber }

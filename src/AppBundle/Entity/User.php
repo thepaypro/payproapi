@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(name="Users")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @ORM\AttributeOverrides({
  *     @ORM\AttributeOverride(name="emailCanonical",
  *         column=@ORM\Column(
