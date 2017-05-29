@@ -18,10 +18,10 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        #TODO: set firewalls for register and resetting.
+        #TODO: set firewall for resetting.
         register:
             pattern:  ^/register
-            # methods: [POST]
+            methods: [POST]
             stateless: true
             anonymous: true
 
@@ -30,8 +30,7 @@ security:
             stateless: true
             anonymous: true
             form_login:
-                provider: fos_userbundle
-                check_path: fos_user_security_check
+                check_path: /login
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
                 require_previous_session: false
@@ -44,7 +43,7 @@ security:
                     - lexik_jwt_authentication.jwt_token_authenticator
 
     access_control:
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/,       roles: IS_AUTHENTICATED_FULLY }
