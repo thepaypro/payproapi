@@ -26,13 +26,13 @@ security:
             anonymous: true
 
         login:
-            pattern:  ^/login
+            pattern:  ^/login_check
             stateless: true
             anonymous: true
             form_login:
-                check_path: /login
-                success_handler:          lexik_jwt_authentication.handler.authentication_success
-                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+                check_path: /login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
                 require_previous_session: false
 
         api:
