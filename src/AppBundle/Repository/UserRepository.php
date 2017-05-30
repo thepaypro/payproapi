@@ -8,7 +8,7 @@ use Doctrine\ORM\QueryBuilder;
 
 class UserRepository extends EntityRepository
 {
-    public function findUsersWithUsernameIn(array $usernames = [])
+    public function findUsersWithUsernameIn(array $usernames = []) : array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $query = $qb->select('u')->from('AppBundle\Entity\User', 'u');
@@ -20,11 +20,12 @@ class UserRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
-    private function queryUsersWithUsernameIn(QueryBuilder $qb, array $usernames = [])
+    private function queryUsersWithUsernameIn(QueryBuilder $qb, array $usernames = []) : QueryBuilder
     {
         if (!$qb) {
             $qb = $this->getEntityManager()->createQueryBuilder();
         }
+
         $desiredUsernamesQueries = [];
 
         foreach ($usernames as $username) {
