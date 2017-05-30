@@ -5,6 +5,7 @@ services:
             - AppBundle\Entity\User
         tags:
             - { name: form.type, alias: app_user_registration }
+
     payproapi.registration_success_subscriber:
         class: UserBundle\EventSubscriber\RegistrationSuccessSubscriber
         arguments: 
@@ -12,7 +13,13 @@ services:
             - '@lexik_jwt_authentication.jwt_manager'
         tags:
             - { name: kernel.event_subscriber }
+
     payproapi.kernel_request_subscriber:
         class: AppBundle\EventSubscriber\KernelRequestSubscriber
         tags:
             - { name: kernel.event_subscriber }
+
+    payproapi.notifications_pusher:
+        class: AppBundle\Service\NotificationPusher
+        arguments:
+            - '%push_notifications_config%'
