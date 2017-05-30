@@ -20,7 +20,7 @@ class KernelRequestSubscriber implements EventSubscriberInterface
     public function formatRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-        if ($request->headers->has('content-type') && $request->headers->get('content-type') === 'application/json') {
+        if ($request->getContent() && $request->headers->has('content-type') && $request->headers->get('content-type') === 'application/json') {
             foreach (json_decode($request->getContent(), true) as $key => $value) {
                 $request->request->set($key, $value);
             }

@@ -5,3 +5,6 @@ app:
 registration:
     resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
     prefix: /register
+
+security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
