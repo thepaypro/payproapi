@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
+use \Pusher;
 
 class UserController extends Controller
 {

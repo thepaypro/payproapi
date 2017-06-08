@@ -20,7 +20,7 @@ class UserRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
-    private function queryUsersWithUsernameIn(QueryBuilder $qb, array $usernames = []) : QueryBuilder
+    private function queryUsersWithUsernameIn(QueryBuilder $qb, array $usernames = [])
     {
         if (!$qb) {
             $qb = $this->getEntityManager()->createQueryBuilder();
@@ -28,11 +28,11 @@ class UserRepository extends EntityRepository
 
         $desiredUsernamesQueries = [];
 
-        foreach ($usernames as $username) {
-            $desiredUsernamesQueries[] = $qb->expr()->like('u.username', ':'.$username);
-            $qb->setParameter($username, '%'.$username.'%');
+        foreach ($usernames as $key => $username) {
+            $desiredUsernamesQueries[] = $qb->expr()->like('u.username', '?'.$key);
+            $qb->setParameter($key, '%'.$username.'%');
         }
 
-        return $qb->expr()->orX()->addMultiple($desiredUsernamesQueries); 
+        return $qb->expr()->orX()->addMultiple($desiredUsernamesQueries);
     }
 }
