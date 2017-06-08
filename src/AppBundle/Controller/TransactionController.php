@@ -12,60 +12,55 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
 
 /**
- * User controller.
+ * Transaction controller.
+ * @Security("has_role('ROLE_USER')")
  *
- * @Route("/users")
+ * @Route("/transactions")
  */
-class UserController extends Controller
+class TransactionController extends Controller
 {
     use JWTResponseControllerTrait;
 
     /**
-     * Returns if a user with the given phone number exists
+     * Returns the information of a given transaction
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/{phoneNumber}", name="user_show")
+     * @Route("/{id}", name="transactions_show")
      * @Method("GET")
      */
     public function getAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $data = [];
+        $transaction = null;
+        return $this->JWTResponse($user, ['transaction' => $transaction]);
+    }
+
+    /**
+     * Create a transaction
+     * @param  UserInterface $user
+     * @param  Request       $request
+     * @return JsonResponse
+     * 
+     * @Route("", name="transactions_create")
+     * @Method("POST")
+     */
+    public function createAction(UserInterface $user, Request $request) : JsonResponse
+    {
+        $transactions = []; 
         return $this->JWTResponse($user, $data);
     }
 
     /**
-     * Returns the information of the users that match the filters
+     * Returns a list of transactions
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Security("has_role('ROLE_USER')")
-     * @Route("", name="users_list")
+     * @Route("", name="transactions_list")
      * @Method("GET")
      */
     public function indexAction(UserInterface $user, Request $request) : JsonResponse
-    {
-        $filters = $request->query->all();
-
-        $userRepository = $this->getDoctrine()->getRepository('AppBundle:User');
-        $users = $userRepository->findUserswithUsernameIn($filters['phoneNumbers']);
-
-        return $this->JWTResponse($user, ['users' => $users]);
-    }
-
-    /**
-     * Update the information of the user
-     * @param  UserInterface $user
-     * @param  Request       $request
-     * @return JsonResponse
-     * 
-     * @Security("has_role('ROLE_USER')")
-     * @Route("/{id}", name="user_update")
-     * @Method("PUT")
-     */
-    public function updateAction(UserInterface $user, Request $request) : JsonResponse
     {
         $data = [];
         return $this->JWTResponse($user, $data);

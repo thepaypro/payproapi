@@ -12,55 +12,55 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
 
 /**
- * Account controller.
+ * GroupTransactionAllocation controller.
  * @Security("has_role('ROLE_USER')")
  *
- * @Route("/accounts")
+ * @Route("/group-transaction-allocations")
  */
-class AccountController extends Controller
+class GroupTransactionAllocationController extends Controller
 {
     use JWTResponseControllerTrait;
 
     /**
-     * Returns the information of a given account
+     * Returns a list of a transactions allocated in a group, with the given filters
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/{id}", name="accounts_show")
+     * @Route("", name="group_transaction_allocations_list")
      * @Method("GET")
      */
-    public function getAction(UserInterface $user, Request $request) : JsonResponse
+    public function indexAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $account = null;
-        return $this->JWTResponse($user, ['account' => $account]);
+        $groupTransactionAllocations = [];
+        return $this->JWTResponse($user, $GroupTransactionAllocations);
     }
 
     /**
-     * Create an account
+     * Assigns a transaction to a group creating a group transaction allocation.
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("", name="accounts_create")
+     * @Route("", name="group_transaction_allocations_create")
      * @Method("POST")
      */
     public function createAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $accounts = []; 
+        $groupTransactionAllocations = [];
         return $this->JWTResponse($user, $data);
     }
 
     /**
-     * Update the information of the account
+     * Unassigns a transaction of a group
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/{id}", name="accounts_update")
-     * @Method("PUT")
+     * @Route("/{id}", name="group_transaction_allocations_delete")
+     * @Method("DELETE")
      */
-    public function updateAction(UserInterface $user, Request $request) : JsonResponse
+    public function deleteAction(UserInterface $user, Request $request) : JsonResponse
     {
         $data = [];
         return $this->JWTResponse($user, $data);

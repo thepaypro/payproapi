@@ -12,55 +12,40 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
 
 /**
- * Account controller.
+ * Card controller.
  * @Security("has_role('ROLE_USER')")
  *
- * @Route("/accounts")
+ * @Route("/cards")
  */
-class AccountController extends Controller
+class CardController extends Controller
 {
     use JWTResponseControllerTrait;
 
     /**
-     * Returns the information of a given account
+     * Request the card for an account
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/{id}", name="accounts_show")
-     * @Method("GET")
-     */
-    public function getAction(UserInterface $user, Request $request) : JsonResponse
-    {
-        $account = null;
-        return $this->JWTResponse($user, ['account' => $account]);
-    }
-
-    /**
-     * Create an account
-     * @param  UserInterface $user
-     * @param  Request       $request
-     * @return JsonResponse
-     * 
-     * @Route("", name="accounts_create")
+     * @Route("/request", name="card_request")
      * @Method("POST")
      */
-    public function createAction(UserInterface $user, Request $request) : JsonResponse
+    public function requestAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $accounts = []; 
+        $data = [];
         return $this->JWTResponse($user, $data);
     }
 
     /**
-     * Update the information of the account
+     * Activate the card for an account
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/{id}", name="accounts_update")
-     * @Method("PUT")
+     * @Route("/activation", name="card_activation")
+     * @Method("POST")
      */
-    public function updateAction(UserInterface $user, Request $request) : JsonResponse
+    public function activationAction(UserInterface $user, Request $request) : JsonResponse
     {
         $data = [];
         return $this->JWTResponse($user, $data);

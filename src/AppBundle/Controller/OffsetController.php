@@ -12,55 +12,40 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
 
 /**
- * Account controller.
+ * Offset controller.
  * @Security("has_role('ROLE_USER')")
  *
- * @Route("/accounts")
+ * @Route("/offsets")
  */
-class AccountController extends Controller
+class OffsetController extends Controller
 {
     use JWTResponseControllerTrait;
 
     /**
-     * Returns the information of a given account
+     * Returns a list of offsets with the given filters
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/{id}", name="accounts_show")
+     * @Route("", name="offsets_list")
      * @Method("GET")
      */
-    public function getAction(UserInterface $user, Request $request) : JsonResponse
+    public function indexAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $account = null;
-        return $this->JWTResponse($user, ['account' => $account]);
+        $offsets = [];
+        return $this->JWTResponse($user, $offsets);
     }
 
     /**
-     * Create an account
+     * Create a offset
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("", name="accounts_create")
+     * @Route("", name="offsets_create")
      * @Method("POST")
      */
     public function createAction(UserInterface $user, Request $request) : JsonResponse
-    {
-        $accounts = []; 
-        return $this->JWTResponse($user, $data);
-    }
-
-    /**
-     * Update the information of the account
-     * @param  UserInterface $user
-     * @param  Request       $request
-     * @return JsonResponse
-     * 
-     * @Route("/{id}", name="accounts_update")
-     * @Method("PUT")
-     */
-    public function updateAction(UserInterface $user, Request $request) : JsonResponse
     {
         $data = [];
         return $this->JWTResponse($user, $data);

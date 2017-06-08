@@ -26,7 +26,8 @@ parameters:
     jwt_token_ttl:        3600
 
     #Push notification credentials
-    app_id: "345998"
-    key: "b5aacd4973b629bb7366"
-    secret: "21e0ca5a8cce30c454aa"
-    cluster: "eu"
+    push_notifications_config:
+        app_id: "345998"
+        key: "b5aacd4973b629bb7366"
+        secret: "21e0ca5a8cce30c454aa"
+        cluster: "eu"

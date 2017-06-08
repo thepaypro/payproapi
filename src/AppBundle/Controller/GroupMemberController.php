@@ -12,55 +12,70 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
 
 /**
- * Account controller.
+ * GroupMember controller.
  * @Security("has_role('ROLE_USER')")
  *
- * @Route("/accounts")
+ * @Route("/group-members")
  */
-class AccountController extends Controller
+class GroupMemberController extends Controller
 {
     use JWTResponseControllerTrait;
 
     /**
-     * Returns the information of a given account
+     * Returns a list of group members with the given filters
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/{id}", name="accounts_show")
+     * @Route("", name="group_members_list")
      * @Method("GET")
      */
-    public function getAction(UserInterface $user, Request $request) : JsonResponse
+    public function indexAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $account = null;
-        return $this->JWTResponse($user, ['account' => $account]);
+        $groupMembers = [];
+        return $this->JWTResponse($user, $groupMembers);
     }
 
     /**
-     * Create an account
+     * Create a group member
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("", name="accounts_create")
+     * @Route("", name="group_members_create")
      * @Method("POST")
      */
     public function createAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $accounts = []; 
+        $groupMembers = []; 
         return $this->JWTResponse($user, $data);
     }
 
     /**
-     * Update the information of the account
+     * Update the information of the group member
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/{id}", name="accounts_update")
+     * @Route("/{id}", name="group_members_update")
      * @Method("PUT")
      */
     public function updateAction(UserInterface $user, Request $request) : JsonResponse
+    {
+        $data = [];
+        return $this->JWTResponse($user, $data);
+    }
+
+    /**
+     * Delete the group member
+     * @param  UserInterface $user
+     * @param  Request       $request
+     * @return JsonResponse
+     * 
+     * @Route("/{id}", name="group_members_delete")
+     * @Method("DELETE")
+     */
+    public function deleteAction(UserInterface $user, Request $request) : JsonResponse
     {
         $data = [];
         return $this->JWTResponse($user, $data);
