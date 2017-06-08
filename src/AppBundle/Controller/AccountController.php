@@ -11,17 +11,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
 
-class UserController extends Controller
+class AccountController extends Controller
 {
     use JWTResponseControllerTrait;
 
     /**
-     * Returns if a user with the given phone number exists
+     * Returns the information of a given account
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/users/{phoneNumber}", name="user_show")
+     * @Route("/accounts/{id}", name="account_show")
      * @Method("GET")
      */
     public function getAction(UserInterface $user, Request $request) : JsonResponse
@@ -31,23 +31,23 @@ class UserController extends Controller
     }
 
     /**
-     * Returns the information of the users that match the filters
+     * Createan account
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
      * @Security("has_role('ROLE_USER')")
-     * @Route("/users", name="users_list")
-     * @Method("GET")
+     * @Route("/accounts", name="accounts_list")
+     * @Method("POST")
      */
-    public function indexAction(UserInterface $user, Request $request) : JsonResponse
+    public function createAction(UserInterface $user, Request $request) : JsonResponse
     {
         $filters = $request->query->all();
 
         $userRepository = $this->getDoctrine()->getRepository('AppBundle:User');
-        $users = $userRepository->findUserswithUsernameIn($filters['phoneNumbers']);
+        $accounts = $userRepository->findaccountswithUsernameIn($filters['phoneNumbers']);
 
-        return $this->JWTResponse($user, ['users' => $users]);
+        return $this->JWTResponse($user, ['accounts' => $accounts]);
     }
 
     /**
@@ -57,7 +57,7 @@ class UserController extends Controller
      * @return JsonResponse
      * 
      * @Security("has_role('ROLE_USER')")
-     * @Route("/users/{id}", name="user_update")
+     * @Route("/accounts/{id}", name="user_update")
      * @Method("PUT")
      */
     public function updateAction(UserInterface $user, Request $request) : JsonResponse
