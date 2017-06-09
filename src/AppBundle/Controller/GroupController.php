@@ -12,60 +12,85 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
 
 /**
- * User controller.
+ * Group controller.
+ * @Security("has_role('ROLE_USER')")
  *
- * @Route("/users")
+ * @Route("/groups")
  */
-class UserController extends Controller
+class GroupController extends Controller
 {
     use JWTResponseControllerTrait;
 
     /**
-     * Returns if a user with the given phone number exists
+     * Returns the information of a given group
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/{phoneNumber}", name="user_show")
+     * @Route("/{id}", name="groups_show")
      * @Method("GET")
      */
     public function getAction(UserInterface $user, Request $request) : JsonResponse
+    {
+        $group = null;
+        return $this->JWTResponse($user, ['group' => $group]);
+    }
+
+    /**
+     * Returns a list of groups with the given filters
+     * @param  UserInterface $user
+     * @param  Request       $request
+     * @return JsonResponse
+     * 
+     * @Route("", name="groups_list")
+     * @Method("GET")
+     */
+    public function indexAction(UserInterface $user, Request $request) : JsonResponse
+    {
+        $groups = [];
+        return $this->JWTResponse($user, $groups);
+    }
+
+    /**
+     * Create a group
+     * @param  UserInterface $user
+     * @param  Request       $request
+     * @return JsonResponse
+     * 
+     * @Route("", name="groups_create")
+     * @Method("POST")
+     */
+    public function createAction(UserInterface $user, Request $request) : JsonResponse
+    {
+        $groups = []; 
+        return $this->JWTResponse($user, $data);
+    }
+
+    /**
+     * Update the information of the group
+     * @param  UserInterface $user
+     * @param  Request       $request
+     * @return JsonResponse
+     * 
+     * @Route("/{id}", name="groups_update")
+     * @Method("PUT")
+     */
+    public function updateAction(UserInterface $user, Request $request) : JsonResponse
     {
         $data = [];
         return $this->JWTResponse($user, $data);
     }
 
     /**
-     * Returns the information of the users that match the filters
+     * Delete the group
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Security("has_role('ROLE_USER')")
-     * @Route("", name="users_list")
-     * @Method("GET")
+     * @Route("/{id}", name="groups_delete")
+     * @Method("DELETE")
      */
-    public function indexAction(UserInterface $user, Request $request) : JsonResponse
-    {
-        $filters = $request->query->all();
-
-        $userRepository = $this->getDoctrine()->getRepository('AppBundle:User');
-        $users = $userRepository->findUserswithUsernameIn($filters['phoneNumbers']);
-
-        return $this->JWTResponse($user, ['users' => $users]);
-    }
-
-    /**
-     * Update the information of the user
-     * @param  UserInterface $user
-     * @param  Request       $request
-     * @return JsonResponse
-     * 
-     * @Security("has_role('ROLE_USER')")
-     * @Route("/{id}", name="user_update")
-     * @Method("PUT")
-     */
-    public function updateAction(UserInterface $user, Request $request) : JsonResponse
+    public function deleteAction(UserInterface $user, Request $request) : JsonResponse
     {
         $data = [];
         return $this->JWTResponse($user, $data);
