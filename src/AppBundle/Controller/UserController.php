@@ -41,7 +41,7 @@ class UserController extends Controller
     }
 
     /**
-     * Returns if a user with the given phone number exists
+     * Returns the information of user with the given id
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
