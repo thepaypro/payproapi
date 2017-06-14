@@ -1,0 +1,141 @@
+{
+	"variables": [],
+	"info": {
+		"name": "PayProApi",
+		"_postman_id": "3d72466a-7250-e828-fcf1-7d0dd449ad10",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication&Authorization",
+			"description": "",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"url": "{{host}}/register/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"app_user_registration\": {\n\t\t\"username\": \"666666666\",\n\t\t\"plainPassword\": {\n\t\t\t\"first\": \"sdfgsdfgsdfg\",\n\t\t\t\"second\": \"sdfgsdfgsdfg\"\n\t\t}\n\t}\n}\n"
+						},
+						"description": "Register user"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"url": "{{host}}/login_check",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"_username\": \"666666666\",\n\t\"_password\": \"\"\n}"
+						},
+						"description": "Login to retrieve a JWT."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"description": "",
+			"item": [
+				{
+					"name": "Check",
+					"request": {
+						"url": "{{host}}/users/check/666666666",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Index",
+					"request": {
+						"url": {
+							"raw": "{{host}}/users?phoneNumbers[]=666666666",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "phoneNumbers[]",
+									"value": "666666666",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Show",
+					"request": {
+						"url": "{{host}}/users/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
