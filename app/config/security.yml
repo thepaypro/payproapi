@@ -35,6 +35,11 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
                 require_previous_session: false
 
+        public:
+            methods: [GET]
+            pattern: ^/users/check/
+            security: false
+
         api:
             pattern:   ^/
             stateless: true

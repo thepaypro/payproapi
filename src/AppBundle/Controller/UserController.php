@@ -22,17 +22,41 @@ class UserController extends Controller
 
     /**
      * Returns if a user with the given phone number exists
+     * @param  Request       $request
+     * @return JsonResponse
+     * 
+     * @Route("/check/{phoneNumber}", name="user_check")
+     * @Method("GET")
+     */
+    public function checkAction(Request $request) : JsonResponse
+    {
+        $phoneNumber = $request->attributes->get('phoneNumber');
+
+        $userRepository = $this->getDoctrine()->getRepository('AppBundle:User');
+        $user = $userRepository->findOneByUsername($phoneNumber);
+
+        $data = ['isUser' => $user ? true : false]; 
+
+        return $this->json($data);
+    }
+
+    /**
+     * Returns the information of user with the given id
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/{phoneNumber}", name="user_show")
+     * @Route("/{id}", name="user_show")
      * @Method("GET")
      */
     public function getAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $data = [];
-        return $this->JWTResponse($user, $data);
+        $id = $request->attributes->get('id');
+
+        $userRepository = $this->getDoctrine()->getRepository('AppBundle:User');
+        $user = $userRepository->findOneById($id);
+
+        return $this->JWTResponse($user, ['user' => $user]);
     }
 
     /**
@@ -70,4 +94,6 @@ class UserController extends Controller
         $data = [];
         return $this->JWTResponse($user, $data);
     }
+
+
 }
