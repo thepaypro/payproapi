@@ -44,9 +44,10 @@ class Account implements \JsonSerializable
     protected $documentNumber;
     
     /**
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Agreement", inversedBy="accounts", cascade={"all"})
+     * @ORM\JoinColumn(name="agreement_id", referencedColumnName="id", nullable=false)
      */
-    protected $accountTypeId;
+    protected $agreement;
 
     /**
      * @ORM\Column(type="string")
