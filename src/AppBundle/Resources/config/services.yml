@@ -19,7 +19,5 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    payproapi.notifications_pusher:
-        class: AppBundle\Service\NotificationPusher
-        arguments:
-            - '%push_notifications_config%'
+    payproapi.http_client:
+        class: AppBundle\Service\GuzzleHttpClient
