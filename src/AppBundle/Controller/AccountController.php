@@ -47,7 +47,6 @@ class AccountController extends Controller
      */
     public function createAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $accounts = []; 
         return $this->JWTResponse($user, $data);
     }
 
