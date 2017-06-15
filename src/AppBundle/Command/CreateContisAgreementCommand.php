@@ -21,45 +21,45 @@ class CreateContisAgreementCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $host = $this->getContainer()->getParameter('contis_api_host');
+        // $host = $this->getContainer()->getParameter('contis_api_host');
 
-        $client = new SoapClient($host.'/ContisCardAPI.svc?singleWsdl');
+        // $client = new SoapClient($host.'/ContisCardAPI.svc?singleWsdl');
 
-        $function = array_filter($client->__getFunctions(), function($functionName) {
-            return strpos($functionName, 'Agreement') !== false ? true : false;
-        });
+        // $function = array_filter($client->__getFunctions(), function($functionName) {
+        //     return strpos($functionName, 'Agreement') !== false ? true : false;
+        // });
 
-        $params = array_filter($client->__getTypes(), function($functionName) {
-            return strpos($functionName, 'AgreementInfo') !== false ? true : false;
-        });
+        // $params = array_filter($client->__getTypes(), function($functionName) {
+        //     return strpos($functionName, 'AgreementInfo') !== false ? true : false;
+        // });
 
-        $params = [
-            'CurrencyCode' => ,
-            'NewCardCharge' => ,
-            'CardReissueCharge' => ,
-            'LocalATMwithdrawCharge' => ,
-            'AbroadATMwithdrawCharge' => ,
-            'MaxBalance' => ,
-            'CardLimit' => ,
-            'MonthlyAccountFee' => ,
-            'DailySpendLimit' => ,
-            'MonthlySpendLimit' => ,
-            'MaxNoOfAdditionalCards' => ,
-            'ATMWeeklySpendLimit' => ,
-            'ATMMonthlySpendLimit' => ,
-            'CashBackDailyLimit' => ,
-            'CashBackWeeklyLimit' => ,
-            'CashBackMonthlyLimit' => ,
-            'CashBackYearlyLimit' => ,
-        ];
+        // $params = [
+        //     'CurrencyCode' => ,
+        //     'NewCardCharge' => ,
+        //     'CardReissueCharge' => ,
+        //     'LocalATMwithdrawCharge' => ,
+        //     'AbroadATMwithdrawCharge' => ,
+        //     'MaxBalance' => ,
+        //     'CardLimit' => ,
+        //     'MonthlyAccountFee' => ,
+        //     'DailySpendLimit' => ,
+        //     'MonthlySpendLimit' => ,
+        //     'MaxNoOfAdditionalCards' => ,
+        //     'ATMWeeklySpendLimit' => ,
+        //     'ATMMonthlySpendLimit' => ,
+        //     'CashBackDailyLimit' => ,
+        //     'CashBackWeeklyLimit' => ,
+        //     'CashBackMonthlyLimit' => ,
+        //     'CashBackYearlyLimit' => ,
+        // ];
 
-        $client->__soapCall('Agreement_Create', )
+        // $client->__soapCall('Agreement_Create', )
 
-        var_dump($function);
-        var_dump('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-        var_dump('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-        var_dump('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-        var_dump($params);
-        die();
+        // var_dump($function);
+        // var_dump('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+        // var_dump('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+        // var_dump('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+        // var_dump($params);
+        // die();
     }
 }
