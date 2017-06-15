@@ -2,5 +2,9 @@ app:
     resource: '@AppBundle/Controller/'
     type: annotation
 
-fos_user:
-    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+registration:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+
+security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
