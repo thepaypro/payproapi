@@ -13,7 +13,7 @@ parameters:
     mailer_transport: gmail
     mailer_host: null
     mailer_user: kilian@thepaypro.com
-    mailer_password: asd76dfhsa78asgdhj
+    mailer_password:
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
