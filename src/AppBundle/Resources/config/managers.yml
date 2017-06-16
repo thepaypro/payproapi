@@ -1,0 +1,6 @@
+services:
+  payproapi.account_manager:
+    class: AppBundle\Service\PayPro\AccountManager
+    arguments:
+      - @doctrine.orm.entity_manager
+      - %contis_wsdl_url%

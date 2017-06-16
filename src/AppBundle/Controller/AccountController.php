@@ -47,6 +47,27 @@ class AccountController extends Controller
      */
     public function createAction(UserInterface $user, Request $request) : JsonResponse
     {
+        $requestData = $request->request->all();
+        $agreementRepository = $this->get('agreement_repository');
+        $countryRepository = $this->get('country_repository');
+
+        dump($requestData);
+
+        $response = $this->get('payproapi.account_manager')->createAccount(
+            $requestData['forename'],
+            $requestData['lastname'],
+            $requestData['birthDate'],
+            $requestData['documentType'],
+            $requestData['documentNumber'],
+            $agreementRepository->findOneById($requestData['agreement']),
+            $requestData['principalAddress'],
+            $requestData['secondaryAddress'],
+            $requestData['secondaryAddress'],
+            $requestData['postcode'],
+            $requestData['city'],
+            $countryRepository->findOneById($requestData['country']),
+        );
+
         return $this->JWTResponse($user, $data);
     }
 

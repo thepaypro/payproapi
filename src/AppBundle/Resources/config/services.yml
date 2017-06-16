@@ -19,5 +19,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    payproapi.http_client:
-        class: AppBundle\Service\GuzzleHttpClient
+imports:
+    - { resource: managers.yml }
+    - { resource: repositories.yml }

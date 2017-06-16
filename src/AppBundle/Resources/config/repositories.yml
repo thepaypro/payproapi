@@ -1,0 +1,12 @@
+services:
+  payproapi.agreement_repository:
+    class: AppBundle\Repository\AgreementRepository
+
+  payproapi.account_repository:
+    class: AppBundle\Repository\AccountRepository
+
+  payproapi.country_repository:
+    class: AppBundle\Repository\CountryRepository
+
+  payproapi.user_repository:
+    class: AppBundle\Repository\UserRepository
