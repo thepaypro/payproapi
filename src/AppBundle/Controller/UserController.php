@@ -35,19 +35,11 @@ class UserController extends Controller
      */
     public function updatePasswordAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $old_password = $request->query->get('old_password');
-        $new_password = $request->query->get('new_password');
-        $confirm_password = $request->query->get('confirm_password');
+        $old_password = $request->request->get('old_password');
+        $new_password = $request->request->get('new_password');
+        $confirm_password = $request->request->get('confirm_password');
 
-        $encoderService = $this->container->get('security.password_encoder');
-        $match = $encoderService->isPasswordValid($user, $old_password);
-        if(!$match) {
-            return $this->json([
-                'message' => 'Wrong old password',
-            ], 400);
-        }
-
-        $passwordValidator = v::notBlank()
+        $passwordValidator = v::notOptional()
             ->Length(6, 6)
             ->Digit();
         try {
@@ -58,6 +50,14 @@ class UserController extends Controller
         } catch(NestedValidationException $exception) {
             return $this->json([
                 'message' => $exception->getMessages()[0]
+            ], 400);
+        }
+
+        $encoderService = $this->container->get('security.password_encoder');
+        $match = $encoderService->isPasswordValid($user, $old_password);
+        if(!$match) {
+            return $this->json([
+                'message' => 'Wrong old password',
             ], 400);
         }
 
