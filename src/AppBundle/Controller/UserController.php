@@ -48,7 +48,7 @@ class UserController extends Controller
             $passwordValidator->equals($new_password)->setName('Confirm password')
                 ->assert($confirm_password);
         } catch(NestedValidationException $exception) {
-            return $this->json([
+            return $this->JWTResponse($user, [
                 'message' => $exception->getMessages()[0]
             ], 400);
         }
@@ -56,7 +56,7 @@ class UserController extends Controller
         $encoderService = $this->container->get('security.password_encoder');
         $match = $encoderService->isPasswordValid($user, $old_password);
         if(!$match) {
-            return $this->json([
+            return $this->JWTResponse($user, [
                 'message' => 'Wrong old password',
             ], 400);
         }
@@ -66,7 +66,7 @@ class UserController extends Controller
         $user->setPassword($hash);
         $em->flush();
 
-        return $this->json([
+        return $this->JWTResponse($user, [
             'message' => 'Password change success',
             'user' => $user,
         ]);
