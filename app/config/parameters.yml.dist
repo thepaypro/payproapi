@@ -1,28 +1,17 @@
-# This file is a "template" of what your parameters.yml file should look like
-# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
-# http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+# This file is auto-generated during the composer install
 parameters:
     database_host: 127.0.0.1
     database_port: 3306
     database_name: payproapi
     database_user: ubuntu
     database_password: aHGajkASgfdkJASHd7823ajdgJHGSW
-    # You should uncomment this if you want to use pdo_sqlite
-    #database_path: '%kernel.root_dir%/../var/data/data.sqlite'
-
     mailer_transport: gmail
     mailer_host: null
     mailer_user: kilian@thepaypro.com
-    mailer_password:
-
-    # A secret key that's used to generate certain security-related tokens
-    secret: ThisTokenIsNotSoSecretChangeIt
-
-    # public and private keys for jwt.
-    # https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md#configuration
-    jwt_private_key_path: '%kernel.root_dir%/../var/jwt/private.pem' # ssh private key path
-    jwt_public_key_path:  '%kernel.root_dir%/../var/jwt/public.pem'  # ssh public key path
-    jwt_key_pass_phrase:  ''                                         # ssh key pass phrase
-    jwt_token_ttl:        3600
-
-    contis_wsdl_url: http://34.253.132.188/ContisCardAPI.svc?singleWsdl
+    mailer_password: asd76dfhsa78asgdhj
+    secret: 98996e818bd6b7910999bffc5e43133092f983a9
+    jwt_private_key_path: '%kernel.root_dir%/../var/jwt/private.pem'
+    jwt_public_key_path: '%kernel.root_dir%/../var/jwt/public.pem'
+    jwt_key_pass_phrase: dev-jwt
+    jwt_token_ttl: 3600
+    contis_wsdl_url: 'http://34.253.132.188/ContisCardAPI.svc?singleWsdl'

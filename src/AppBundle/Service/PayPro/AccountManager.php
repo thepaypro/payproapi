@@ -81,20 +81,34 @@ class AccountManager
         }
 
         $params = [
-            'FirstName' => $account->getForename(),
-            'LastName' => $account->getLastname(),
-            'Gender' => 'N',
-            'DOB' => $account->getBirthdate(),
-            'Street' => $account->getPrincipalAddress(),
-            'City' => $account->getCity(),
-            'Postcode' => $account->getPostcode(),
-            'Country' => $account->getCountry()->getIso3(),
-            'IsMain' => 1,
-            'Relationship' => 'self'
+            'UserName' => 'Payprobeta',
+            'Password' => 'P@yprobeta',
         ];
+        $hashDataString = '';
+        foreach ($params as $key => $param) {
+            $hashDataString = $hashDataString.'&'.$param;
+        }
+        $hashDataString = ltrim($hashDataString, '&');
+        $params['HashDataString'] = $hashDataString;
+        $params['Hash'] = md5($hashDataString);
+        // $params = [
+        //     'FirstName' => $account->getForename(),
+        //     'LastName' => $account->getLastname(),
+        //     'Gender' => 'N',
+        //     'DOB' => $account->getBirthdate(),
+        //     'Street' => $account->getPrincipalAddress(),
+        //     'City' => $account->getCity(),
+        //     'Postcode' => $account->getPostcode(),
+        //     'Country' => $account->getCountry()->getIso3(),
+        //     'IsMain' => 1,
+        //     'Relationship' => 'self'
+        // ];
 
-        // dump('hola');die();
-        $response = $this->contisSoapClient->__soapCall('CardHolder_Create', $params);
+        // dump($params);
+        // die();
+        $response = $this->contisSoapClient->__soapCall('Login', $params);
+
+        dump($response);
         die();
         return;
     }
