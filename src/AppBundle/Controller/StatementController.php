@@ -10,6 +10,8 @@ use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 class StatementController extends Controller
 {
@@ -23,10 +25,6 @@ class StatementController extends Controller
      */
     public function getStatementAction(UserInterface $user, Request $request)
     {
-        // $html = $this->render('statements/main.html.twig', array(
-        //     'user' => $user,
-        // ));
-
         $date_from = $request->query->get('date_from');
         $date_to = $request->query->get('date_to');
 
@@ -42,17 +40,16 @@ class StatementController extends Controller
         }
 
         // request data to provider
-        //
+        
         // generate pdf
+        $user_statements_path = $this->get('kernel')->getRootDir() . "/../var/statements/{$user->getId()}/";
         $this->get('knp_snappy.pdf')->generateFromHtml(
             $this->renderView(
-                'statements/main.html.twig',
-                [
+                'statements/main.html.twig', [
                     'user' => $user,
                     'transactions' => []
-                ]
-            ),
-            $this->get('kernel')->getRootDir() . "/../var/statements/{$user->getId()}/statement.pdf"
+                ]),
+            $user_statements_path . 'statement.pdf'
         );
 
         // send email
@@ -67,9 +64,13 @@ class StatementController extends Controller
             ]);
         }
 
+        $fs = new Filesystem();
+        if($fs->exists($user_statements_path)) {
+            $fs->remove($user_statements_path);
+        }
+
         return $this->json([
             'message' => 'Statement sended',
         ]);
     }
-
 }
