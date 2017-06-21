@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "PayProApi",
-		"_postman_id": "3d72466a-7250-e828-fcf1-7d0dd449ad10",
+		"_postman_id": "3bdfc609-22e8-54c2-6fc8-4a86e125b4c7",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -45,7 +45,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"_username\": \"666666666\",\n\t\"_password\": \"\"\n}"
+							"raw": "{\n\t\"_username\": \"666666666\",\n\t\"_password\": \"1234\"\n}"
 						},
 						"description": "Login to retrieve a JWT."
 					},
@@ -69,7 +69,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -108,7 +111,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -130,7 +136,35 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update password",
+					"request": {
+						"url": "{{host}}/users/update-password",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"old_password\": \"123457\",\n\t\"new_password\":\"123457\",\n\t\"confirm_password\":\"123457\"\n}"
+						},
 						"description": ""
 					},
 					"response": []
