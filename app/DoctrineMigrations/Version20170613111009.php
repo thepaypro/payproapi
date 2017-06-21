@@ -21,6 +21,7 @@ class Version20170613111009 extends AbstractMigration
         $this->addSql('CREATE TABLE Accounts (id INT AUTO_INCREMENT NOT NULL, agreement_id INT NOT NULL, country_id INT NOT NULL, forename VARCHAR(255) NOT NULL, lastname VARCHAR(255) NOT NULL, birth_date DATETIME NOT NULL, document_type VARCHAR(255) NOT NULL, document_number VARCHAR(255) NOT NULL, card_holder_id VARCHAR(255) NOT NULL, principal_address VARCHAR(255) NOT NULL, secondary_address VARCHAR(255) DEFAULT NULL, postcode VARCHAR(255) NOT NULL, city VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_33BEFCFA24890B2B (agreement_id), INDEX IDX_33BEFCFAF92F3E70 (country_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE Agreements (id INT AUTO_INCREMENT NOT NULL, contis_agreement_code VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE Countries (id INT AUTO_INCREMENT NOT NULL, iso VARCHAR(2) NOT NULL, name VARCHAR(100) NOT NULL, active TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE MobileVerificationCode (id INT AUTO_INCREMENT NOT NULL, code VARCHAR(255) NOT NULL, phone_number VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE Accounts ADD CONSTRAINT FK_33BEFCFA24890B2B FOREIGN KEY (agreement_id) REFERENCES Agreements (id)');
         $this->addSql('ALTER TABLE Accounts ADD CONSTRAINT FK_33BEFCFAF92F3E70 FOREIGN KEY (country_id) REFERENCES Countries (id)');
     }
@@ -38,5 +39,6 @@ class Version20170613111009 extends AbstractMigration
         $this->addSql('DROP TABLE Accounts');
         $this->addSql('DROP TABLE Agreements');
         $this->addSql('DROP TABLE Countries');
+        $this->addSql('DROP TABLE MobileVerificationCode');
     }
 }
