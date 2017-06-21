@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -119,7 +120,7 @@ class Account implements \JsonSerializable
         String $secondaryAddress,
         String $postcode,
         String $city,
-        Country $country,
+        Country $country
     )
     {
         $this->forename = $forename;
@@ -129,7 +130,7 @@ class Account implements \JsonSerializable
         $this->documentNumber = $documentNumber;
         $this->agreement = $agreement;
         $this->principalAddress = $principalAddress;
-        $this->secondaryAddress = $principalAddress;
+        $this->secondaryAddress = $secondaryAddress;
         $this->postcode = $postcode;
         $this->city = $city;
         $this->country = $country;
@@ -480,5 +481,11 @@ class Account implements \JsonSerializable
 
         $document_types = array_intersect_key($constants, array_flip($key_types));
         return $document_types;
+    }
+
+    public static function getConstants()
+    {
+        $clientClass = new \ReflectionClass(__CLASS__);
+        return $clientClass->getConstants();
     }
 }

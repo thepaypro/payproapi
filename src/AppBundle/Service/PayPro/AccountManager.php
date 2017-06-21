@@ -1,9 +1,13 @@
 <?php
 namespace AppBundle\Service\PayPro;
 
-use Doctrine\ORM\EntityManager;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 use AppBundle\Entity\Account;
+use AppBundle\Repository\CountryRepository;
+use AppBundle\Repository\AgreementRepository;
+use \SoapClient;
 
 /**
  * Class AccountManager
@@ -11,15 +15,24 @@ use AppBundle\Entity\Account;
  */
 class AccountManager
 {
-    protected $em;
+    protected $agreementRepository;
+    protected $countryRepository;
+    protected $validationService;
     protected $contisSoapClient;
 
     /**
      * @param EntityManager $em
      */
-    public function __construct(EntityManager $em, String $contisWsdlUrl)
+    public function __construct(
+        AgreementRepository $agreementRepository,
+        CountryRepository $countryRepository,
+        ValidatorInterface $validationService,
+        String $contisWsdlUrl
+    )
     {
-        $this->em = $em;
+        $this->agreementRepository = $agreementRepository;
+        $this->countryRepository = $countryRepository;
+        $this->validationService = $validationService;
         $this->contisSoapClient = new SoapClient($contisWsdlUrl);
     }
 
@@ -34,15 +47,55 @@ class AccountManager
         String $birthDate,
         String $documentType,
         String $documentNumber,
-        Agreement $agreement,
+        Int $agreementId,
         String $principalAddress,
+        String $secondaryAddress,
         String $postcode,
         String $city,
-        Country $country,
+        Int $countryId
     )
     {
-        
-        $account = new Account();
+        $agreement = $this->agreementRepository->findOneById($agreementId);
+        $country = $this->countryRepository->findOneById($countryId);
+
+        $account = new Account(
+            $forename,
+            $lastname,
+            $birthDate,
+            $documentType,
+            $documentNumber,
+            $agreement,
+            $principalAddress,
+            $secondaryAddress,
+            $postcode,
+            $city,
+            $country
+        );
+
+        $errors = $this->validationService->validate($account);
+
+        if (count($errors) > 0) {
+            foreach ($errors as $key => $error) {
+                throw new BadRequestHttpException($error->getMessage());
+            }
+        }
+
+        $params = [
+            'FirstName' => $account->getForename(),
+            'LastName' => $account->getLastname(),
+            'Gender' => 'N',
+            'DOB' => $account->getBirthdate(),
+            'Street' => $account->getPrincipalAddress(),
+            'City' => $account->getCity(),
+            'Postcode' => $account->getPostcode(),
+            'Country' => $account->getCountry()->getIso3(),
+            'IsMain' => 1,
+            'Relationship' => 'self'
+        ];
+
+        // dump('hola');die();
+        $response = $this->contisSoapClient->__soapCall('CardHolder_Create', $params);
         die();
+        return;
     }
 }

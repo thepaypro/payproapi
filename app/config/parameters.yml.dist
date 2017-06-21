@@ -25,4 +25,4 @@ parameters:
     jwt_key_pass_phrase:  ''                                         # ssh key pass phrase
     jwt_token_ttl:        3600
 
-    contis_api_host: http://34.253.132.188 
+    contis_wsdl_url: http://34.253.132.188/ContisCardAPI.svc?singleWsdl

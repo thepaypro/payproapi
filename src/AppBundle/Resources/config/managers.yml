@@ -2,5 +2,7 @@ services:
   payproapi.account_manager:
     class: AppBundle\Service\PayPro\AccountManager
     arguments:
-      - @doctrine.orm.entity_manager
-      - %contis_wsdl_url%
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Agreement')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Country')"
+      - "@validator"
+      - "%contis_wsdl_url%"

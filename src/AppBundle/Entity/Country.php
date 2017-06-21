@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity
  * @ORM\Table(name="Countries")
- * @ORM\Entity(repositoryClass="AppBundle\Entity\CountryRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CountryRepository")
  */
 class Country implements \JsonSerializable
 {
@@ -22,7 +22,12 @@ class Country implements \JsonSerializable
     /**
      * @ORM\Column(type="string", length=2, nullable=false)
      */
-    protected $iso;
+    protected $iso2;
+
+    /**
+     * @ORM\Column(type="string", length=3, nullable=false)
+     */
+    protected $iso3;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=false)
@@ -80,29 +85,6 @@ class Country implements \JsonSerializable
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set iso
-     *
-     * @param string $iso
-     * @return Country
-     */
-    public function setIso($iso)
-    {
-        $this->iso = $iso;
-
-        return $this;
-    }
-
-    /**
-     * Get iso
-     *
-     * @return string
-     */
-    public function getIso()
-    {
-        return $this->iso;
     }
 
     /**
@@ -222,5 +204,53 @@ class Country implements \JsonSerializable
     public function getAccounts()
     {
         return $this->accounts;
+    }
+
+    /**
+     * Set iso2
+     *
+     * @param string $iso2
+     *
+     * @return Country
+     */
+    public function setIso2($iso2)
+    {
+        $this->iso2 = $iso2;
+
+        return $this;
+    }
+
+    /**
+     * Get iso2
+     *
+     * @return string
+     */
+    public function getIso2()
+    {
+        return $this->iso2;
+    }
+
+    /**
+     * Set iso3
+     *
+     * @param string $iso3
+     *
+     * @return Country
+     */
+    public function setIso3($iso3)
+    {
+        $this->iso3 = $iso3;
+
+        return $this;
+    }
+
+    /**
+     * Get iso3
+     *
+     * @return string
+     */
+    public function getIso3()
+    {
+        return $this->iso3;
     }
 }

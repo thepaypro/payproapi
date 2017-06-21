@@ -9,8 +9,8 @@ services:
     payproapi.registration_success_subscriber:
         class: UserBundle\EventSubscriber\RegistrationSuccessSubscriber
         arguments: 
-            - '@router'
-            - '@lexik_jwt_authentication.jwt_manager'
+            - "@router"
+            - "@lexik_jwt_authentication.jwt_manager"
         tags:
             - { name: kernel.event_subscriber }
 
@@ -21,4 +21,3 @@ services:
 
 imports:
     - { resource: managers.yml }
-    - { resource: repositories.yml }
