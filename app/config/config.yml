@@ -77,3 +77,12 @@ doctrine_migrations:
     namespace: Application\Migrations
     table_name: MigrationVersions
     name: Application Migrations
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:     xvfb-run -- /usr/bin/wkhtmltopdf
+        options:    []
+    image:
+        enabled:    false
+        binary:     /usr/local/bin/wkhtmltoimage #"\"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe\"" for Windows users
+        options:    []
