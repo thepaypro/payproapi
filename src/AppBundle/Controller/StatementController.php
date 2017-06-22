@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Swift_Message, Swift_Attachment;
 
 class StatementController extends Controller
 {
@@ -28,8 +29,7 @@ class StatementController extends Controller
         $date_from = $request->query->get('date_from');
         $date_to = $request->query->get('date_to');
 
-        $dateValidator = v::notOptional()
-            ->date();
+        $dateValidator = v::notOptional()->date();
         try {
             $dateValidator->setName('Date from')->assert($date_from);
             $dateValidator->min($date_from)->setName('Date to')->assert($date_to);
@@ -54,12 +54,11 @@ class StatementController extends Controller
         );
 
         // send email
-        $message = (new \Swift_Message('Extracto'))
+        $message = (new Swift_Message('Extracto'))
             ->setFrom('juanma@mondeapp.com')
             ->setTo($user->getEmail())
             ->setBody($this->renderView('emails/statement.html.twig'), 'text/html')
-            ->attach(\Swift_Attachment::fromPath("$user_statements_path/$statement_file_name"));
-
+            ->attach(Swift_Attachment::fromPath("$user_statements_path/$statement_file_name"));
         $mailer = $this->get('mailer');
         if(!$mailer->send($message)) {
             return $this->json([
@@ -67,10 +66,10 @@ class StatementController extends Controller
             ], 400);
         }
 
+        // delete pdf
+        $fs = new Filesystem();
         $spool = $mailer->getTransport()->getSpool();
         $spool->flushQueue($this->container->get('swiftmailer.transport.real'));
-
-        $fs = new Filesystem();
         if($fs->exists($user_statements_path)) {
             $fs->remove($user_statements_path);
         }
