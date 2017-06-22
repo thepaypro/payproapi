@@ -45,12 +45,5 @@ class TwilioShortMessageService
                 'body' => $message
             ]
         );
-        dump([
-            'to' => $to,
-            'from' => $this->phoneNumber,
-            'body' => $message,
-            'response' => $response
-        ]);
-        die();
     }
 }
