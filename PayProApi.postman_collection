@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "PayProApi",
-		"_postman_id": "3d72466a-7250-e828-fcf1-7d0dd449ad10",
+		"_postman_id": "3bdfc609-22e8-54c2-6fc8-4a86e125b4c7",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -25,7 +25,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"app_user_registration\": {\n\t\t\"username\": \"666666666\",\n\t\t\"plainPassword\": {\n\t\t\t\"first\": \"sdfgsdfgsdfg\",\n\t\t\t\"second\": \"sdfgsdfgsdfg\"\n\t\t}\n\t}\n}\n"
+							"raw": "{\n\t\"app_user_registration\": {\n\t\t\"username\": \"666666666\",\n\t\t\"plainPassword\": {\n\t\t\t\"first\": \"123456\",\n\t\t\t\"second\": \"123456\"\n\t\t}\n\t}\n}\n"
 						},
 						"description": "Register user"
 					},
@@ -45,9 +45,55 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"_username\": \"666666666\",\n\t\"_password\": \"\"\n}"
+							"raw": "{\n\t\"_username\": \"666666666\",\n\t\"_password\": \"1234\"\n}"
 						},
 						"description": "Login to retrieve a JWT."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Statements",
+			"description": "",
+			"item": [
+				{
+					"name": "Get statement",
+					"request": {
+						"url": {
+							"raw": "{{host}}/statements?date_from=2012-06-17&date_to=2013-06-17",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"statements"
+							],
+							"query": [
+								{
+									"key": "date_from",
+									"value": "2012-06-17",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "date_to",
+									"value": "2013-06-17",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
 					},
 					"response": []
 				}
@@ -69,7 +115,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -108,7 +157,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -130,7 +182,35 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update password",
+					"request": {
+						"url": "{{host}}/users/1",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"old_password\": \"123457\",\n\t\"new_password\":\"123457\",\n\t\"confirm_password\":\"123457\"\n}"
+						},
 						"description": ""
 					},
 					"response": []
