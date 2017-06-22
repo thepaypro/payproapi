@@ -13,9 +13,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Swift_Message, Swift_Attachment;
+use AppBundle\Controller\Traits\JWTResponseControllerTrait;
 
 class StatementController extends Controller
 {
+    use JWTResponseControllerTrait;
+
     /**
      * Send a statement by email
      * @param  Request       $request
@@ -34,7 +37,7 @@ class StatementController extends Controller
             $dateValidator->setName('Date from')->assert($date_from);
             $dateValidator->min($date_from)->setName('Date to')->assert($date_to);
         } catch(NestedValidationException $exception) {
-            return $this->json([
+            return $this->JWTResponse($user, [
                 'message' => $exception->getMessages()[0]
             ], 400);
         }
@@ -65,7 +68,7 @@ class StatementController extends Controller
             ->attach(Swift_Attachment::fromPath("$user_statements_path/$statement_file_name"));
         $mailer = $this->get('mailer');
         if(!$mailer->send($message)) {
-            return $this->json([
+            return $this->JWTResponse($user, [
                 'message' => 'Can\'t send statement'
             ], 400);
         }
@@ -78,7 +81,7 @@ class StatementController extends Controller
             $fs->remove($user_statements_path);
         }
 
-        return $this->json([
+        return $this->JWTResponse($user, [
             'message' => 'Statement sended',
         ]);
     }
