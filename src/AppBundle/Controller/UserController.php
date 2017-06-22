@@ -23,55 +23,6 @@ class UserController extends Controller
 {
     use JWTResponseControllerTrait;
 
-    /**
-     * Check the user password
-     * @param  UserInterface $user
-     * @param  Request       $request
-     * @return JsonResponse
-     *
-     * @Security("has_role('ROLE_USER')")
-     * @Route("/update-password", name="update_password")
-     * @Method("PUT")
-     */
-    public function updatePasswordAction(UserInterface $user, Request $request) : JsonResponse
-    {
-        $old_password = $request->request->get('old_password');
-        $new_password = $request->request->get('new_password');
-        $confirm_password = $request->request->get('confirm_password');
-
-        $passwordValidator = v::notOptional()
-            ->Length(6, 6)
-            ->Digit();
-        try {
-            $passwordValidator->setName('Old password')->assert($old_password);
-            $passwordValidator->setName('New password')->assert($new_password);
-            $passwordValidator->equals($new_password)->setName('Confirm password')
-                ->assert($confirm_password);
-        } catch(NestedValidationException $exception) {
-            return $this->JWTResponse($user, [
-                'message' => $exception->getMessages()[0]
-            ], 400);
-        }
-
-        $encoderService = $this->container->get('security.password_encoder');
-        $match = $encoderService->isPasswordValid($user, $old_password);
-        if(!$match) {
-            return $this->JWTResponse($user, [
-                'message' => 'Wrong old password',
-            ], 400);
-        }
-
-        $em = $this->getDoctrine()->getManager();
-        $hash = $encoderService->encodePassword($user, $new_password);
-        $user->setPassword($hash);
-        $em->flush();
-
-        return $this->JWTResponse($user, [
-            'message' => 'Password change success',
-            'user' => $user,
-        ]);
-    }
-
     /*
      * Returns if a user with the given phone number exists
      * @param  Request       $request
@@ -143,8 +94,41 @@ class UserController extends Controller
      */
     public function updateAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $data = [];
-        return $this->JWTResponse($user, $data);
+        $old_password = $request->request->get('old_password');
+        $new_password = $request->request->get('new_password');
+        $confirm_password = $request->request->get('confirm_password');
+
+        $passwordValidator = v::notOptional()
+            ->Length(6, 6)
+            ->Digit();
+        try {
+            $passwordValidator->setName('Old password')->assert($old_password);
+            $passwordValidator->setName('New password')->assert($new_password);
+            $passwordValidator->equals($new_password)->setName('Confirm password')
+                ->assert($confirm_password);
+        } catch(NestedValidationException $exception) {
+            return $this->JWTResponse($user, [
+                'message' => $exception->getMessages()[0]
+            ], 400);
+        }
+
+        $encoderService = $this->container->get('security.password_encoder');
+        $match = $encoderService->isPasswordValid($user, $old_password);
+        if(!$match) {
+            return $this->JWTResponse($user, [
+                'message' => 'Wrong old password',
+            ], 400);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $hash = $encoderService->encodePassword($user, $new_password);
+        $user->setPassword($hash);
+        $em->flush();
+
+        return $this->JWTResponse($user, [
+            'message' => 'Password change success',
+            'user' => $user,
+        ]);
     }
 
 
