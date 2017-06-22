@@ -28,6 +28,12 @@ class MobileVerificationCode
      */
     protected $phoneNumber;
 
+    public function __construct(String $phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+        $this->code = rand(1000, 9999);
+    }
+
     /**
      * Get id
      *
