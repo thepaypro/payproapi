@@ -39,8 +39,12 @@ class StatementController extends Controller
             ], 400);
         }
 
+        // convert dates to api request format
+        $date_from = str_replace('-', '', $date_from) . '000000';
+        $date_to = str_replace('-', '', $date_to) . '000000';
+
         // request data to provider
-        
+
         // generate pdf
         $user_statements_path = $this->get('kernel')->getRootDir() . "/../var/statements/{$user->getId()}";
         $statement_file_name = 'statement-' . time() . '.pdf';
