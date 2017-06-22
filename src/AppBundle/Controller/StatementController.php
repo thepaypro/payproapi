@@ -62,7 +62,7 @@ class StatementController extends Controller
 
         // send email
         $message = (new Swift_Message('Extracto'))
-            ->setFrom('juanma@mondeapp.com')
+            ->setFrom($this->container->getParameter('mailer_user'))
             ->setTo($user->getEmail())
             ->setBody($this->renderView('emails/statement.html.twig'), 'text/html')
             ->attach(Swift_Attachment::fromPath("$user_statements_path/$statement_file_name"));
