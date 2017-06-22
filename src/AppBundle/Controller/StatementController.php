@@ -43,7 +43,7 @@ class StatementController extends Controller
         
         // generate pdf
         $user_statements_path = $this->get('kernel')->getRootDir() . "/../var/statements/{$user->getId()}";
-        $statement_file_name = "statement-$date_from-$date_to.pdf";
+        $statement_file_name = 'statement-' . time() . '.pdf';
         $this->get('knp_snappy.pdf')->generateFromHtml(
             $this->renderView(
                 'statements/main.html.twig', [
