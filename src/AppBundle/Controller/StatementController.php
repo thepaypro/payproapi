@@ -42,27 +42,33 @@ class StatementController extends Controller
         // request data to provider
         
         // generate pdf
-        $user_statements_path = $this->get('kernel')->getRootDir() . "/../var/statements/{$user->getId()}/";
+        $user_statements_path = $this->get('kernel')->getRootDir() . "/../var/statements/{$user->getId()}";
+        $statement_file_name = "statement-$date_from-$date_to.pdf";
         $this->get('knp_snappy.pdf')->generateFromHtml(
             $this->renderView(
                 'statements/main.html.twig', [
                     'user' => $user,
                     'transactions' => []
                 ]),
-            $user_statements_path . 'statement.pdf'
+            "$user_statements_path/$statement_file_name"
         );
 
         // send email
-        $message = (new \Swift_Message())
+        $message = (new \Swift_Message('Extracto'))
             ->setFrom('juanma@mondeapp.com')
             ->setTo($user->getEmail())
-            ->setBody($this->renderView('emails/statement.html.twig'), 'text/html');
+            ->setBody($this->renderView('emails/statement.html.twig'), 'text/html')
+            ->attach(\Swift_Attachment::fromPath("$user_statements_path/$statement_file_name"));
 
-        if(!$this->get('mailer')->send($message)) {
+        $mailer = $this->get('mailer');
+        if(!$mailer->send($message)) {
             return $this->json([
                 'message' => 'Can\'t send statement'
-            ]);
+            ], 400);
         }
+
+        $spool = $mailer->getTransport()->getSpool();
+        $spool->flushQueue($this->container->get('swiftmailer.transport.real'));
 
         $fs = new Filesystem();
         if($fs->exists($user_statements_path)) {
