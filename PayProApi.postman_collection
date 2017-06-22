@@ -25,7 +25,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"app_user_registration\": {\n\t\t\"username\": \"666666666\",\n\t\t\"plainPassword\": {\n\t\t\t\"first\": \"sdfgsdfgsdfg\",\n\t\t\t\"second\": \"sdfgsdfgsdfg\"\n\t\t}\n\t}\n}\n"
+							"raw": "{\n\t\"app_user_registration\": {\n\t\t\"username\": \"666666666\",\n\t\t\"plainPassword\": {\n\t\t\t\"first\": \"123456\",\n\t\t\t\"second\": \"123456\"\n\t\t}\n\t}\n}\n"
 						},
 						"description": "Register user"
 					},
@@ -48,6 +48,52 @@
 							"raw": "{\n\t\"_username\": \"666666666\",\n\t\"_password\": \"1234\"\n}"
 						},
 						"description": "Login to retrieve a JWT."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Statements",
+			"description": "",
+			"item": [
+				{
+					"name": "Get statement",
+					"request": {
+						"url": {
+							"raw": "{{host}}/statements?date_from=2012-06-17&date_to=2013-06-17",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"statements"
+							],
+							"query": [
+								{
+									"key": "date_from",
+									"value": "2012-06-17",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "date_to",
+									"value": "2013-06-17",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
 					},
 					"response": []
 				}
@@ -147,7 +193,7 @@
 				{
 					"name": "Update password",
 					"request": {
-						"url": "{{host}}/users/update-password",
+						"url": "{{host}}/users/1",
 						"method": "PUT",
 						"header": [
 							{
