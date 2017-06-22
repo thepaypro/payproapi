@@ -23,26 +23,6 @@ class UserController extends Controller
 {
     use JWTResponseControllerTrait;
 
-    /*
-     * Returns if a user with the given phone number exists
-     * @param  Request       $request
-     * @return JsonResponse
-     *
-     * @Route("/check/{phoneNumber}", name="user_check")
-     * @Method("GET")
-     */
-    public function checkAction(Request $request) : JsonResponse
-    {
-        $phoneNumber = $request->attributes->get('phoneNumber');
-
-        $userRepository = $this->getDoctrine()->getRepository('AppBundle:User');
-        $user = $userRepository->findOneByUsername($phoneNumber);
-
-        $data = ['isUser' => $user ? true : false];
-
-        return $this->json($data);
-    }
-
     /**
      * Returns the information of user with the given id
      * @param  UserInterface $user
@@ -130,6 +110,4 @@ class UserController extends Controller
             'user' => $user,
         ]);
     }
-
-
 }

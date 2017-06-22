@@ -36,8 +36,8 @@ security:
                 require_previous_session: false
 
         public:
-            methods: [GET]
-            pattern: ^/users/check/
+            methods: [POST]
+            pattern: ^/mobile-verification-code
             security: false
 
         api:
