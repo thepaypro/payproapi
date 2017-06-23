@@ -2,25 +2,28 @@
 
 namespace UserBundle\EventSubscriber;
 
+use libphonenumber\PhoneNumberUtil;
 use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Event\FormEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use FOS\UserBundle\Event\GetResponseUserEvent;
 
-/**
- * Listener responsible to change the redirection at the end of the password resetting
- */
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use AppBundle\Repository\MobileVerificationCodeRepository;
+use AppBundle\Repository\UserRepository;
+
 class RegistrationSuccessSubscriber implements EventSubscriberInterface
 {
-    private $router;
-    private $JWTManager;
+    private $mobileVerificationCodeRepository;
+    private $userRepository;
 
-    public function __construct(UrlGeneratorInterface $router, JWTManagerInterface $JWTManager)
+    public function __construct(
+        MobileVerificationCodeRepository $mobileVerificationCodeRepository,
+        UserRepository $userRepository
+    )
     {
-        $this->router = $router;
-        $this->JWTManager = $JWTManager;
+        $this->mobileVerificationCodeRepository = $mobileVerificationCodeRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -29,18 +32,54 @@ class RegistrationSuccessSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FOSUserEvents::REGISTRATION_SUCCESS => [
-                ['onRegistrationSuccess', -10],
+            FOSUserEvents::REGISTRATION_INITIALIZE => [
+                ['onRegistrationInitialize', -10],
             ],
         ];
     }
 
-    public function onRegistrationSuccess(FormEvent $event)
+    /**
+     * Listener to check that user phoneNumber is valid and user validationCode is correct.
+     * @param  GetResponseUserEvent $event
+     */
+    public function onRegistrationInitialize(GetResponseUserEvent $event)
     {
-        $user = $event->getForm()->getData();
+        $data = $event->getRequest()->request->all()['app_user_registration'];
 
-        $data['token'] = $this->JWTManager->create($user);
+        $phoneNumberUtil = PhoneNumberUtil::getInstance();
 
-        $event->setResponse(new JsonResponse($data));
+        try {
+            $phoneNumberObject = $phoneNumberUtil->parse($data['username'], null);
+        } catch (\Exception $e) {
+            return $event->setResponse(new JsonResponse(
+                [
+                    'statusCode' => 400,
+                    'message' => $e->getMessage()
+                ]
+            ));
+        }
+
+        if ($this->userRepository->findOneByUsername($data['username'])) {
+            return $event->setResponse(new JsonResponse(
+                [
+                    'statusCode' => 400,
+                    'message' => 'Username already exist'
+                ]
+            ));
+        }
+
+        $mobileVerificationCode = $this->mobileVerificationCodeRepository->findOneBy([
+            'code' => $data['validationCode'],
+            'phoneNumber' => $data['username']
+        ]);
+
+        if (!$mobileVerificationCode) {
+            return $event->setResponse(new JsonResponse(
+                [
+                    'statusCode' => 400,
+                    'message' => 'Invalid verification code'
+                ]
+            ));
+        }
     }
 }

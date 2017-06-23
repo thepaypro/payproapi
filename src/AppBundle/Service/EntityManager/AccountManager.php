@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Service\PayPro;
+namespace AppBundle\Service\EntityManager;
 
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;

@@ -8,6 +8,37 @@
 	},
 	"item": [
 		{
+			"name": "Accounts",
+			"description": "",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"url": "{{host}}/accounts",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"agreement\": \"1\",\n\t\"forename\": \"asdfa\",\n\t\"lastname\": \"sdsfsdfs\",\n\t\"dateOfBirth\": \"08/06/1992\",\n\t\"documentType\": \"DNI\",\n\t\"documentNumber\": \"123123123K\",\n\t\"principalAddress\": \"C/ Gandesa nº 11\",\n\t\"secondaryAddress\": \"C/ Horta nº 2\",\n\t\"postcode\": \"08293FTW\",\n\t\"city\": \"London\",\n\t\"country\": \"239\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Authentication&Authorization",
 			"description": "",
 			"item": [
@@ -25,7 +56,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"app_user_registration\": {\n\t\t\"username\": \"666666666\",\n\t\t\"plainPassword\": {\n\t\t\t\"first\": \"sdfgsdfgsdfg\",\n\t\t\t\"second\": \"sdfgsdfgsdfg\"\n\t\t}\n\t}\n}\n"
+							"raw": "{\n\t\"app_user_registration\": {\n\t\t\"username\": \"+34649437747\",\n\t\t\"plainPassword\": {\n\t\t\t\"first\": \"kilian\",\n\t\t\t\"second\": \"kilian\"\n\t\t},\n\t\t\"validationCode\": \"5257\"\n\t}\n}\n"
 						},
 						"description": "Register user"
 					},
@@ -54,15 +85,69 @@
 			]
 		},
 		{
-			"name": "Users",
+			"name": "MobileVerificationCode",
 			"description": "",
 			"item": [
 				{
-					"name": "Check",
+					"name": "Create",
 					"request": {
-						"url": "{{host}}/users/check/666666666",
+						"url": "{{host}}/mobile-verification-code",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"phoneNumber\": \"+34649437747\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Statements",
+			"description": "",
+			"item": [
+				{
+					"name": "Get statement",
+					"request": {
+						"url": {
+							"raw": "{{host}}/statements?date_from=2012-06-17&date_to=2013-06-17",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"statements"
+							],
+							"query": [
+								{
+									"key": "date_from",
+									"value": "2012-06-17",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "date_to",
+									"value": "2013-06-17",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
 						"method": "GET",
 						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							},
 							{
 								"key": "Content-Type",
 								"value": "application/json",
@@ -73,7 +158,13 @@
 						"description": ""
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"description": "",
+			"item": [
 				{
 					"name": "Index",
 					"request": {
@@ -109,6 +200,31 @@
 							}
 						],
 						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"url": "{{host}}/users/1",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"old_password\": \"123457\",\n\t\"new_password\":\"123457\",\n\t\"confirm_password\":\"123457\"\n}"
+						},
 						"description": ""
 					},
 					"response": []

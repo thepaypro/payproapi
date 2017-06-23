@@ -1,8 +1,14 @@
 services:
   payproapi.account_manager:
-    class: AppBundle\Service\PayPro\AccountManager
+    class: AppBundle\Service\EntityManager\AccountManager
     arguments:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Agreement')"
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Country')"
       - "@validator"
       - "%contis_wsdl_url%"
+    
+  payproapi.mobile_verification_code_manager:
+    class: AppBundle\Service\EntityManager\MobileVerificationCodeManager
+    arguments:
+      - "@doctrine.orm.entity_manager"
+      - "@event_dispatcher"

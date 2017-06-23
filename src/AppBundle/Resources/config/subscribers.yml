@@ -1,0 +1,20 @@
+services:
+  payproapi.registration_success_subscriber:
+    class: UserBundle\EventSubscriber\RegistrationSuccessSubscriber
+    arguments: 
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:MobileVerificationCode')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+    tags:
+      - { name: kernel.event_subscriber }
+
+  payproapi.kernel_request_subscriber:
+    class: AppBundle\EventSubscriber\KernelRequestSubscriber
+    tags:
+      - { name: kernel.event_subscriber }
+
+  payproapi.mobile_verification_code_subscriber:
+    class: AppBundle\EventSubscriber\MobileVerificationCodeSubscriber
+    arguments:
+      - '@payproapi.twilio_short_message_service'
+    tags:
+      - { name: kernel.event_subscriber }

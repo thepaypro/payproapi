@@ -1,23 +1,18 @@
 services:
-    payproapi.registration_form:
-        class: UserBundle\Form\Type\RegistrationFormType
-        arguments:
-            - AppBundle\Entity\User
-        tags:
-            - { name: form.type, alias: app_user_registration }
+  payproapi.registration_form:
+    class: UserBundle\Form\Type\RegistrationFormType
+    arguments:
+      - AppBundle\Entity\User
+    tags:
+      - { name: form.type, alias: app_user_registration }
 
-    payproapi.registration_success_subscriber:
-        class: UserBundle\EventSubscriber\RegistrationSuccessSubscriber
-        arguments: 
-            - "@router"
-            - "@lexik_jwt_authentication.jwt_manager"
-        tags:
-            - { name: kernel.event_subscriber }
-
-    payproapi.kernel_request_subscriber:
-        class: AppBundle\EventSubscriber\KernelRequestSubscriber
-        tags:
-            - { name: kernel.event_subscriber }
+  payproapi.twilio_short_message_service:
+    class: AppBundle\Service\TwilioShortMessageService
+    arguments:
+      - "%twilio_account_id%"
+      - "%twilio_auth_token%"
+      - "%twilio_phone_number%"
 
 imports:
-    - { resource: managers.yml }
+  - { resource: managers.yml }
+  - { resource: subscribers.yml }

@@ -18,7 +18,11 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        #TODO: set firewall for resetting.
+        verification_code:
+            methods: [POST]
+            pattern: ^/mobile-verification-code
+            security: false
+
         register:
             pattern:  ^/register
             methods: [POST]
@@ -34,11 +38,6 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
                 require_previous_session: false
-
-        public:
-            methods: [GET]
-            pattern: ^/users/check/
-            security: false
 
         api:
             pattern:   ^/
