@@ -2,5 +2,5 @@ services:
     payproapi.mobile_verification_code_manager:
         class: AppBundle\Service\EntityManager\MobileVerificationCodeManager
         arguments:
-          - '@doctrine.orm.entity_manager'
-          - '@event_dispatcher'
+          - "@doctrine.orm.entity_manager"
+          - "@event_dispatcher"

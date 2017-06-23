@@ -2,11 +2,42 @@
 	"variables": [],
 	"info": {
 		"name": "PayProApi",
-		"_postman_id": "3bdfc609-22e8-54c2-6fc8-4a86e125b4c7",
+		"_postman_id": "3d72466a-7250-e828-fcf1-7d0dd449ad10",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Accounts",
+			"description": "",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"url": "{{host}}/accounts",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"agreement\": \"1\",\n\t\"forename\": \"asdfa\",\n\t\"lastname\": \"sdsfsdfs\",\n\t\"dateOfBirth\": \"08/06/1992\",\n\t\"documentType\": \"DNI\",\n\t\"documentNumber\": \"123123123K\",\n\t\"principalAddress\": \"C/ Gandesa nº 11\",\n\t\"secondaryAddress\": \"C/ Horta nº 2\",\n\t\"postcode\": \"08293FTW\",\n\t\"city\": \"London\",\n\t\"country\": \"239\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Authentication&Authorization",
 			"description": "",
@@ -25,7 +56,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"app_user_registration\": {\n\t\t\"username\": \"666666666\",\n\t\t\"plainPassword\": {\n\t\t\t\"first\": \"123456\",\n\t\t\t\"second\": \"123456\"\n\t\t}\n\t}\n}\n"
+							"raw": "{\n\t\"app_user_registration\": {\n\t\t\"username\": \"+34649437747\",\n\t\t\"plainPassword\": {\n\t\t\t\"first\": \"kilian\",\n\t\t\t\"second\": \"kilian\"\n\t\t},\n\t\t\"validationCode\": \"5257\"\n\t}\n}\n"
 						},
 						"description": "Register user"
 					},
@@ -45,9 +76,35 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"_username\": \"666666666\",\n\t\"_password\": \"1234\"\n}"
+							"raw": "{\n\t\"_username\": \"666666666\",\n\t\"_password\": \"\"\n}"
 						},
 						"description": "Login to retrieve a JWT."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MobileVerificationCode",
+			"description": "",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"url": "{{host}}/mobile-verification-code",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"phoneNumber\": \"+34649437747\"\n}"
+						},
+						"description": ""
 					},
 					"response": []
 				}
@@ -90,6 +147,11 @@
 								"key": "Authorization",
 								"value": "Bearer {{jwt}}",
 								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
 							}
 						],
 						"body": {},
@@ -103,26 +165,6 @@
 			"name": "Users",
 			"description": "",
 			"item": [
-				{
-					"name": "Check",
-					"request": {
-						"url": "{{host}}/users/check/666666666",
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"description": ""
-					},
-					"response": []
-				},
 				{
 					"name": "Index",
 					"request": {
@@ -157,9 +199,31 @@
 								"description": ""
 							}
 						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"url": "{{host}}/users/1",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"old_password\": \"123457\",\n\t\"new_password\":\"123457\",\n\t\"confirm_password\":\"123457\"\n}"
 						},
 						"description": ""
 					},
@@ -182,35 +246,7 @@
 								"description": ""
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "Update password",
-					"request": {
-						"url": "{{host}}/users/1",
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwt}}",
-								"description": ""
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"old_password\": \"123457\",\n\t\"new_password\":\"123457\",\n\t\"confirm_password\":\"123457\"\n}"
-						},
+						"body": {},
 						"description": ""
 					},
 					"response": []

@@ -2,8 +2,8 @@ services:
     payproapi.registration_success_subscriber:
         class: UserBundle\EventSubscriber\RegistrationSuccessSubscriber
         arguments: 
-            - '@router'
-            - '@lexik_jwt_authentication.jwt_manager'
+            - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:MobileVerificationCode')"
+            - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
         tags:
             - { name: kernel.event_subscriber }
 
