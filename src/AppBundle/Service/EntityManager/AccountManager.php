@@ -8,7 +8,8 @@ use AppBundle\Entity\Account;
 use AppBundle\Repository\CountryRepository;
 use AppBundle\Repository\AgreementRepository;
 use \SoapClient;
-
+// use GuzzleHttp\Client;
+// use GuzzleHttp\Psr7\Request;
 /**
  * Class AccountManager
  * @package AppBundle\Service
@@ -33,7 +34,7 @@ class AccountManager
         $this->agreementRepository = $agreementRepository;
         $this->countryRepository = $countryRepository;
         $this->validationService = $validationService;
-        $this->contisSoapClient = new SoapClient($contisWsdlUrl);
+        // $this->contisSoapClient = new SoapClient($contisWsdlUrl);
     }
 
     /**
@@ -81,8 +82,8 @@ class AccountManager
         }
 
         $params = [
-            'UserName' => 'Payprobeta',
             'Password' => 'P@yprobeta',
+            'UserName' => 'Payprobeta',
         ];
         $hashDataString = '';
         foreach ($params as $key => $param) {
@@ -90,23 +91,15 @@ class AccountManager
         }
         $hashDataString = ltrim($hashDataString, '&');
         $params['HashDataString'] = $hashDataString;
-        $params['Hash'] = md5($hashDataString);
-        // $params = [
-        //     'FirstName' => $account->getForename(),
-        //     'LastName' => $account->getLastname(),
-        //     'Gender' => 'N',
-        //     'DOB' => $account->getBirthdate(),
-        //     'Street' => $account->getPrincipalAddress(),
-        //     'City' => $account->getCity(),
-        //     'Postcode' => $account->getPostcode(),
-        //     'Country' => $account->getCountry()->getIso3(),
-        //     'IsMain' => 1,
-        //     'Relationship' => 'self'
-        // ];
+        $params['Hash'] = md5(mb_convert_encoding($hashDataString.'82117C6AB41E198A', "UCS-2LE", "JIS, eucjp-win, sjis-win"));
 
-        // dump($params);
-        // die();
-        $response = $this->contisSoapClient->__soapCall('Login', $params);
+        $client = new \GuzzleHttp\Client();
+        $response = $client->post(
+            'http://34.253.132.188:8080/ContisRESTAPI_Beta/Account/Login.aspx',
+            ['form_params' => $params]
+        );
+
+        // $response = $this->contisSoapClient->__soapCall('Login', ["body" => $params]);
 
         dump($response);
         die();

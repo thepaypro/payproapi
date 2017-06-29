@@ -27,6 +27,7 @@
         "doctrine/orm": "^2.5",
         "friendsofsymfony/user-bundle": "^2.0",
         "giggsey/libphonenumber-for-php": "^8.5",
+        "guzzlehttp/guzzle": "^6.3",
         "incenteev/composer-parameter-handler": "^2.0",
         "lexik/jwt-authentication-bundle": "^2.4",
         "nelmio/cors-bundle": "^1.5",
