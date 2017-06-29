@@ -5,7 +5,6 @@ namespace AppBundle\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
-use UserInterface;
 
 class AuthenticationSubscriber implements EventSubscriberInterface
 {
@@ -25,7 +24,7 @@ class AuthenticationSubscriber implements EventSubscriberInterface
         $event->setData(
             array_merge(
                 $event->getData(),
-                ["user" => $user->jsonSerialize()]
+                ['user' => $user->jsonSerialize()]
             )
         );
     }
