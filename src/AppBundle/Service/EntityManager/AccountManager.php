@@ -85,10 +85,12 @@ class AccountManager
             'Password' => 'P@yprobeta',
             'UserName' => 'Payprobeta',
         ];
+
         $hashDataString = '';
         foreach ($params as $key => $param) {
             $hashDataString = $hashDataString.'&'.$param;
         }
+
         $hashDataString = ltrim($hashDataString, '&');
         $params['HashDataString'] = $hashDataString;
         $params['Hash'] = md5(mb_convert_encoding($hashDataString.'82117C6AB41E198A', "UCS-2LE", "JIS, eucjp-win, sjis-win"));
