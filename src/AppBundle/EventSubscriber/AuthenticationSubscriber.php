@@ -3,10 +3,11 @@
 namespace AppBundle\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTAuthenticatedEvent;
+use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
+use UserInterface;
 
-class KernelRequestSubscriber implements EventSubscriberInterface
+class AuthenticationSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
@@ -17,14 +18,15 @@ class KernelRequestSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function addUserToResponse(JWTAuthenticatedEvent $event)
+    public function addUserToResponse(AuthenticationSuccessEvent $event)
     {
         $user = $event->getUser();
 
-        if (!$user instanceof UserInterface) {
-            return;
-        }
-
-        $event->setData($user);
+        $event->setData(
+            array_merge(
+                $event->getData(),
+                ["user" => $user->jsonSerialize()]
+            )
+        );
     }
 }
