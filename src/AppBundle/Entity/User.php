@@ -31,6 +31,11 @@ class User extends BaseUser implements \JsonSerializable
      */
     protected $id;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Account", mappedBy="user")
+     */
+    private $account;
+
     public function __construct()
     {
         parent::__construct();

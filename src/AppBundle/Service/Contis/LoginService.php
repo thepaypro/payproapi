@@ -19,7 +19,7 @@ class LoginService
         String $contisPassword,
         RequestService $requestService
     ) {
-        $this->contisUsername= $contisUsername
+        $this->contisUsername= $contisUsername;
         $this->contisPassword = $contisPassword;
         $this->requestService = $requestService;
     }
@@ -30,12 +30,13 @@ class LoginService
      */
     public function login()
     {
-        $params = [
-            'Password' => $this->contisPassword,
-            'UserName' => $this->contisUsername,
-        ];
-
-        $response = $this->requestService->call('CardHolder_Login', $params);
+        $response = $this->requestService->call(
+            'Login',
+            [
+                'Password' => $this->contisPassword,
+                'UserName' => $this->contisUsername
+            ]
+        );
 
         dump($response);die();
 

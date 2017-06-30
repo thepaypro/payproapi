@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Service\EntityManager;
 
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -8,6 +9,7 @@ use AppBundle\Entity\Account;
 use AppBundle\Repository\CountryRepository;
 use AppBundle\Repository\AgreementRepository;
 use AppBundle\Service\Contis\RequestService;
+
 /**
  * Class AccountManager
  * @package AppBundle\Service
@@ -95,6 +97,6 @@ class AccountManager
 
         dump($response);die();
 
-        return;
+        return $response;
     }
 }

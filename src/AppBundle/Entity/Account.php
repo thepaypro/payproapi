@@ -23,6 +23,12 @@ class Account implements \JsonSerializable
     protected $id;
 
     /**
+     * @ORM\OneToOne(targetEntity="User", inversedBy="account")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
+
+    /**
      * @ORM\Column(type="string", nullable=false)
      * @Assert\NotBlank()
      */
@@ -62,7 +68,17 @@ class Account implements \JsonSerializable
      * @ORM\Column(type="string")
      */
     protected $cardHolderId;
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="Transaction", mappedBy="payer")
+     */
+    protected $sentTransactions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Transaction", mappedBy="beneficiary")
+     */
+    protected $receivedTransactions;
+
     /**
      * @ORM\Column(type="string", nullable=false)
      * @Assert\NotBlank()

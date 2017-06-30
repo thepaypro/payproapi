@@ -49,6 +49,9 @@ class AccountController extends Controller
     {
         $requestData = $request->request->all();
 
+        $response = $this->get('payproapi.contis_login_service')->login();
+
+        dump($response);die();
         try {
             $responseData = $this->get('payproapi.account_manager')->createAccount(
                 $requestData['forename'],
