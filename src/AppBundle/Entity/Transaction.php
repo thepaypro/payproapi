@@ -19,9 +19,16 @@ class Transaction implements \JsonSerializable
     protected $id;
 
     /**
-     * @var [type]
+     * @ORM\ManyToOne(targetEntity="Account", inversedBy="sentTransactions")
+     * @ORM\JoinColumn(name="payer_id", referencedColumnName="id")
      */
     protected $payer;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Account", inversedBy="receivedTransactions")
+     * @ORM\JoinColumn(name="beneficiary_id", referencedColumnName="id")
+     */
+    protected $beneficiary;
 
     /**
      * @ORM\Column(type="string", nullable=false)
@@ -29,12 +36,16 @@ class Transaction implements \JsonSerializable
     protected $contisCode;
 
     /**
-     * @ORM\OneToMany(targetEntity="Account", mappedBy="agreement")
+     * @ORM\Column(type="float", nullable=false)
      */
-    protected $accounts;
+    protected $amount;
 
     public function jsonSerialize()
     {
-        return ['id' => $this->id];
+        $allProperties = get_object_vars($this);
+
+        unset($allProperties['contisCode']);
+
+        return $allProperties;
     }
 }
