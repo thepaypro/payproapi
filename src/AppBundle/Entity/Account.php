@@ -19,6 +19,12 @@ class Account implements \JsonSerializable
     protected $id;
 
     /**
+     * @OneToOne(targetEntity="User", inversedBy="account")
+     * @JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
+
+    /**
      * @ORM\Column(type="string", nullable=false)
      */
     protected $forename;
