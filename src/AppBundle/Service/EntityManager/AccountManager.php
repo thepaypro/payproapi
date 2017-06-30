@@ -7,7 +7,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use AppBundle\Entity\Account;
 use AppBundle\Repository\CountryRepository;
 use AppBundle\Repository\AgreementRepository;
-
+use AppBundle\Service\Contis\RequestService;
 /**
  * Class AccountManager
  * @package AppBundle\Service
@@ -17,7 +17,7 @@ class AccountManager
     protected $agreementRepository;
     protected $countryRepository;
     protected $validationService;
-    protected $contisApiHost;
+    protected $contisRequestService;
 
     /**
      * @param EntityManager $em
@@ -25,12 +25,13 @@ class AccountManager
     public function __construct(
         AgreementRepository $agreementRepository,
         CountryRepository $countryRepository,
-        ValidatorInterface $validationService
-    )
-    {
+        ValidatorInterface $validationService,
+        RequestService $contisRequestService
+    ) {
         $this->agreementRepository = $agreementRepository;
         $this->countryRepository = $countryRepository;
         $this->validationService = $validationService;
+        $this->contisRequestService = $contisRequestService;
     }
 
     /**
@@ -50,8 +51,7 @@ class AccountManager
         String $postcode,
         String $city,
         Int $countryId
-    )
-    {
+    ) {
         $agreement = $this->agreementRepository->findOneById($agreementId);
         $country = $this->countryRepository->findOneById($countryId);
 
@@ -76,6 +76,24 @@ class AccountManager
                 throw new BadRequestHttpException($error->getMessage());
             }
         }
+
+        $response = $this->contisRequestService->call(
+            'CardHolder_Create',
+            [
+                'FirstName' => $account->getForename(),
+                'LastName' => $account->getLastname(),
+                'Gender' => 'N',
+                'DOB' => $account->getBirthdate(),
+                'Street' => $account->getPrincipalAddress(),
+                'City' => $account->getCity(),
+                'Country' => $account->getCountry()->getIso3(),
+                'Postcode' => $account->getPostcode(),
+                'IsMain' => 1,
+                'Relationship' => 'self',
+            ]
+        );
+
+        dump($response);die();
 
         return;
     }

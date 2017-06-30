@@ -18,8 +18,7 @@ class LoginService
         String $contisUsername,
         String $contisPassword,
         RequestService $requestService
-    )
-    {
+    ) {
         $this->contisUsername= $contisUsername
         $this->contisPassword = $contisPassword;
         $this->requestService = $requestService;

@@ -17,10 +17,9 @@ class RequestService
      * @param String $contisApiHost
      */
     public function __construct(
-        String $contisSecretKey
+        String $contisSecretKey,
         String $contisApiHost
-    )
-    {
+    ) {
         $this->contisSecretKey = $contisSecretKey;
         $this->contisApiHost = $contisApiHost;
         $this->httpClient = new Client();
@@ -40,11 +39,15 @@ class RequestService
         $hashDataString = ltrim($hashDataString, '&');
         $params['HashDataString'] = $hashDataString;
         $params['Hash'] = md5(mb_convert_encoding($hashDataString.$this->contisSecretKey, "UCS-2LE", "JIS, eucjp-win, sjis-win"));
-
-        $response = $this->httpClient->post(
-            $this->contisApiHost.$endpoint,
-            ['json' => $params]
-        );
+        try {
+            $response = $this->httpClient->post(
+                $this->contisApiHost.$endpoint,
+                ['json' => $params]
+            );   
+        } catch (\Exception $e) {
+            dump($e);
+            die();
+        }
 
         return json_decode($response->getBody()->getContents(), true);
     }

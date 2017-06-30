@@ -5,7 +5,7 @@ services:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Agreement')"
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Country')"
       - "@validator"
-      - "%contis_wsdl_url%"
+      - "@payproapi.contis_request_service"
     
   payproapi.mobile_verification_code_manager:
     class: AppBundle\Service\EntityManager\MobileVerificationCodeManager
