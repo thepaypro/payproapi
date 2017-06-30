@@ -95,6 +95,8 @@ class AccountManager
             ]
         );
 
+        dump($response);die();
+
         return $response;
     }
 }

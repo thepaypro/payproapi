@@ -47,6 +47,30 @@ class AccountController extends Controller
      */
     public function createAction(UserInterface $user, Request $request) : JsonResponse
     {
+        $requestData = $request->request->all();
+
+        $response = $this->get('payproapi.contis_login_service')->login();
+
+        dump($response);die();
+        try {
+            $responseData = $this->get('payproapi.account_manager')->createAccount(
+                $requestData['forename'],
+                $requestData['lastname'],
+                $requestData['birthDate'],
+                $requestData['documentType'],
+                $requestData['documentNumber'],
+                $requestData['agreement'],
+                $requestData['principalAddress'],
+                $requestData['secondaryAddress'],
+                $requestData['postcode'],
+                $requestData['city'],
+                $requestData['country']
+            );
+
+        } catch (Exception $e) {
+            $responseData = ['error' => $e->getErrorMessage()];
+        }
+
         return $this->JWTResponse($user, $data);
     }
 

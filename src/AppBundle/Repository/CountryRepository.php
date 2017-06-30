@@ -7,5 +7,4 @@ use Doctrine\ORM\QueryBuilder;
 
 class CountryRepository extends EntityRepository
 {
-
 }

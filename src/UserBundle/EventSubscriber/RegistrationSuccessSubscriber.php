@@ -51,21 +51,11 @@ class RegistrationSuccessSubscriber implements EventSubscriberInterface
         try {
             $phoneNumberObject = $phoneNumberUtil->parse($data['username'], null);
         } catch (\Exception $e) {
-            return $event->setResponse(new JsonResponse(
-                [
-                    'statusCode' => 400,
-                    'message' => $e->getMessage()
-                ]
-            ));
+            throw new \Exception($e->getMessage(), 400);
         }
 
         if ($this->userRepository->findOneByUsername($data['username'])) {
-            return $event->setResponse(new JsonResponse(
-                [
-                    'statusCode' => 400,
-                    'message' => 'Username already exist'
-                ]
-            ));
+            throw new \Exception('Username already exist', 400);
         }
 
         $mobileVerificationCode = $this->mobileVerificationCodeRepository->findOneBy([
@@ -74,12 +64,7 @@ class RegistrationSuccessSubscriber implements EventSubscriberInterface
         ]);
 
         if (!$mobileVerificationCode) {
-            return $event->setResponse(new JsonResponse(
-                [
-                    'statusCode' => 400,
-                    'message' => 'Invalid verification code'
-                ]
-            ));
+            throw new \Exception('Invalid verification code', 400);
         }
     }
 }

@@ -36,6 +36,10 @@ class UserController extends Controller
     {
         $id = $request->attributes->get('id');
 
+        if ($id != $user->getId()) {
+            
+        }
+
         $userRepository = $this->getDoctrine()->getRepository('AppBundle:User');
         $user = $userRepository->findOneById($id);
 

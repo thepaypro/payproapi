@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -11,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Account implements \JsonSerializable
 {
+    const DOCUMENT_TYPE_DNI = "DNI";
+    const DOCUMENT_TYPE_PASSPORT = "PASSPORT";
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -26,26 +30,31 @@ class Account implements \JsonSerializable
 
     /**
      * @ORM\Column(type="string", nullable=false)
+     * @Assert\NotBlank()
      */
     protected $forename;
 
     /**
      * @ORM\Column(type="string", nullable=false)
+     * @Assert\NotBlank()
      */
     protected $lastname;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     * @Assert\DateTime(format="d/m/Y")
      */
     protected $birthDate;
     
     /**
      * @ORM\Column(type="string", nullable=false)
+     * @Assert\Choice(callback = "getValidDocumentTypes")
      */
     protected $documentType;
    
     /**
      * @ORM\Column(type="string", nullable=false)
+     * @Assert\NotBlank()
      */
     protected $documentNumber;
     
@@ -61,17 +70,18 @@ class Account implements \JsonSerializable
     protected $cardHolderId;
 
     /**
-     * @OneToMany(targetEntity="Transaction", mappedBy="payer")
+     * @ORM\OneToMany(targetEntity="Transaction", mappedBy="payer")
      */
-    protected $sentTransactions:
+    protected $sentTransactions;
 
     /**
-     * @OneToMany(targetEntity="Transaction", mappedBy="beneficiary")
+     * @ORM\OneToMany(targetEntity="Transaction", mappedBy="beneficiary")
      */
-    protected $receivedTransactions:
+    protected $receivedTransactions;
 
     /**
      * @ORM\Column(type="string", nullable=false)
+     * @Assert\NotBlank()
      */
     protected $principalAddress;
     
@@ -82,17 +92,20 @@ class Account implements \JsonSerializable
     
     /**
      * @ORM\Column(type="string", nullable=false)
+     * @Assert\NotBlank()
      */
     protected $postcode;
     
     /**
      * @ORM\Column(type="string", nullable=false)
+     * @Assert\NotBlank()
      */
     protected $city;
 
     /**
      * @ORM\ManyToOne(targetEntity="Country", inversedBy="accounts", cascade={"all"})
      * @ORM\JoinColumn(name="country_id", referencedColumnName="id", nullable=false)
+     * @Assert\NotBlank()
      */
     protected $country;
 
@@ -111,6 +124,33 @@ class Account implements \JsonSerializable
      *
      */
     protected $updatedAt;
+
+    public function __construct(
+        String $forename,
+        String $lastname,
+        String $birthDate,
+        String $documentType,
+        String $documentNumber,
+        Agreement $agreement,
+        String $principalAddress,
+        String $secondaryAddress,
+        String $postcode,
+        String $city,
+        Country $country
+    )
+    {
+        $this->forename = $forename;
+        $this->lastname = $lastname;
+        $this->birthDate = $birthDate;
+        $this->documentType = $documentType;
+        $this->documentNumber = $documentNumber;
+        $this->agreement = $agreement;
+        $this->principalAddress = $principalAddress;
+        $this->secondaryAddress = $secondaryAddress;
+        $this->postcode = $postcode;
+        $this->city = $city;
+        $this->country = $country;
+    }
 
     public function jsonSerialize()
     {
@@ -443,5 +483,25 @@ class Account implements \JsonSerializable
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @return Array
+     */
+    public function getValidDocumentTypes() : Array
+    {
+        $constants = self::getConstants();
+        $key_types =  array_filter(array_flip($constants), function ($k) {
+            return (bool)preg_match('/DOCUMENT_TYPE/', $k);
+        });
+
+        $document_types = array_intersect_key($constants, array_flip($key_types));
+        return $document_types;
+    }
+
+    public static function getConstants()
+    {
+        $clientClass = new \ReflectionClass(__CLASS__);
+        return $clientClass->getConstants();
     }
 }

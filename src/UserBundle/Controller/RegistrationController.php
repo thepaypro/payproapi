@@ -22,28 +22,29 @@ class RegistrationController extends BaseRegistrationController
      */
     public function registerAction(Request $request)
     {
-        /** @var $formFactory FactoryInterface */
-        $formFactory = $this->get('fos_user.registration.form.factory');
-        /** @var $userManager UserManagerInterface */
-        $userManager = $this->get('fos_user.user_manager');
-        /** @var $dispatcher EventDispatcherInterface */
-        $dispatcher = $this->get('event_dispatcher');
-
-        $user = $userManager->createUser();
-        $user->setEnabled(true);
-
-        $event = new GetResponseUserEvent($user, $request);
-        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
-
-        if (null !== $event->getResponse()) {
-            return $event->getResponse();
-        }
-
-        $form = $formFactory->createForm();
-        $form->setData($user);
-
-        $form->handleRequest($request);
         try {
+            /** @var $formFactory FactoryInterface */
+            $formFactory = $this->get('fos_user.registration.form.factory');
+            /** @var $userManager UserManagerInterface */
+            $userManager = $this->get('fos_user.user_manager');
+            /** @var $dispatcher EventDispatcherInterface */
+            $dispatcher = $this->get('event_dispatcher');
+
+            $user = $userManager->createUser();
+            $user->setEnabled(true);
+
+            $event = new GetResponseUserEvent($user, $request);
+            $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
+
+            if (null !== $event->getResponse()) {
+                return $event->getResponse();
+            }
+
+            $form = $formFactory->createForm();
+            $form->setData($user);
+
+            $form->handleRequest($request);
+
             if ($form->isSubmitted()) {
                 if ($form->isValid()) {
                     $event = new FormEvent($form, $request);
@@ -69,7 +70,7 @@ class RegistrationController extends BaseRegistrationController
                 }
             }
         } catch (\Exception $e) {
-            dump([$e->getMessage(), $e->getCode()]);die();
+            return $this->json(['statusCode' => $e->getCode(), 'message' => $e->getMessage()]);
         }
     }
 }

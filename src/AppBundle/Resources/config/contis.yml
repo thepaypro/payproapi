@@ -1,0 +1,13 @@
+services:
+  payproapi.contis_request_service:
+    class: AppBundle\Service\Contis\RequestService
+    arguments:
+      - "%contis_hash_pan_key%"
+      - "%contis_api_host%"
+
+  payproapi.contis_login_service:
+    class: AppBundle\Service\Contis\LoginService
+    arguments:
+      - "%contis_username%"
+      - "%contis_password%"
+      - "@payproapi.contis_request_service"

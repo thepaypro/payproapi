@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Service\EntityManager;
 
+use libphonenumber\PhoneNumberUtil;
+
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -39,6 +41,14 @@ class MobileVerificationCodeManager
      */
     public function createMobileVerificationCode(String $phoneNumber) : Array
     {
+        $phoneNumberUtil = PhoneNumberUtil::getInstance();
+
+        try {
+            $phoneNumberObject = $phoneNumberUtil->parse($phoneNumber, null);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), 400);
+        }
+
         $user = $this->userRepository->findOneByUsername($phoneNumber);
 
         if ($user) {
@@ -47,9 +57,11 @@ class MobileVerificationCodeManager
 
         $mobileVerificationCode = $this->mobileVerificationCodeRepository->findOneByPhoneNumber($phoneNumber);
 
-        $mobileVerificationCode = new MobileVerificationCode($phoneNumber);
-        $this->em->persist($mobileVerificationCode);
-        $this->em->flush();
+        if (!$mobileVerificationCode) {
+            $mobileVerificationCode = new MobileVerificationCode($phoneNumber);
+            $this->em->persist($mobileVerificationCode);
+            $this->em->flush();
+        }
 
         $this->dispatcher->dispatch(
             MobileVerificationCodeEvents::MOBILE_VERIFICATION_CODE_REQUESTED,
