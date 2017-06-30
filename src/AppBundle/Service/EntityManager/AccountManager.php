@@ -7,9 +7,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use AppBundle\Entity\Account;
 use AppBundle\Repository\CountryRepository;
 use AppBundle\Repository\AgreementRepository;
-use \SoapClient;
-// use GuzzleHttp\Client;
-// use GuzzleHttp\Psr7\Request;
+
 /**
  * Class AccountManager
  * @package AppBundle\Service
@@ -19,7 +17,7 @@ class AccountManager
     protected $agreementRepository;
     protected $countryRepository;
     protected $validationService;
-    protected $contisSoapClient;
+    protected $contisApiHost;
 
     /**
      * @param EntityManager $em
@@ -27,14 +25,12 @@ class AccountManager
     public function __construct(
         AgreementRepository $agreementRepository,
         CountryRepository $countryRepository,
-        ValidatorInterface $validationService,
-        String $contisWsdlUrl
+        ValidatorInterface $validationService
     )
     {
         $this->agreementRepository = $agreementRepository;
         $this->countryRepository = $countryRepository;
         $this->validationService = $validationService;
-        // $this->contisSoapClient = new SoapClient($contisWsdlUrl);
     }
 
     /**
@@ -81,30 +77,6 @@ class AccountManager
             }
         }
 
-        $params = [
-            'Password' => 'P@yprobeta',
-            'UserName' => 'Payprobeta',
-        ];
-
-        $hashDataString = '';
-        foreach ($params as $key => $param) {
-            $hashDataString = $hashDataString.'&'.$param;
-        }
-
-        $hashDataString = ltrim($hashDataString, '&');
-        $params['HashDataString'] = $hashDataString;
-        $params['Hash'] = md5(mb_convert_encoding($hashDataString.'82117C6AB41E198A', "UCS-2LE", "JIS, eucjp-win, sjis-win"));
-
-        $client = new \GuzzleHttp\Client();
-        $response = $client->post(
-            'http://34.253.132.188:8080/ContisRESTAPI_Beta/Account/Login.aspx',
-            ['form_params' => $params]
-        );
-
-        // $response = $this->contisSoapClient->__soapCall('Login', ["body" => $params]);
-
-        dump($response);
-        die();
         return;
     }
 }

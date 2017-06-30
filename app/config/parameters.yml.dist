@@ -10,7 +10,6 @@ parameters:
     mailer_user: kilian@thepaypro.com
     mailer_password:
     secret: 98996e818bd6b7910999bffc5e43133092f983a9
-    contis_wsdl_url: 'http://34.253.132.188/ContisCardAPI.svc?singleWsdl'
 
     # public and private keys for jwt.
     # https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md#configuration
@@ -22,3 +21,10 @@ parameters:
     twilio_account_id: 'AC3728b7395057e64047db32dfb6175d81'
     twilio_auth_token: '877ba70e2f95811f69586cd850fcc8fc'
     twilio_phone_number: '+16364863418'
+
+    contis_api_host: 'http://34.253.132.188/ContisCardAPI.svc/rest/'
+    contis_username: 'Payprobeta'
+    contis_password: 'P@yprobeta'
+    contis_hash_pan_key: '82117C6AB41E198A'
+    contis_3des_pin_IV_key: '729B06BA0F609553'
+    contis_3des_pin_secret_key: '3F70D22CF1378D6DC8884A6855BFAA6D'

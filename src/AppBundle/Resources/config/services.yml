@@ -16,3 +16,4 @@ services:
 imports:
   - { resource: managers.yml }
   - { resource: subscribers.yml }
+  - { resource: contis.yml }
