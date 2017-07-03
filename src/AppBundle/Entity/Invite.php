@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity
  * @ORM\Table(name="Invites")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\InvitesRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\InviteRepository")
  */
 class Invite
 {
@@ -31,6 +31,11 @@ class Invite
      * @Assert\NotBlank()
      */
     protected $inviter;
+
+    /**
+     * @ORM\OneToMany(targetEntity="TransactionInvite", mappedBy="invite")
+     */
+    protected $transactionInvites;
 
     /**
      * Get id
