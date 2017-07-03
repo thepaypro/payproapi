@@ -23,7 +23,8 @@ class Version20170523165703 extends AbstractMigration
         $this->addSql('CREATE TABLE Countries (id INT AUTO_INCREMENT NOT NULL, iso2 VARCHAR(2) NOT NULL, iso3 VARCHAR(3) NOT NULL, name VARCHAR(100) NOT NULL, active TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE Invites (id INT AUTO_INCREMENT NOT NULL, inviter_id INT NOT NULL, invited_phone_number VARCHAR(255) NOT NULL, INDEX IDX_CCC353F0B79F4F04 (inviter_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE MobileVerificationCodes (id INT AUTO_INCREMENT NOT NULL, code VARCHAR(255) NOT NULL, phone_number VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE Transactions (id INT AUTO_INCREMENT NOT NULL, payer_id INT DEFAULT NULL, beneficiary_id INT DEFAULT NULL, contis_code VARCHAR(255) NOT NULL, amount DOUBLE PRECISION NOT NULL, INDEX IDX_F299C1B4C17AD9A9 (payer_id), INDEX IDX_F299C1B4ECCAAFA0 (beneficiary_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE Transactions (id INT AUTO_INCREMENT NOT NULL, payer_id INT DEFAULT NULL, beneficiary_id INT DEFAULT NULL, contis_code VARCHAR(255) NOT NULL, amount DOUBLE PRECISION NOT NULL, transaction_invite VARCHAR(255) NOT NULL, INDEX IDX_F299C1B4C17AD9A9 (payer_id), INDEX IDX_F299C1B4ECCAAFA0 (beneficiary_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE TransactionInvites (id INT AUTO_INCREMENT NOT NULL, invite_id INT DEFAULT NULL, transaction_id INT DEFAULT NULL, requested_at DATETIME NOT NULL, status VARCHAR(255) NOT NULL, INDEX IDX_1ECB7E03EA417747 (invite_id), UNIQUE INDEX UNIQ_1ECB7E032FC0CB0F (transaction_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE Users (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(180) NOT NULL, username_canonical VARCHAR(180) NOT NULL, enabled TINYINT(1) NOT NULL, salt VARCHAR(255) DEFAULT NULL, password VARCHAR(255) NOT NULL, last_login DATETIME DEFAULT NULL, confirmation_token VARCHAR(180) DEFAULT NULL, password_requested_at DATETIME DEFAULT NULL, roles LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\', email_canonical VARCHAR(255) DEFAULT NULL, email VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_D5428AED92FC23A8 (username_canonical), UNIQUE INDEX UNIQ_D5428AEDC05FB297 (confirmation_token), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE Accounts ADD CONSTRAINT FK_33BEFCFAA76ED395 FOREIGN KEY (user_id) REFERENCES Users (id)');
         $this->addSql('ALTER TABLE Accounts ADD CONSTRAINT FK_33BEFCFA24890B2B FOREIGN KEY (agreement_id) REFERENCES Agreements (id)');
@@ -31,6 +32,8 @@ class Version20170523165703 extends AbstractMigration
         $this->addSql('ALTER TABLE Invites ADD CONSTRAINT FK_CCC353F0B79F4F04 FOREIGN KEY (inviter_id) REFERENCES Users (id)');
         $this->addSql('ALTER TABLE Transactions ADD CONSTRAINT FK_F299C1B4C17AD9A9 FOREIGN KEY (payer_id) REFERENCES Accounts (id)');
         $this->addSql('ALTER TABLE Transactions ADD CONSTRAINT FK_F299C1B4ECCAAFA0 FOREIGN KEY (beneficiary_id) REFERENCES Accounts (id)');
+        $this->addSql('ALTER TABLE TransactionInvites ADD CONSTRAINT FK_1ECB7E03EA417747 FOREIGN KEY (invite_id) REFERENCES Invites (id)');
+        $this->addSql('ALTER TABLE TransactionInvites ADD CONSTRAINT FK_1ECB7E032FC0CB0F FOREIGN KEY (transaction_id) REFERENCES Transactions (id)');
     }
 
     /**
@@ -45,6 +48,8 @@ class Version20170523165703 extends AbstractMigration
         $this->addSql('ALTER TABLE Transactions DROP FOREIGN KEY FK_F299C1B4ECCAAFA0');
         $this->addSql('ALTER TABLE Accounts DROP FOREIGN KEY FK_33BEFCFA24890B2B');
         $this->addSql('ALTER TABLE Accounts DROP FOREIGN KEY FK_33BEFCFAF92F3E70');
+        $this->addSql('ALTER TABLE TransactionInvites DROP FOREIGN KEY FK_1ECB7E03EA417747');
+        $this->addSql('ALTER TABLE TransactionInvites DROP FOREIGN KEY FK_1ECB7E032FC0CB0F');
         $this->addSql('ALTER TABLE Accounts DROP FOREIGN KEY FK_33BEFCFAA76ED395');
         $this->addSql('ALTER TABLE Invites DROP FOREIGN KEY FK_CCC353F0B79F4F04');
         $this->addSql('DROP TABLE Accounts');
@@ -53,6 +58,7 @@ class Version20170523165703 extends AbstractMigration
         $this->addSql('DROP TABLE Invites');
         $this->addSql('DROP TABLE MobileVerificationCodes');
         $this->addSql('DROP TABLE Transactions');
+        $this->addSql('DROP TABLE TransactionInvites');
         $this->addSql('DROP TABLE Users');
     }
 }
