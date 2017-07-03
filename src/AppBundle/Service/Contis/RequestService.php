@@ -2,7 +2,7 @@
 namespace AppBundle\Service\Contis;
 
 use GuzzleHttp\Client;
-// use Exception;
+
 /**
  * Class RequestService
  * @package AppBundle\Service
@@ -45,7 +45,7 @@ class RequestService
                 $this->contisApiHost.$endpoint,
                 ['json' => $params]
             );   
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             dump($e);
             die();
         }
