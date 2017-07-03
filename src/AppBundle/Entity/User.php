@@ -36,6 +36,11 @@ class User extends BaseUser implements \JsonSerializable
      */
     private $account;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Invite", mappedBy="inviter")
+     */
+    protected $invites;
+
     public function __construct()
     {
         parent::__construct();
@@ -55,5 +60,63 @@ class User extends BaseUser implements \JsonSerializable
         unset($allProperties['passwordRequestedAt']);
 
         return $allProperties;
+    }
+
+    /**
+     * Set account
+     *
+     * @param \AppBundle\Entity\Account $account
+     *
+     * @return User
+     */
+    public function setAccount(Account $account = null)
+    {
+        $this->account = $account;
+
+        return $this;
+    }
+
+    /**
+     * Get account
+     *
+     * @return \AppBundle\Entity\Account
+     */
+    public function getAccount()
+    {
+        return $this->account;
+    }
+
+    /**
+     * Add invite
+     *
+     * @param \AppBundle\Entity\Invite $invite
+     *
+     * @return User
+     */
+    public function addInvite(Invite $invite)
+    {
+        $this->invites[] = $invite;
+
+        return $this;
+    }
+
+    /**
+     * Remove invite
+     *
+     * @param \AppBundle\Entity\Invite $invite
+     */
+    public function removeInvite(Invite $invite)
+    {
+        $this->invites->removeElement($invite);
+    }
+
+    /**
+     * Get invites
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInvites()
+    {
+        return $this->invites;
     }
 }

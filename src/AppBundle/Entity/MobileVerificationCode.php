@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="MobileVerificationCode")
+ * @ORM\Table(name="MobileVerificationCodes")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\MobileVerificationCodeRepository")
  */
 class MobileVerificationCode
