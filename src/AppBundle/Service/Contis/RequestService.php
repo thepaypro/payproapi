@@ -40,7 +40,8 @@ class RequestService
         $params['HashDataString'] = $hashDataString;
         $params['Hash'] = md5(mb_convert_encoding($hashDataString.$this->contisSecretKey, "UCS-2LE", "JIS, eucjp-win, sjis-win"));
         try {
-            $response = $this->httpClient->post(
+            $response = $this->httpClient->request(
+                'POST',
                 $this->contisApiHost.$endpoint,
                 ['json' => $params]
             );   
