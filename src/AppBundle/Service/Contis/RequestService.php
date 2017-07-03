@@ -2,7 +2,7 @@
 namespace AppBundle\Service\Contis;
 
 use GuzzleHttp\Client;
-
+// use Exception;
 /**
  * Class RequestService
  * @package AppBundle\Service
@@ -40,11 +40,12 @@ class RequestService
         $params['HashDataString'] = $hashDataString;
         $params['Hash'] = md5(mb_convert_encoding($hashDataString.$this->contisSecretKey, "UCS-2LE", "JIS, eucjp-win, sjis-win"));
         try {
-            $response = $this->httpClient->post(
+            $response = $this->httpClient->request(
+                'POST',
                 $this->contisApiHost.$endpoint,
                 ['json' => $params]
             );   
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dump($e);
             die();
         }
