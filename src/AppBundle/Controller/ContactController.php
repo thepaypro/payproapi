@@ -32,7 +32,6 @@ class ContactController extends Controller
      */
     public function createAction(UserInterface $user, Request $request) : JsonResponse
     {
-        dump($request);die();
         $phoneNumbers = $request->request->all();
 
         $contacts = $this->get('payproapi.contact_manager')->createList($user->getUsername(), $phoneNumbers);

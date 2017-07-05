@@ -2,28 +2,30 @@
 namespace AppBundle\Service\EntityManager;
 
 use libphonenumber\PhoneNumberUtil;
+use libphonenumber\NumberParseException;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Doctrine\Common\Persistence\ObjectRepository;
 
+use Exception;
 /**
  * Class ContactManager
  * @package AppBundle\Service
  */
 class ContactManager
 {
-    protected $em;
-    protected $phoneNumberUtil;
+    protected $userRepository;
+    protected $phoneUtil;
 
     /**
      * @param EntityManager            $em
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(EntityManager $em, EventDispatcherInterface $eventDispatcher)
+    public function __construct(ObjectRepository $userRepository)
     {
-        $this->em = $em;
-        $this->phoneNumberUtil = PhoneNumberUtil::getInstance();
-
+        $this->userRepository = $userRepository;
+        $this->phoneUtil = PhoneNumberUtil::getInstance();
     }
 
     /**
@@ -34,17 +36,47 @@ class ContactManager
      */
     public function createList(String $userPhoneNumber, Array $phoneNumbers) : Array
     {
-        $userphoneNumber = $this->phoneNumberUtil->parse($phoneNumber, null);
-        try {
-            $phoneNumberObject = $phoneNumberUtil->parse($phoneNumber, null);
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage(), 400);
+        $userPhoneNumberObject = $this->phoneUtil->parse($userPhoneNumber, null);
+
+        $contactsList = [];
+
+        foreach ($phoneNumbers as $phoneNumber) {
+            try {
+                $phoneNumberObject = $this->phoneUtil->parse($phoneNumber, null);
+            } catch (NumberParseException $e) {
+                $autocompletedPhoneNumber = '+'.$userPhoneNumberObject->getCountryCode().$phoneNumber;
+
+                try {
+                    $phoneNumberObject = $this->phoneUtil->parse($autocompletedPhoneNumber, null);
+                } catch (Exception $e) {
+                    $contactsList[$phoneNumber] = [
+                        'phoneNumber' => $phoneNumber,
+                        'isUser' => false,
+                        'fullName' => null
+                    ];
+                    continue;
+                }
+            }
+
+            $formattedPhoneNumber = '+'.$phoneNumberObject->getCountryCode().$phoneNumberObject->getNationalNumber();
+
+            $user = $this->userRepository->findOneByUsername($formattedPhoneNumber);
+
+            if ($user && $user->getAccount()) {
+                $contactsList[$phoneNumber] = [
+                    'phoneNumber' => $formattedPhoneNumber,
+                    'isUser' => true,
+                    'fullName' => $user->getAccount()->getForename().' '.$user->getAccount()->getLastname()
+                ];
+            } else {
+                $contactsList[$phoneNumber] = [
+                    'phoneNumber' => $formattedPhoneNumber,
+                    'isUser' => false,
+                    'fullName' => null
+                ];
+            }
         }
 
-        $user = $this->userRepository->findOneByUsername($phoneNumber);
-
-        if ($user) {
-            return ['isUser' => true];
-        }
+        return $contactsList;
     }
 }
