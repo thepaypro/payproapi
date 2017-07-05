@@ -42,17 +42,16 @@ class RequestService
      * This method authenticates with Contis if needed and create the hash data string and hash required by contis to execute the call.
      * @return Array
      */
-    public function call(String $endpoint, Array $params) : Array
+    public function call(String $endpoint, Array $params, String $jsonParamtersKey = 'objInfo') : Array
     {
-        $params = $this->generateHashDataStringAndHash($params);
-        $params = ['CardHolderSearchInfo' => $params];
-        $params['token'] = $this->getAuthenticationToken();
-        // dump($params);die();
+        $payload[$jsonParamtersKey] = $this->generateHashDataStringAndHash($params);
+        $payload['objReqInfo'] = $this->generateHashDataStringAndHash(['token' => $this->getAuthenticationToken()]);
+        // dump(json_encode($payload));die();
         try {
             $response = $this->httpClient->request(
                 'POST',
                 $this->contisApiHost.$endpoint,
-                ['json' => $params]
+                ['json' => $payload]
             );
         } catch (Exception $e) {
             dump($e->getResponse()->getBody()->getContents());die();

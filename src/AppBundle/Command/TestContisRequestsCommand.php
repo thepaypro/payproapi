@@ -30,8 +30,8 @@ class TestContisRequestsCommand extends ContainerAwareCommand
         ];
         $endpoint = 'CardHolder_Lookup_GetInfo';
 
-        $response = $this->getContainer()->get('payproapi.contis_request_service')->call($endpoint, $params);
+        $response = $this->getContainer()->get('payproapi.contis_request_service')->call($endpoint, $params, 'objCardHolderSearchInfo');
 
-        $output->writeln($response);
+        dump($response);die();
     }
 }

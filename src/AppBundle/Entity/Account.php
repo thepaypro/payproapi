@@ -285,6 +285,29 @@ class Account implements \JsonSerializable
     }
 
     /**
+     * Set agreement
+     *
+     * @param string $agreement
+     * @return Account
+     */
+    public function setAgreement($agreement)
+    {
+        $this->agreement = $agreement;
+
+        return $this;
+    }
+
+    /**
+     * Get agreement
+     *
+     * @return string
+     */
+    public function getAgreement()
+    {
+        return $this->agreement;
+    }
+
+    /**
      * Set accountTypeId
      *
      * @param string $accountTypeId
