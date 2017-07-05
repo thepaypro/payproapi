@@ -12,3 +12,8 @@ services:
     arguments:
       - "@doctrine.orm.entity_manager"
       - "@event_dispatcher"
+
+  payproapi.contact_manager:
+    class: AppBundle\Service\EntityManager\ContactsManager
+    arguments:
+      - "@doctrine.orm.entity_manager"
