@@ -155,7 +155,7 @@ class Account implements \JsonSerializable
     public function jsonSerialize()
     {
         $allProperties = get_object_vars($this);
-
+        $allProperties['user'] = $this->user->getId();
         return $allProperties;
     }
 

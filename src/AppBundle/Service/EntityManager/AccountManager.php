@@ -82,6 +82,7 @@ class AccountManager
         $response = $this->contisRequestService->call(
             'CardHolder_Create',
             [
+                'AgreementCode' => $agreement->getContisAgreementCode(),
                 'FirstName' => $account->getForename(),
                 'LastName' => $account->getLastname(),
                 'Gender' => 'N',
@@ -90,7 +91,7 @@ class AccountManager
                 'City' => $account->getCity(),
                 'Country' => $account->getCountry()->getIso3(),
                 'Postcode' => $account->getPostcode(),
-                'IsMain' => 1,
+                'IsMain' => 0,
                 'Relationship' => 'self',
             ]
         );
