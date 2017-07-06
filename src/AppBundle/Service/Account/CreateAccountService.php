@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Service\EntityManager;
+namespace AppBundle\Service\Account;
 
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -11,10 +11,9 @@ use AppBundle\Repository\AgreementRepository;
 use AppBundle\Service\Contis\RequestService;
 
 /**
- * Class AccountManager
- * @package AppBundle\Service
+ * Class CreateAccountService
  */
-class AccountManager
+class CreateAccountService
 {
     protected $agreementRepository;
     protected $countryRepository;
@@ -41,7 +40,7 @@ class AccountManager
      * @param  Account $account
      * @return something to reflect if something goes ok or not
      */
-    public function createAccount(
+    public function execute(
         String $forename,
         String $lastname,
         String $birthDate,

@@ -51,7 +51,7 @@ class AccountController extends Controller
         $requestData = $request->request->all();
 
         try {
-            $responseData = $this->get('payproapi.account_manager')->createAccount(
+            $responseData = $this->get('payproapi.create_account_service')->execute(
                 $requestData['forename'],
                 $requestData['lastname'],
                 $requestData['birthDate'],
@@ -85,9 +85,9 @@ class AccountController extends Controller
         $requestData = $request->request->all();
 
         try {
-            $responseData = $this->get('payproapi.account_manager')->updateAccount(/*
-            Here lack some parameters
-            */);
+            $responseData = $this->get('payproapi.account_manager')->updateAccount(
+            /* Here lack some parameters */
+            );
         } catch (Exception $e) {
             $responseData = ['error' => $e->getErrorMessage()];
         }

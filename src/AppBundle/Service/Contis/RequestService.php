@@ -14,7 +14,9 @@ use Exception;
 class RequestService
 {
     const CONTIS_TOKEN_KEY = 'payproapi.contis_authentication_token';
+    const CONTIS_SECURITY_KEY = 'payproapi.contis_authentication_security_key';
     const TOKEN_EXPIRY_DATE_KEY = 'payproapi.contis_token_expiry_time';
+
     protected $contisApiHost;
     protected $contisSecretKey;
     protected $session;
@@ -44,8 +46,10 @@ class RequestService
      */
     public function call(String $endpoint, Array $params, String $jsonParamtersKey = 'objInfo') : Array
     {
+        $token = $this->getAuthenticationToken();
+        $params['token'] = $token;
         $payload[$jsonParamtersKey] = $this->generateHashDataStringAndHash($params);
-        $payload['objReqInfo'] = $this->generateHashDataStringAndHash(['token' => $this->getAuthenticationToken()]);
+        $payload['objReqInfo'] = $this->generateHashDataStringAndHash(['token' => $token]);
         // dump(json_encode($payload));die();
         try {
             $response = $this->httpClient->request(
@@ -64,12 +68,13 @@ class RequestService
     {
         $hashDataString = '';
         foreach ($params as $key => $param) {
-            $hashDataString = $hashDataString.'&'.$param;
+            $combineOperator = $param === end($params) ? '' : '&';
+            $hashDataString = $hashDataString.$param.$combineOperator;
         }
 
-        $hashDataString = ltrim($hashDataString, '&');
         $params['HashDataString'] = $hashDataString;
-        $params['Hash'] = md5(mb_convert_encoding($hashDataString.$this->contisSecretKey, "UCS-2LE", "JIS, eucjp-win, sjis-win"));
+        $securityKey = $this->session->has(self::CONTIS_SECURITY_KEY) ? $this->session->get(self::CONTIS_SECURITY_KEY) : '';
+        $params['Hash'] = md5(mb_convert_encoding($hashDataString.$securityKey, "UCS-2LE", "JIS, eucjp-win, sjis-win"));
 
         return $params;
     }
@@ -104,14 +109,16 @@ class RequestService
             'POST',
             $this->contisApiHost.'Login',
             ['json' => $params]
-        );   
+        );
 
         $response = json_decode($response->getBody()->getContents(), true);
 
         $token = $response['LoginResult']['Token'];
+        $securityKey = $response['LoginResult']['SecurityKey'];
         $expiryDate = trim($response['LoginResult']['SessionExpiryDateTime'], '/Date()')/1000;
 
         $this->session->set(self::CONTIS_TOKEN_KEY, $token);
+        $this->session->set(self::CONTIS_SECURITY_KEY, $securityKey);
         $this->session->set(self::TOKEN_EXPIRY_DATE_KEY, $expiryDate);
 
         return $token;

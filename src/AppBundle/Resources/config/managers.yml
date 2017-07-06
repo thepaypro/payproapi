@@ -1,19 +1,19 @@
 services:
-  payproapi.account_manager:
-    class: AppBundle\Service\EntityManager\AccountManager
+  payproapi.create_account_service:
+    class: AppBundle\Service\Account\CreateAccountService
     arguments:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Agreement')"
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Country')"
       - "@validator"
       - "@payproapi.contis_request_service"
     
-  payproapi.mobile_verification_code_manager:
-    class: AppBundle\Service\EntityManager\MobileVerificationCodeManager
+  payproapi.create_mobile_verification_code_service:
+    class: AppBundle\Service\MobileVerificationCode\CreateMobileVerificationCodeService
     arguments:
       - "@doctrine.orm.entity_manager"
       - "@event_dispatcher"
 
-  payproapi.contact_manager:
-    class: AppBundle\Service\EntityManager\ContactManager
+  payproapi.contact_list_service:
+    class: AppBundle\Service\Contact\ContactListService
     arguments:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
