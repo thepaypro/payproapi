@@ -32,7 +32,8 @@ class User extends BaseUser implements \JsonSerializable
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Account", mappedBy="user")
+     * @ORM\ManyToOne(targetEntity="Account", inversedBy="users")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id")
      */
     private $account;
 
