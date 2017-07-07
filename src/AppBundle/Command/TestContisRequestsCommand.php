@@ -17,20 +17,20 @@ class TestContisRequestsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $params = [
-            'CardHolderID'  => null,
+            'CardHolderID'  => 0,
             'FirstName'     => 'Bethany',
             'LastName'      => 'Harriman',
-            'MobileNumber'  => null,
+            'MobileNumber'  => '',
             'EmailAddress'  => 'beth.harriman@contisgroup.com',
             'AccountNumber' => '04079462',
-            'CardID'        => null,
-            'HashCardNumber'=> null,
-            'UserName'      => null,
+            'CardID'        => 0,
+            'HashCardNumber'=> '',
+            'UserName'      => '',
             'SortCode'      => '623053'
         ];
         $endpoint = 'CardHolder_Lookup_GetInfo';
 
-        $response = $this->getContainer()->get('payproapi.contis_request_service')->call($endpoint, $params, 'objCardHolderSearchInfo');
+        $response = $this->getContainer()->get('payproapi.contis_request_service')->call($endpoint, $params);
 
         dump($response);die();
     }

@@ -49,7 +49,14 @@ class RequestService
         $token = $this->getAuthenticationToken();
         $params['token'] = $token;
         $payload[$jsonParamtersKey] = $this->generateHashDataStringAndHash($params);
-        $payload['objReqInfo'] = $this->generateHashDataStringAndHash(['token' => $token]);
+        $payload['objReqInfo'] = $this->generateHashDataStringAndHash(
+            [
+                'token' => $token,
+                'ClientRequestReference' => 'contis123',
+                'SchemeCode' => 'PAYPRO'
+            ]
+        );
+
         // dump(json_encode($payload));die();
         try {
             $response = $this->httpClient->request(
@@ -69,7 +76,8 @@ class RequestService
         $hashDataString = '';
         foreach ($params as $key => $param) {
             $combineOperator = $param === end($params) ? '' : '&';
-            $hashDataString = $hashDataString.$param.$combineOperator;
+            $stringParam = $param === 0 ? '' : $param;
+            $hashDataString = $hashDataString.$stringParam.$combineOperator;
         }
 
         $params['HashDataString'] = $hashDataString;
