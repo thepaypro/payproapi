@@ -9,6 +9,8 @@ use AppBundle\Entity\Account;
 use AppBundle\Repository\CountryRepository;
 use AppBundle\Repository\AgreementRepository;
 use AppBundle\Service\Contis\RequestService;
+use AppBundle\Service\Contis\HashingService;
+use AppBundle\Service\Contis\AuthenticationService;
 
 /**
  * Class CreateAccountService
@@ -19,6 +21,8 @@ class CreateAccountService
     protected $countryRepository;
     protected $validationService;
     protected $contisRequestService;
+    protected $contisAuthenticationService;
+    protected $contisHashingService;
 
     /**
      * @param EntityManager $em
@@ -27,12 +31,16 @@ class CreateAccountService
         AgreementRepository $agreementRepository,
         CountryRepository $countryRepository,
         ValidatorInterface $validationService,
-        RequestService $contisRequestService
+        RequestService $contisRequestService,
+        AuthenticationService $contisAuthenticationService,
+        HashingService $contisHashingService
     ) {
         $this->agreementRepository = $agreementRepository;
         $this->countryRepository = $countryRepository;
         $this->validationService = $validationService;
         $this->contisRequestService = $contisRequestService;
+        $this->contisAuthenticationService = $contisAuthenticationService;
+        $this->contisHashingService = $contisHashingService;
     }
 
     /**
@@ -78,22 +86,30 @@ class CreateAccountService
             }
         }
 
-        $response = $this->contisRequestService->call(
-            'CardHolder_Create',
-            [
-                'AgreementCode' => $account->getAgreement()->getContisAgreementCode(),
-                'FirstName' => $account->getForename(),
-                'LastName' => $account->getLastname(),
-                'Gender' => 'N',
-                'DOB' => $account->getBirthdate(),
-                'Street' => $account->getPrincipalAddress(),
-                'City' => $account->getCity(),
-                'Country' => $account->getCountry()->getIso3(),
-                'Postcode' => $account->getPostcode(),
-                'IsMain' => 1,
-                'Relationship' => 'self',
-            ]
-        );
+        $params = [
+            'AgreementCode' => $account->getAgreement()->getContisAgreementCode(),
+            'FirstName' => $account->getForename(),
+            'LastName' => $account->getLastname(),
+            'Gender' => 'N',
+            'DOB' => $account->getBirthdate(),
+            'Street' => $account->getPrincipalAddress(),
+            'City' => $account->getCity(),
+            'Country' => $account->getCountry()->getIso3(),
+            'Postcode' => $account->getPostcode(),
+            'IsMain' => 1,
+            'Relationship' => 'self',
+        ];
+
+        $params['Token'] = $this->contisAuthenticationService->getAuthenticationToken();
+
+        $requestParams = [
+            'Token' => $params['Token']
+        ];
+
+        $params = [$this->contisHashingService->generateHashDataStringAndHash($params)];
+        $requestParams = $this->contisHashingService->generateHashDataStringAndHash($requestParams);
+
+        $response = $this->contisRequestService->call('CardHolder_Create', $params, $requestParams);
 
         dump($response);die();
 

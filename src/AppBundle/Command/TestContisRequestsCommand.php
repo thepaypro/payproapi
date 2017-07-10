@@ -30,7 +30,18 @@ class TestContisRequestsCommand extends ContainerAwareCommand
         ];
         $endpoint = 'CardHolder_Lookup_GetInfo';
 
-        $response = $this->getContainer()->get('payproapi.contis_request_service')->call($endpoint, $params);
+        $params['Token'] = $this->getContainer()->get('payproapi.contis_authentication_service')->getAuthenticationToken();
+
+        $requestParams = [
+            'Token' => $params['Token'],
+            'ClientRequestReference' => 'contis123',
+            'SchemeCode' => 'PAYPRO'
+        ];
+
+        $params = $this->getContainer()->get('payproapi.contis_hashing_service')->generateHashDataStringAndHash($params);
+        $requestParams = $this->getContainer()->get('payproapi.contis_hashing_service')->generateHashDataStringAndHash($requestParams);
+
+        $response = $this->getContainer()->get('payproapi.contis_request_service')->call($endpoint, $params, $requestParams);
 
         dump($response);die();
     }

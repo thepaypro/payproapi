@@ -50,7 +50,7 @@ class AccountController extends Controller
     {
         $requestData = $request->request->all();
 
-        try {
+        // try {
             $responseData = $this->get('payproapi.create_account_service')->execute(
                 $requestData['forename'],
                 $requestData['lastname'],
@@ -64,9 +64,9 @@ class AccountController extends Controller
                 $requestData['city'],
                 $requestData['country']
             );
-        } catch (Exception $e) {
-            $responseData = ['error' => $e->getErrorMessage()];
-        }
+        // } catch (Exception $e) {
+        //     $responseData = ['error' => $e->getMessage()];
+        // }
 
         return $this->JWTResponse($user, $responseData);
     }

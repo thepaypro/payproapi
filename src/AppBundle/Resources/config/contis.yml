@@ -2,8 +2,19 @@ services:
   payproapi.contis_request_service:
     class: AppBundle\Service\Contis\RequestService
     arguments:
-      - "@session"
       - "%contis_api_host%"
-      - "%contis_hash_pan_key%"
+
+  payproapi.contis_hashing_service:
+    class: AppBundle\Service\Contis\HashingService
+    arguments:
+      - "@session"
+
+  payproapi.contis_authentication_service:
+    class: AppBundle\Service\Contis\AuthenticationService
+    arguments:
+      - "@session"
+      - "@payproapi.contis_request_service"
+      - "@payproapi.contis_hashing_service"
+      - "%contis_api_host%"
       - "%contis_username%"
       - "%contis_password%"
