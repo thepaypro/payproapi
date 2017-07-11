@@ -58,8 +58,8 @@ class AccountController extends Controller
                 $requestData['documentType'],
                 $requestData['documentNumber'],
                 $requestData['agreement'],
-                $requestData['principalAddress'],
-                $requestData['secondaryAddress'],
+                $requestData['street'],
+                $requestData['buildingNumber'],
                 $requestData['postcode'],
                 $requestData['city'],
                 $requestData['country']

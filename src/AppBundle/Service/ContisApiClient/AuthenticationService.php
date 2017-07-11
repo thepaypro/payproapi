@@ -1,15 +1,13 @@
 <?php
 
-namespace AppBundle\Service\Contis;
+namespace AppBundle\Service\ContisApiClient;
 
 use Symfony\Component\HttpFoundation\Session\Session;
-use GuzzleHttp\Client;
-use DateTime;
 use Exception;
 
 /**
  * Class AuthenticationService
- * @package AppBundle\Service\Contis
+ * @package AppBundle\Service\ContisApiClient
  */
 class AuthenticationService
 {
@@ -44,7 +42,6 @@ class AuthenticationService
         $this->contisApiHost = $contisApiHost;
         $this->contisUsername = $contisUsername;
         $this->contisPassword = $contisPassword;
-        $this->httpClient = new Client();
     }
 
     /**

@@ -18,7 +18,7 @@ class Version20170704122249 extends AbstractMigration
         $agreements = [
             [
                 'id' => '1',
-                'contis_agreement_code' => 'RJ-AM-GS-L7',
+                'contis_agreement_code' => 'RJAMGSL7',
                 'currency_code' => 'GB',
                 'new_card_charge' => '599',
                 'card_reissue_charge' => '0',
@@ -39,7 +39,7 @@ class Version20170704122249 extends AbstractMigration
             ],
             [
                 'id' => '2',
-                'contis_agreement_code' => 'RJ-AM-GS-L7',
+                'contis_agreement_code' => '8JZ8MYNM',
                 'currency_code' => 'GB',
                 'new_card_charge' => '59900',
                 'card_reissue_charge' => '1',

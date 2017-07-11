@@ -83,12 +83,12 @@ class Account implements \JsonSerializable
      * @ORM\Column(type="string", nullable=false)
      * @Assert\NotBlank()
      */
-    protected $principalAddress;
+    protected $street;
     
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $secondaryAddress;
+    protected $buildingNumber;
     
     /**
      * @ORM\Column(type="string", nullable=false)
@@ -132,8 +132,8 @@ class Account implements \JsonSerializable
         String $documentType,
         String $documentNumber,
         Agreement $agreement,
-        String $principalAddress,
-        String $secondaryAddress,
+        String $street,
+        String $buildingNumber,
         String $postcode,
         String $city,
         Country $country
@@ -145,8 +145,8 @@ class Account implements \JsonSerializable
         $this->documentType = $documentType;
         $this->documentNumber = $documentNumber;
         $this->agreement = $agreement;
-        $this->principalAddress = $principalAddress;
-        $this->secondaryAddress = $secondaryAddress;
+        $this->street = $street;
+        $this->buildingNumber = $buildingNumber;
         $this->postcode = $postcode;
         $this->city = $city;
         $this->country = $country;
@@ -354,49 +354,49 @@ class Account implements \JsonSerializable
     }
 
     /**
-     * Set principalAddress
+     * Set street
      *
-     * @param string $principalAddress
+     * @param string $street
      * @return Account
      */
-    public function setPrincipalAddress($principalAddress)
+    public function setStreet($street)
     {
-        $this->principalAddress = $principalAddress;
+        $this->street = $street;
 
         return $this;
     }
 
     /**
-     * Get principalAddress
+     * Get street
      *
      * @return string
      */
-    public function getPrincipalAddress()
+    public function getStreet()
     {
-        return $this->principalAddress;
+        return $this->street;
     }
 
     /**
-     * Set secondaryAddress
+     * Set buildingNumber
      *
-     * @param string $secondaryAddress
+     * @param string $buildingNumber
      * @return Account
      */
-    public function setSecondaryAddress($secondaryAddress)
+    public function setBuildingNumber($buildingNumber)
     {
-        $this->secondaryAddress = $secondaryAddress;
+        $this->buildingNumber = $buildingNumber;
 
         return $this;
     }
 
     /**
-     * Get secondaryAddress
+     * Get buildingNumber
      *
      * @return string
      */
-    public function getSecondaryAddress()
+    public function getBuildingNumber()
     {
-        return $this->secondaryAddress;
+        return $this->buildingNumber;
     }
 
     /**

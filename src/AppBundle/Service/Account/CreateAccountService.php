@@ -8,9 +8,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use AppBundle\Entity\Account;
 use AppBundle\Repository\CountryRepository;
 use AppBundle\Repository\AgreementRepository;
-use AppBundle\Service\Contis\RequestService;
-use AppBundle\Service\Contis\HashingService;
-use AppBundle\Service\Contis\AuthenticationService;
+use AppBundle\Service\ContisApiClient\Account as ContisAccountApiClient;
 
 /**
  * Class CreateAccountService
@@ -20,9 +18,7 @@ class CreateAccountService
     protected $agreementRepository;
     protected $countryRepository;
     protected $validationService;
-    protected $contisRequestService;
-    protected $contisAuthenticationService;
-    protected $contisHashingService;
+    protected $contisAccountApiClient;
 
     /**
      * @param EntityManager $em
@@ -31,16 +27,13 @@ class CreateAccountService
         AgreementRepository $agreementRepository,
         CountryRepository $countryRepository,
         ValidatorInterface $validationService,
-        RequestService $contisRequestService,
-        AuthenticationService $contisAuthenticationService,
-        HashingService $contisHashingService
+        ContisAccountApiClient $contisAccountApiClient
     ) {
         $this->agreementRepository = $agreementRepository;
         $this->countryRepository = $countryRepository;
         $this->validationService = $validationService;
-        $this->contisRequestService = $contisRequestService;
-        $this->contisAuthenticationService = $contisAuthenticationService;
-        $this->contisHashingService = $contisHashingService;
+        $this->contisAccountApiClient = $contisAccountApiClient;
+
     }
 
     /**
@@ -55,8 +48,8 @@ class CreateAccountService
         String $documentType,
         String $documentNumber,
         Int $agreementId,
-        String $principalAddress,
-        String $secondaryAddress,
+        String $street,
+        String $buildingNumber,
         String $postcode,
         String $city,
         Int $countryId
@@ -71,8 +64,8 @@ class CreateAccountService
             $documentType,
             $documentNumber,
             $agreement,
-            $principalAddress,
-            $secondaryAddress,
+            $street,
+            $buildingNumber,
             $postcode,
             $city,
             $country
@@ -86,32 +79,7 @@ class CreateAccountService
             }
         }
 
-        $params = [
-            'AgreementCode' => $account->getAgreement()->getContisAgreementCode(),
-            'FirstName' => $account->getForename(),
-            'LastName' => $account->getLastname(),
-            'Gender' => 'N',
-            'DOB' => $account->getBirthdate(),
-            'Street' => $account->getPrincipalAddress(),
-            'City' => $account->getCity(),
-            'Country' => $account->getCountry()->getIso3(),
-            'Postcode' => $account->getPostcode(),
-            'IsMain' => 1,
-            'Relationship' => 'self',
-        ];
-
-        $params['Token'] = $this->contisAuthenticationService->getAuthenticationToken();
-
-        $requestParams = [
-            'Token' => $params['Token']
-        ];
-
-        $params = [$this->contisHashingService->generateHashDataStringAndHash($params)];
-        $requestParams = $this->contisHashingService->generateHashDataStringAndHash($requestParams);
-
-        $response = $this->contisRequestService->call('CardHolder_Create', $params, $requestParams);
-
-        dump($response);die();
+        $response = $this->contisAccountApiClient->create($account);
 
         return $response;
     }

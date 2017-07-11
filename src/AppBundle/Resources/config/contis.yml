@@ -1,20 +1,27 @@
 services:
-  payproapi.contis_request_service:
-    class: AppBundle\Service\Contis\RequestService
+  contis_api_client.request_service:
+    class: AppBundle\Service\ContisApiClient\RequestService
     arguments:
       - "%contis_api_host%"
 
-  payproapi.contis_hashing_service:
-    class: AppBundle\Service\Contis\HashingService
+  contis_api_client.hashing_service:
+    class: AppBundle\Service\ContisApiClient\HashingService
     arguments:
       - "@session"
 
-  payproapi.contis_authentication_service:
-    class: AppBundle\Service\Contis\AuthenticationService
+  contis_api_client.authentication_service:
+    class: AppBundle\Service\ContisApiClient\AuthenticationService
     arguments:
       - "@session"
-      - "@payproapi.contis_request_service"
-      - "@payproapi.contis_hashing_service"
+      - "@contis_api_client.request_service"
+      - "@contis_api_client.hashing_service"
       - "%contis_api_host%"
       - "%contis_username%"
       - "%contis_password%"
+
+  contis_api_client.account_service:
+    class: AppBundle\Service\ContisApiClient\Account
+    arguments:
+      - "@contis_api_client.request_service"
+      - "@contis_api_client.hashing_service"
+      - "@contis_api_client.authentication_service"

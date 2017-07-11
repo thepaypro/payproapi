@@ -1,12 +1,12 @@
 <?php
 
-namespace AppBundle\Service\Contis;
+namespace AppBundle\Service\ContisApiClient;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class HashingService
- * @package AppBundle\Service\Contis
+ * @package AppBundle\Service\ContisApiClient
  */
 class HashingService
 {

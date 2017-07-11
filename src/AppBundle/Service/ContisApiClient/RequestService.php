@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Service\Contis;
+namespace AppBundle\Service\ContisApiClient;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 use GuzzleHttp\Client;
@@ -9,7 +9,7 @@ use Exception;
 
 /**
  * Class RequestService
- * @package AppBundle\Service
+ * @package AppBundle\Service\ContisApiClient
  */
 class RequestService
 {
@@ -43,12 +43,20 @@ class RequestService
         $payload[$jsonParamtersKey] = $params;
         $payload['objReqInfo'] = $requestParams;
 
-        // dump($payload);die();
+        $payload = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        if ($endpoint != 'Login') {
+            // dump($payload);die();
+        }
         try {
             $response = $this->httpClient->request(
                 'POST',
                 $this->contisApiHost.$endpoint,
-                ['json' => $payload]
+                [
+                    'headers' => [
+                        'Content-type' => 'application/json'
+                    ],
+                    'body' => $payload
+                ]
             );
         } catch (Exception $e) {
             dump($e->getResponse()->getBody()->getContents());die();
