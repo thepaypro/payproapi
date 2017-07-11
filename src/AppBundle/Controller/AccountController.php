@@ -51,7 +51,8 @@ class AccountController extends Controller
         $requestData = $request->request->all();
 
         // try {
-            $responseData = $this->get('payproapi.create_account_service')->execute(
+            $account = $this->get('payproapi.create_account_service')->execute(
+                $user->getId(),
                 $requestData['forename'],
                 $requestData['lastname'],
                 $requestData['birthDate'],
@@ -68,7 +69,7 @@ class AccountController extends Controller
         //     $responseData = ['error' => $e->getMessage()];
         // }
 
-        return $this->JWTResponse($user, $responseData);
+        return $this->JWTResponse($user, ['account' => $account]);
     }
 
     /**

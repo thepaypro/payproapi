@@ -5,9 +5,13 @@ namespace AppBundle\Service\Account;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+use DateTime;
+
 use AppBundle\Entity\Account;
 use AppBundle\Repository\CountryRepository;
 use AppBundle\Repository\AgreementRepository;
+use AppBundle\Repository\AccountRepository;
+use AppBundle\Repository\UserRepository;
 use AppBundle\Service\ContisApiClient\Account as ContisAccountApiClient;
 
 /**
@@ -17,6 +21,8 @@ class CreateAccountService
 {
     protected $agreementRepository;
     protected $countryRepository;
+    protected $accountRepository;
+    protected $userRepository;
     protected $validationService;
     protected $contisAccountApiClient;
 
@@ -26,11 +32,15 @@ class CreateAccountService
     public function __construct(
         AgreementRepository $agreementRepository,
         CountryRepository $countryRepository,
+        AccountRepository $accountRepository,
+        UserRepository $userRepository,
         ValidatorInterface $validationService,
         ContisAccountApiClient $contisAccountApiClient
     ) {
         $this->agreementRepository = $agreementRepository;
         $this->countryRepository = $countryRepository;
+        $this->accountRepository = $accountRepository;
+        $this->userRepository = $userRepository;
         $this->validationService = $validationService;
         $this->contisAccountApiClient = $contisAccountApiClient;
 
@@ -42,6 +52,7 @@ class CreateAccountService
      * @return something to reflect if something goes ok or not
      */
     public function execute(
+        int $userId,
         String $forename,
         String $lastname,
         String $birthDate,
@@ -56,8 +67,12 @@ class CreateAccountService
     ) {
         $agreement = $this->agreementRepository->findOneById($agreementId);
         $country = $this->countryRepository->findOneById($countryId);
+        $user = $this->userRepository->findOneById($userId);
+
+        $birthDate = new DateTime($birthDate);
 
         $account = new Account(
+            $user,
             $forename,
             $lastname,
             $birthDate,
@@ -81,6 +96,12 @@ class CreateAccountService
 
         $response = $this->contisAccountApiClient->create($account);
 
-        return $response;
+        $account->setCardHolderId($response['CardHolderID']);
+        $account->setAccountNumber($response['AccountNumber']);
+        $account->setSortCode($response['SortCode']);
+
+        $this->accountRepository->save($account);
+
+        return $account;
     }
 }

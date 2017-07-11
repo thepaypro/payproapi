@@ -4,6 +4,8 @@ services:
     arguments:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Agreement')"
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Country')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Account')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
       - "@validator"
       - "@contis_api_client.account_service"
     

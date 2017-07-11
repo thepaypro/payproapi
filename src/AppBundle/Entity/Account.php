@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -9,11 +10,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Table(name="Accounts")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AccountRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Account implements \JsonSerializable
 {
     const DOCUMENT_TYPE_DNI = "DNI";
     const DOCUMENT_TYPE_PASSPORT = "PASSPORT";
+    const DOCUMENT_TYPE_DRIVING_LICENSE = "DRIVING_LICENSE";
 
     /**
      * @ORM\Id
@@ -68,6 +71,16 @@ class Account implements \JsonSerializable
      * @ORM\Column(type="string")
      */
     protected $cardHolderId;
+
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     */
+    protected $accountNumber;
+
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     */
+    protected $sortCode;
 
     /**
      * @ORM\OneToMany(targetEntity="Transaction", mappedBy="payer")
@@ -126,9 +139,10 @@ class Account implements \JsonSerializable
     protected $updatedAt;
 
     public function __construct(
+        User $user,
         String $forename,
         String $lastname,
-        String $birthDate,
+        DateTime $birthDate,
         String $documentType,
         String $documentNumber,
         Agreement $agreement,
@@ -155,6 +169,7 @@ class Account implements \JsonSerializable
     public function jsonSerialize()
     {
         $allProperties = get_object_vars($this);
+
         $allProperties['user'] = $this->user->getId();
         return $allProperties;
     }
@@ -167,6 +182,16 @@ class Account implements \JsonSerializable
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get user
+     *
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -221,7 +246,7 @@ class Account implements \JsonSerializable
      * @param \DateTime $birthDate
      * @return Account
      */
-    public function setBirthDate($birthDate)
+    public function setBirthDate(DateTime $birthDate)
     {
         $this->birthDate = $birthDate;
 
@@ -354,6 +379,52 @@ class Account implements \JsonSerializable
     }
 
     /**
+     * Set accountNumber
+     *
+     * @param string $accountNumber
+     * @return Account
+     */
+    public function setAccountNumber($accountNumber)
+    {
+        $this->accountNumber = $accountNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get accountNumber
+     *
+     * @return string
+     */
+    public function getAccountNumber()
+    {
+        return $this->accountNumber;
+    }
+
+    /**
+     * Set sortCode
+     *
+     * @param string $sortCode
+     * @return Account
+     */
+    public function setSortCode($sortCode)
+    {
+        $this->sortCode = $sortCode;
+
+        return $this;
+    }
+
+    /**
+     * Get sortCode
+     *
+     * @return string
+     */
+    public function getSortCode()
+    {
+        return $this->sortCode;
+    }
+
+    /**
      * Set street
      *
      * @param string $street
@@ -476,6 +547,7 @@ class Account implements \JsonSerializable
     public function onPrePersist()
     {
         $this->createdAt = new \DateTime("now");
+        $this->updatedAt = new \DateTime("now");
     }
 
     /**

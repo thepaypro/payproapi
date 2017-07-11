@@ -43,11 +43,14 @@ class Account
             'City' => $account->getCity(),
             'Country' => $account->getCountry()->getIsoNumeric(),
             'County' => $account->getCountry()->getIso2(),
-            'DOB' => '/Date('.strtotime($account->getBirthdate()).')/',
+            'DOB' => '/Date('.$account->getBirthdate()->getTimeStamp().')/',
             'FirstName' => $account->getForename(),
             'Gender' => 'N',
             'LastName' => $account->getLastname(),
             'Postcode' => $account->getPostcode(),
+            'Nationalidcardline1' => $account->getDocumentType() == AccountEntity::DOCUMENT_TYPE_DNI ? $account->getDocumentNumber() : '',
+            'Drivinglicence' => $account->getDocumentType() == AccountEntity::DOCUMENT_TYPE_PASSPORT ? $account->getDocumentNumber() : '',
+            'Passportnumber' => $account->getDocumentType() == AccountEntity::DOCUMENT_TYPE_DRIVING_LICENSE ? $account->getDocumentNumber() : '',
             'IsMain' => 'true',
             'Relationship' => '01',
             'Street' => $account->getStreet(),
@@ -58,7 +61,8 @@ class Account
 
         $requestParams = [
             'Token' => $params['Token'],
-            'ClientRequestReference' => $account->getId()
+            'ClientUniqueReferenceID' => strtotime('now')
+
         ];
 
         $params = [$this->hashingService->generateHashDataStringAndHash($params)];
@@ -66,6 +70,9 @@ class Account
 
         $response = $this->requestService->call('CardHolder_Create', $params, $requestParams);
 
-        return $response;
+        if ($response['CardHolder_CreateResult']['Description'] == 'Success ') {
+            return $response['CardHolder_CreateResult']['ResultObject'][0];
+        }
+        dump($response);die();
     }
 }
