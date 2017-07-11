@@ -67,6 +67,26 @@ class UserController extends Controller
     }
 
     /**
+     * Create a User with the Information specified.
+     * @param  UserInterface $user    [description]
+     * @param  Request       $request [description]
+     * @return JsonResponse
+     *
+     * @Security("has_role('ROLE_USER')")
+     * @Route("/}", name="user_create")
+     * @Method("POST")     * 
+     */
+    public function createAction(UserInterface $user, Request $request) : JsonResponse
+    {
+        $payload = $request->request->all();
+
+        $user = $this->get('payproapi.create_user_service')->create(
+            $payload['phoneNumber'],
+            $payload['mobileVerificationCode']
+        );
+    }
+
+    /**
      * Update the information of the user
      * @param  UserInterface $user
      * @param  Request       $request

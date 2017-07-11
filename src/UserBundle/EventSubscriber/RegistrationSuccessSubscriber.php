@@ -16,14 +16,17 @@ class RegistrationSuccessSubscriber implements EventSubscriberInterface
 {
     private $mobileVerificationCodeRepository;
     private $userRepository;
+    private $PhoneNumberValidator;
 
     public function __construct(
         MobileVerificationCodeRepository $mobileVerificationCodeRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        PhoneNumberValidatorService $PhoneNumberValidator
     )
     {
         $this->mobileVerificationCodeRepository = $mobileVerificationCodeRepository;
         $this->userRepository = $userRepository;
+        $this->phoneNumberValidator = $phoneNumberValidator;
     }
 
     /**
@@ -48,10 +51,8 @@ class RegistrationSuccessSubscriber implements EventSubscriberInterface
 
         $phoneNumberUtil = PhoneNumberUtil::getInstance();
 
-        try {
-            $phoneNumberObject = $phoneNumberUtil->parse($data['username'], null);
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage(), 400);
+        if (!$this->phoneNumberValidator->isValid($data['username'])) {
+            throw new \Exception('Invalid phone number', 400);
         }
 
         if ($this->userRepository->findOneByUsername($data['username'])) {

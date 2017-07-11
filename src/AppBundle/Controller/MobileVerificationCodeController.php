@@ -28,8 +28,8 @@ class MobileVerificationCodeController extends Controller
 
         try {
             return $this->json(
-                $this->get('payproapi.mobile_verification_code_manager')
-                    ->createMobileVerificationCode($phoneNumber)
+                $this->get('payproapi.create_mobile_verification_code_service')
+                    ->execute($phoneNumber)
             );
         } catch (\Exception $e) {
             return $this->json(['statusCode' => $e->getCode(),'message' => $e->getMessage()]);            

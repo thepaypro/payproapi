@@ -115,7 +115,10 @@ class Agreement implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        return ['id' => $this->id];
+        return [
+            'id' => $this->id,
+            'newCardCharge' => $this->newCardCharge
+        ];
     }
 
     /**

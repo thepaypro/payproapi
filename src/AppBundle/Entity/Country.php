@@ -30,6 +30,11 @@ class Country implements \JsonSerializable
     protected $iso3;
 
     /**
+     * @ORM\Column(type="string", length=3, nullable=false)
+     */
+    protected $isoNumeric;
+
+    /**
      * @ORM\Column(type="string", length=100, nullable=false)
      */
     protected $name;
@@ -252,5 +257,29 @@ class Country implements \JsonSerializable
     public function getIso3()
     {
         return $this->iso3;
+    }
+
+    /**
+     * Set isoNumeric
+     *
+     * @param string $isoNumeric
+     *
+     * @return Country
+     */
+    public function setIsoNumeric($isoNumeric)
+    {
+        $this->isoNumeric = $isoNumeric;
+
+        return $this;
+    }
+
+    /**
+     * Get isoNumeric
+     *
+     * @return string
+     */
+    public function getIsoNumeric()
+    {
+        return $this->isoNumeric;
     }
 }

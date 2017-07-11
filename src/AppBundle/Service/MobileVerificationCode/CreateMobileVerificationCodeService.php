@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Service\EntityManager;
+namespace AppBundle\Service\MobileVerificationCode;
 
 use libphonenumber\PhoneNumberUtil;
 
@@ -11,10 +11,10 @@ use AppBundle\Event\MobileVerificationCodeEvent;
 use AppBundle\Event\MobileVerificationCodeEvents;
 
 /**
- * Class MobileVerificationCodeManager
+ * Class CreateMobileVerificationCodeService
  * @package AppBundle\Service
  */
-class MobileVerificationCodeManager
+class CreateMobileVerificationCodeService
 {
     protected $em;
     protected $dispatcher;
@@ -39,7 +39,7 @@ class MobileVerificationCodeManager
      * @param  phoneNumber $phoneNumber
      * @return something to reflect if something goes ok or not
      */
-    public function createMobileVerificationCode(String $phoneNumber) : Array
+    public function execute(String $phoneNumber) : Array
     {
         $phoneNumberUtil = PhoneNumberUtil::getInstance();
 
