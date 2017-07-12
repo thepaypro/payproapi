@@ -2,34 +2,26 @@
 
 namespace UserBundle\EventSubscriber;
 
-use libphonenumber\PhoneNumberUtil;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
-use AppBundle\Repository\MobileVerificationCodeRepository;
-use AppBundle\Repository\UserRepository;
+use AppBundle\Service\User\Validator\UserValidatorService;
 
 class RegistrationSuccessSubscriber implements EventSubscriberInterface
 {
-    private $mobileVerificationCodeRepository;
-    private $userRepository;
+    private $userValidatorService;
 
-    public function __construct(
-        MobileVerificationCodeRepository $mobileVerificationCodeRepository,
-        UserRepository $userRepository
-    )
+    public function __construct(UserValidatorService $userValidatorService)
     {
-        $this->mobileVerificationCodeRepository = $mobileVerificationCodeRepository;
-        $this->userRepository = $userRepository;
+        $this->userValidatorService = $userValidatorService;
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): Array
     {
         return [
             FOSUserEvents::REGISTRATION_INITIALIZE => [
@@ -46,25 +38,6 @@ class RegistrationSuccessSubscriber implements EventSubscriberInterface
     {
         $data = $event->getRequest()->request->all()['app_user_registration'];
 
-        $phoneNumberUtil = PhoneNumberUtil::getInstance();
-
-        try {
-            $phoneNumberObject = $phoneNumberUtil->parse($data['username'], null);
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage(), 400);
-        }
-
-        if ($this->userRepository->findOneByUsername($data['username'])) {
-            throw new \Exception('Username already exist', 400);
-        }
-
-        $mobileVerificationCode = $this->mobileVerificationCodeRepository->findOneBy([
-            'code' => $data['validationCode'],
-            'phoneNumber' => $data['username']
-        ]);
-
-        if (!$mobileVerificationCode) {
-            throw new \Exception('Invalid verification code', 400);
-        }
+        $this->userValidatorService->validate($data['username'], $data['mobileVerificationCode']);
     }
 }

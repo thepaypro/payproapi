@@ -1,5 +1,6 @@
 <?php
-namespace AppBundle\Service\EntityManager;
+
+namespace AppBundle\Service\Contact;
 
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\NumberParseException;
@@ -9,23 +10,25 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Doctrine\Common\Persistence\ObjectRepository;
 
 use Exception;
+
 /**
- * Class ContactManager
+ * Class ContactListService
  * @package AppBundle\Service
  */
-class ContactManager
+class ContactListService
 {
     protected $userRepository;
-    protected $phoneUtil;
+    protected $phoneNumberValidator;
 
     /**
-     * @param EntityManager            $em
-     * @param EventDispatcherInterface $eventDispatcher
+     * @param UserRepository              $userRepository
+     * @param PhoneNumberValidatorService $phoneNumberValidator
      */
-    public function __construct(ObjectRepository $userRepository)
+    public function __construct(ObjectRepository $userRepository, PhoneNumberValidatorService $phoneNumberValidator)
     {
         $this->userRepository = $userRepository;
         $this->phoneUtil = PhoneNumberUtil::getInstance();
+        $this->phoneNumberValidator = $phoneNumberValidator;
     }
 
     /**
@@ -37,46 +40,44 @@ class ContactManager
     public function createList(String $userPhoneNumber, Array $phoneNumbers) : Array
     {
         $userPhoneNumberObject = $this->phoneUtil->parse($userPhoneNumber, null);
-
         $contactsList = [];
 
         foreach ($phoneNumbers as $phoneNumber) {
-            try {
-                $phoneNumberObject = $this->phoneUtil->parse($phoneNumber, null);
-            } catch (NumberParseException $e) {
+            unset($autocompletedPhoneNumber);
+            
+            if (!$this->phoneNumberValidator->isValid($phoneNumber)) {
                 $autocompletedPhoneNumber = '+'.$userPhoneNumberObject->getCountryCode().$phoneNumber;
 
-                try {
-                    $phoneNumberObject = $this->phoneUtil->parse($autocompletedPhoneNumber, null);
-                } catch (Exception $e) {
+                if (!$this->phoneNumberValidator->isValid($autocompletedPhoneNumber)) {
                     $contactsList[$phoneNumber] = [
                         'phoneNumber' => $phoneNumber,
                         'isUser' => false,
                         'fullName' => null
                     ];
+
                     continue;
                 }
             }
 
-            $formattedPhoneNumber = '+'.$phoneNumberObject->getCountryCode().$phoneNumberObject->getNationalNumber();
+            $actualPhoneNumber = isset($autocompletedPhoneNumber) ? $autocompletedPhoneNumber : $phoneNumber;
 
-            $user = $this->userRepository->findOneByUsername($formattedPhoneNumber);
+            $user = $this->userRepository->findOneByUsername($actualPhoneNumber);
 
-            if ($user && $user->getAccount()) {
+            if (!$user || !$user->getAccount()) {
                 $contactsList[$phoneNumber] = [
-                    'phoneNumber' => $formattedPhoneNumber,
-                    'isUser' => true,
-                    'fullName' => $user->getAccount()->getForename().' '.$user->getAccount()->getLastname()
-                ];
-            } else {
-                $contactsList[$phoneNumber] = [
-                    'phoneNumber' => $formattedPhoneNumber,
+                    'phoneNumber' => $actualPhoneNumber,
                     'isUser' => false,
                     'fullName' => null
                 ];
+                continue;
             }
-        }
 
+            $contactsList[$phoneNumber] = [
+                'phoneNumber' => $actualPhoneNumber,
+                'isUser' => true,
+                'fullName' => $user->getAccount()->getForename().' '.$user->getAccount()->getLastname()
+            ];
+        }
         return $contactsList;
     }
 }

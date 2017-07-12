@@ -34,7 +34,7 @@ class ContactController extends Controller
     {
         $phoneNumbers = $request->request->all();
 
-        $contacts = $this->get('payproapi.contact_manager')->createList($user->getUsername(), $phoneNumbers);
+        $contacts = $this->get('payproapi.contact_list_service')->createList($user->getUsername(), $phoneNumbers);
 
         return $this->JWTResponse($user, ['contacts' => $contacts]);
     }

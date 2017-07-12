@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use AppBundle\Exception\PayProException;
 
 /**
  * Card controller.
@@ -28,10 +29,10 @@ class MobileVerificationCodeController extends Controller
 
         try {
             return $this->json(
-                $this->get('payproapi.mobile_verification_code_manager')
-                    ->createMobileVerificationCode($phoneNumber)
+                $this->get('payproapi.create_mobile_verification_code_service')
+                    ->execute($phoneNumber)
             );
-        } catch (\Exception $e) {
+        } catch (PayProException $e) {
             return $this->json(['statusCode' => $e->getCode(),'message' => $e->getMessage()]);            
         }
 

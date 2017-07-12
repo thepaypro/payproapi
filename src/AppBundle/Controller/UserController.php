@@ -2,17 +2,20 @@
 
 namespace AppBundle\Controller;
 
+use Respect\Validation\Validator as v;
+use Respect\Validation\Exceptions\NestedValidationException;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
+
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Respect\Validation\Validator as v;
-use Respect\Validation\Exceptions\NestedValidationException;
+use AppBundle\Exception\PayProException;
 
 /**
  * User controller.
@@ -36,7 +39,7 @@ class UserController extends Controller
     {
         $id = $request->attributes->get('id');
 
-        if ($id != $user->getId()) {
+        if ($id != $user->getId()) {//TODO: change that when the account is multiuser.
             
         }
 
@@ -56,14 +59,41 @@ class UserController extends Controller
      * @Route("", name="users_list")
      * @Method("GET")
      */
-    public function indexAction(UserInterface $user, Request $request) : JsonResponse
+    // public function indexAction(UserInterface $user, Request $request) : JsonResponse
+    // {
+    //     $filters = $request->query->all();
+
+    //     $userRepository = $this->getDoctrine()->getRepository('AppBundle:User');
+    //     $users = $userRepository->findUserswithUsernameIn($filters['phoneNumbers']);
+
+    //     return $this->JWTResponse($user, ['users' => $users]);
+    // }
+
+    /**
+     * Create a User with the information specified.
+     * @param  UserInterface $user    [description]
+     * @param  Request       $request [description]
+     * @return JsonResponse
+     *
+     * @Security("has_role('ROLE_USER')")
+     * @Route("", name="user_create")
+     * @Method("POST")
+     */
+    public function createAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $filters = $request->query->all();
+        $payload = $request->request->all();
 
-        $userRepository = $this->getDoctrine()->getRepository('AppBundle:User');
-        $users = $userRepository->findUserswithUsernameIn($filters['phoneNumbers']);
+        try {
+            $user = $this->get('payproapi.create_user_service')->execute(
+                $user->getId(),
+                $payload['phoneNumber'],
+                $payload['mobileVerificationCode']
+            );   
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['message' => $e->getMessage()], $e->getCode());
+        }
 
-        return $this->JWTResponse($user, ['users' => $users]);
+        return $this->JWTResponse($user, ['user' => $user]);
     }
 
     /**
@@ -113,5 +143,28 @@ class UserController extends Controller
             'message' => 'Password change success',
             'user' => $user,
         ]);
+    }
+
+    /**
+     * Delete the user with the given id.
+     * @param  UserInterface $user
+     * @param  Request       $request
+     * @return JsonResponse
+     *
+     * @Security("has_role('ROLE_USER')")
+     * @Route("/{id}", name="user_delete")
+     * @Method("DELETE")
+     */
+    public function deleteAction(UserInterface $user, Request $request) : JsonResponse
+    {
+        $id = $request->attributes->get('id');
+
+        try {
+            $this->get('payproapi.delete_user_service')->execute($user->getId(), $id);
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['message' => $e->getMessage()], $e->getCode());
+        }
+
+        return $this->JWTResponse($user, ['message' => 'User deleted']);
     }
 }

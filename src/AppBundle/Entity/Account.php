@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -9,11 +10,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Table(name="Accounts")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AccountRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Account implements \JsonSerializable
 {
     const DOCUMENT_TYPE_DNI = "DNI";
     const DOCUMENT_TYPE_PASSPORT = "PASSPORT";
+    const DOCUMENT_TYPE_DRIVING_LICENSE = "DRIVING_LICENSE";
 
     /**
      * @ORM\Id
@@ -23,10 +26,9 @@ class Account implements \JsonSerializable
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="User", inversedBy="account")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="User", mappedBy="account")
      */
-    private $user;
+    private $users;
 
     /**
      * @ORM\Column(type="string", nullable=false)
@@ -70,6 +72,16 @@ class Account implements \JsonSerializable
     protected $cardHolderId;
 
     /**
+     * @ORM\Column(type="string", nullable=false)
+     */
+    protected $accountNumber;
+
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     */
+    protected $sortCode;
+
+    /**
      * @ORM\OneToMany(targetEntity="Transaction", mappedBy="payer")
      */
     protected $sentTransactions;
@@ -83,12 +95,12 @@ class Account implements \JsonSerializable
      * @ORM\Column(type="string", nullable=false)
      * @Assert\NotBlank()
      */
-    protected $principalAddress;
+    protected $street;
     
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $secondaryAddress;
+    protected $buildingNumber;
     
     /**
      * @ORM\Column(type="string", nullable=false)
@@ -126,14 +138,15 @@ class Account implements \JsonSerializable
     protected $updatedAt;
 
     public function __construct(
+        User $user,
         String $forename,
         String $lastname,
-        String $birthDate,
+        DateTime $birthDate,
         String $documentType,
         String $documentNumber,
         Agreement $agreement,
-        String $principalAddress,
-        String $secondaryAddress,
+        String $street,
+        String $buildingNumber,
         String $postcode,
         String $city,
         Country $country
@@ -145,17 +158,22 @@ class Account implements \JsonSerializable
         $this->documentType = $documentType;
         $this->documentNumber = $documentNumber;
         $this->agreement = $agreement;
-        $this->principalAddress = $principalAddress;
-        $this->secondaryAddress = $secondaryAddress;
+        $this->street = $street;
+        $this->buildingNumber = $buildingNumber;
         $this->postcode = $postcode;
         $this->city = $city;
         $this->country = $country;
+
+        $this->sentTransactions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->receivedTransactions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function jsonSerialize()
     {
         $allProperties = get_object_vars($this);
 
+        $allProperties['user'] = $this->user->getId();
         return $allProperties;
     }
 
@@ -167,6 +185,16 @@ class Account implements \JsonSerializable
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get user
+     *
+     * @return User
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 
     /**
@@ -221,7 +249,7 @@ class Account implements \JsonSerializable
      * @param \DateTime $birthDate
      * @return Account
      */
-    public function setBirthDate($birthDate)
+    public function setBirthDate(DateTime $birthDate)
     {
         $this->birthDate = $birthDate;
 
@@ -285,6 +313,29 @@ class Account implements \JsonSerializable
     }
 
     /**
+     * Set agreement
+     *
+     * @param string $agreement
+     * @return Account
+     */
+    public function setAgreement($agreement)
+    {
+        $this->agreement = $agreement;
+
+        return $this;
+    }
+
+    /**
+     * Get agreement
+     *
+     * @return string
+     */
+    public function getAgreement()
+    {
+        return $this->agreement;
+    }
+
+    /**
      * Set accountTypeId
      *
      * @param string $accountTypeId
@@ -331,49 +382,95 @@ class Account implements \JsonSerializable
     }
 
     /**
-     * Set principalAddress
+     * Set accountNumber
      *
-     * @param string $principalAddress
+     * @param string $accountNumber
      * @return Account
      */
-    public function setPrincipalAddress($principalAddress)
+    public function setAccountNumber($accountNumber)
     {
-        $this->principalAddress = $principalAddress;
+        $this->accountNumber = $accountNumber;
 
         return $this;
     }
 
     /**
-     * Get principalAddress
+     * Get accountNumber
      *
      * @return string
      */
-    public function getPrincipalAddress()
+    public function getAccountNumber()
     {
-        return $this->principalAddress;
+        return $this->accountNumber;
     }
 
     /**
-     * Set secondaryAddress
+     * Set sortCode
      *
-     * @param string $secondaryAddress
+     * @param string $sortCode
      * @return Account
      */
-    public function setSecondaryAddress($secondaryAddress)
+    public function setSortCode($sortCode)
     {
-        $this->secondaryAddress = $secondaryAddress;
+        $this->sortCode = $sortCode;
 
         return $this;
     }
 
     /**
-     * Get secondaryAddress
+     * Get sortCode
      *
      * @return string
      */
-    public function getSecondaryAddress()
+    public function getSortCode()
     {
-        return $this->secondaryAddress;
+        return $this->sortCode;
+    }
+
+    /**
+     * Set street
+     *
+     * @param string $street
+     * @return Account
+     */
+    public function setStreet($street)
+    {
+        $this->street = $street;
+
+        return $this;
+    }
+
+    /**
+     * Get street
+     *
+     * @return string
+     */
+    public function getStreet()
+    {
+        return $this->street;
+    }
+
+    /**
+     * Set buildingNumber
+     *
+     * @param string $buildingNumber
+     * @return Account
+     */
+    public function setBuildingNumber($buildingNumber)
+    {
+        $this->buildingNumber = $buildingNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get buildingNumber
+     *
+     * @return string
+     */
+    public function getBuildingNumber()
+    {
+        return $this->buildingNumber;
     }
 
     /**
@@ -453,6 +550,7 @@ class Account implements \JsonSerializable
     public function onPrePersist()
     {
         $this->createdAt = new \DateTime("now");
+        $this->updatedAt = new \DateTime("now");
     }
 
     /**
@@ -503,5 +601,125 @@ class Account implements \JsonSerializable
     {
         $clientClass = new \ReflectionClass(__CLASS__);
         return $clientClass->getConstants();
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return Account
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Account
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Account
+     */
+    public function addUser(\AppBundle\Entity\User $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \AppBundle\Entity\User $user
+     */
+    public function removeUser(\AppBundle\Entity\User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Add sentTransaction
+     *
+     * @param \AppBundle\Entity\Transaction $sentTransaction
+     *
+     * @return Account
+     */
+    public function addSentTransaction(\AppBundle\Entity\Transaction $sentTransaction)
+    {
+        $this->sentTransactions[] = $sentTransaction;
+
+        return $this;
+    }
+
+    /**
+     * Remove sentTransaction
+     *
+     * @param \AppBundle\Entity\Transaction $sentTransaction
+     */
+    public function removeSentTransaction(\AppBundle\Entity\Transaction $sentTransaction)
+    {
+        $this->sentTransactions->removeElement($sentTransaction);
+    }
+
+    /**
+     * Get sentTransactions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSentTransactions()
+    {
+        return $this->sentTransactions;
+    }
+
+    /**
+     * Add receivedTransaction
+     *
+     * @param \AppBundle\Entity\Transaction $receivedTransaction
+     *
+     * @return Account
+     */
+    public function addReceivedTransaction(\AppBundle\Entity\Transaction $receivedTransaction)
+    {
+        $this->receivedTransactions[] = $receivedTransaction;
+
+        return $this;
+    }
+
+    /**
+     * Remove receivedTransaction
+     *
+     * @param \AppBundle\Entity\Transaction $receivedTransaction
+     */
+    public function removeReceivedTransaction(\AppBundle\Entity\Transaction $receivedTransaction)
+    {
+        $this->receivedTransactions->removeElement($receivedTransaction);
+    }
+
+    /**
+     * Get receivedTransactions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReceivedTransactions()
+    {
+        return $this->receivedTransactions;
     }
 }

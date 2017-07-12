@@ -1,25 +1,30 @@
 <?php
 
-namespace AppBundle\Service\EntityManager;
+namespace AppBundle\Service\Account;
 
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+use DateTime;
+
 use AppBundle\Entity\Account;
 use AppBundle\Repository\CountryRepository;
 use AppBundle\Repository\AgreementRepository;
-use AppBundle\Service\Contis\RequestService;
+use AppBundle\Repository\AccountRepository;
+use AppBundle\Repository\UserRepository;
+use AppBundle\Service\ContisApiClient\Account as ContisAccountApiClient;
 
 /**
- * Class AccountManager
- * @package AppBundle\Service
+ * Class CreateAccountService
  */
-class AccountManager
+class CreateAccountService
 {
     protected $agreementRepository;
     protected $countryRepository;
+    protected $accountRepository;
+    protected $userRepository;
     protected $validationService;
-    protected $contisRequestService;
+    protected $contisAccountApiClient;
 
     /**
      * @param EntityManager $em
@@ -27,13 +32,18 @@ class AccountManager
     public function __construct(
         AgreementRepository $agreementRepository,
         CountryRepository $countryRepository,
+        AccountRepository $accountRepository,
+        UserRepository $userRepository,
         ValidatorInterface $validationService,
-        RequestService $contisRequestService
+        ContisAccountApiClient $contisAccountApiClient
     ) {
         $this->agreementRepository = $agreementRepository;
         $this->countryRepository = $countryRepository;
+        $this->accountRepository = $accountRepository;
+        $this->userRepository = $userRepository;
         $this->validationService = $validationService;
-        $this->contisRequestService = $contisRequestService;
+        $this->contisAccountApiClient = $contisAccountApiClient;
+
     }
 
     /**
@@ -41,31 +51,36 @@ class AccountManager
      * @param  Account $account
      * @return something to reflect if something goes ok or not
      */
-    public function createAccount(
+    public function execute(
+        int $userId,
         String $forename,
         String $lastname,
         String $birthDate,
         String $documentType,
         String $documentNumber,
         Int $agreementId,
-        String $principalAddress,
-        String $secondaryAddress,
+        String $street,
+        String $buildingNumber,
         String $postcode,
         String $city,
         Int $countryId
     ) {
         $agreement = $this->agreementRepository->findOneById($agreementId);
         $country = $this->countryRepository->findOneById($countryId);
+        $user = $this->userRepository->findOneById($userId);
+
+        $birthDate = new DateTime($birthDate);
 
         $account = new Account(
+            $user,
             $forename,
             $lastname,
             $birthDate,
             $documentType,
             $documentNumber,
             $agreement,
-            $principalAddress,
-            $secondaryAddress,
+            $street,
+            $buildingNumber,
             $postcode,
             $city,
             $country
@@ -79,24 +94,14 @@ class AccountManager
             }
         }
 
-        $response = $this->contisRequestService->call(
-            'CardHolder_Create',
-            [
-                'FirstName' => $account->getForename(),
-                'LastName' => $account->getLastname(),
-                'Gender' => 'N',
-                'DOB' => $account->getBirthdate(),
-                'Street' => $account->getPrincipalAddress(),
-                'City' => $account->getCity(),
-                'Country' => $account->getCountry()->getIso3(),
-                'Postcode' => $account->getPostcode(),
-                'IsMain' => 1,
-                'Relationship' => 'self',
-            ]
-        );
+        $response = $this->contisAccountApiClient->create($account);
 
-        dump($response);die();
+        $account->setCardHolderId($response['CardHolderID']);
+        $account->setAccountNumber($response['AccountNumber']);
+        $account->setSortCode($response['SortCode']);
 
-        return $response;
+        $this->accountRepository->save($account);
+
+        return $account;
     }
 }

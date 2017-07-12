@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
+use AppBundle\Exception\PayProException;
 
 /**
  * Account controller.
@@ -49,29 +50,26 @@ class AccountController extends Controller
     {
         $requestData = $request->request->all();
 
-        $response = $this->get('payproapi.contis_login_service')->login();
-
-        dump($response);die();
         try {
-            $responseData = $this->get('payproapi.account_manager')->createAccount(
+            $account = $this->get('payproapi.create_account_service')->execute(
+                $user->getId(),
                 $requestData['forename'],
                 $requestData['lastname'],
                 $requestData['birthDate'],
                 $requestData['documentType'],
                 $requestData['documentNumber'],
                 $requestData['agreement'],
-                $requestData['principalAddress'],
-                $requestData['secondaryAddress'],
+                $requestData['street'],
+                $requestData['buildingNumber'],
                 $requestData['postcode'],
                 $requestData['city'],
                 $requestData['country']
             );
-
-        } catch (Exception $e) {
-            $responseData = ['error' => $e->getErrorMessage()];
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()]);
         }
 
-        return $this->JWTResponse($user, $data);
+        return $this->JWTResponse($user, ['account' => $account]);
     }
 
     /**
@@ -85,7 +83,16 @@ class AccountController extends Controller
      */
     public function updateAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $data = [];
-        return $this->JWTResponse($user, $data);
+        $requestData = $request->request->all();
+
+        try {
+            $responseData = $this->get('payproapi.account_manager')->updateAccount(
+            /* Here lack some parameters */
+            );
+        } catch (PayProException $e) {
+            $responseData = ['error' => $e->getErrorMessage()];
+        }
+
+        return $this->JWTResponse($user, $responseData);
     }
 }
