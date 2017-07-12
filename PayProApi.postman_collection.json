@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "PayProApi",
-		"_postman_id": "3d72466a-7250-e828-fcf1-7d0dd449ad10",
+		"_postman_id": "75e3f74c-d722-ac4c-da49-a613f82a69c3",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -30,7 +30,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"agreement\": \"1\",\n\t\"forename\": \"asdfa\",\n\t\"lastname\": \"sdsfsdfs\",\n\t\"birthDate\": \"08/06/1992\",\n\t\"documentType\": \"DNI\",\n\t\"documentNumber\": \"123123123K\",\n\t\"principalAddress\": \"C/ Gandesa nº 11\",\n\t\"secondaryAddress\": \"C/ Horta nº 2\",\n\t\"postcode\": \"08293FTW\",\n\t\"city\": \"London\",\n\t\"country\": \"239\"\n}"
+							"raw": "{\n\t\"agreement\": \"1\",\n\t\"forename\": \"asdadadsasd\",\n\t\"lastname\": \"aaaaaaaaaaaaaa\",\n\t\"birthDate\": \"08/06/1990\",\n\t\"documentType\": \"DNI\",\n\t\"documentNumber\": \"12341234K\",\n\t\"street\": \"Ametller\",\n\t\"buildingNumber\": \"6\",\n\t\"postcode\": \"08293\",\n\t\"city\": \"Barcelona\",\n\t\"country\": \"239\"\n}"
 						},
 						"description": ""
 					},
@@ -59,7 +59,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -84,7 +87,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"app_user_registration\": {\n\t\t\"username\": \"+34666666666\",\n\t\t\"plainPassword\": {\n\t\t\t\"first\": \"\",\n\t\t\t\"second\": \"\"\n\t\t},\n\t\t\"validationCode\": \"5257\"\n\t}\n}\n"
+							"raw": "{\n\t\"app_user_registration\": {\n\t\t\"username\": \"+34666666666\",\n\t\t\"plainPassword\": {\n\t\t\t\"first\": \"\",\n\t\t\t\"second\": \"\"\n\t\t},\n\t\t\"mobileVerificationCode\": \"5257\"\n\t}\n}\n"
 						},
 						"description": "Register user"
 					},
@@ -213,7 +216,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -224,6 +230,31 @@
 			"name": "Users",
 			"description": "",
 			"item": [
+				{
+					"name": "Show",
+					"request": {
+						"url": "{{host}}/users/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
 				{
 					"name": "Index",
 					"request": {
@@ -258,7 +289,35 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"url": "{{host}}/users",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"phoneNumber\":\"+34666666666\",\n\t\"mobileVerificationCode\":\"1234\" \n}"
+						},
 						"description": ""
 					},
 					"response": []
@@ -289,23 +348,26 @@
 					"response": []
 				},
 				{
-					"name": "Show",
+					"name": "Delete",
 					"request": {
 						"url": "{{host}}/users/1",
-						"method": "GET",
+						"method": "DELETE",
 						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							},
 							{
 								"key": "Authorization",
 								"value": "Bearer {{jwt}}",
 								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
