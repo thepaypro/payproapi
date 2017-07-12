@@ -1,0 +1,21 @@
+services:
+  payproapi.create_user_service:
+    class: AppBundle\Service\User\CreateUserService
+    arguments:
+      - "@payproapi.user_validator_service"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@fos_user.user_manager"
+
+  payproapi.delete_user_service:
+    class: AppBundle\Service\User\DeleteUserService
+    arguments:
+      - "@payproapi.user_validator_service"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@fos_user.user_manager"
+
+  payproapi.user_validator_service:
+    class: AppBundle\Service\User\Validator\UserValidatorService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:MobileVerificationCode')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@payproapi.phone_number_validation_service"

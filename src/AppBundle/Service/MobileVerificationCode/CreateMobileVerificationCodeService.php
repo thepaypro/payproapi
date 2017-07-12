@@ -3,12 +3,15 @@ namespace AppBundle\Service\MobileVerificationCode;
 
 use libphonenumber\PhoneNumberUtil;
 
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use AppBundle\Entity\MobileVerificationCode;
+use AppBundle\Repository\MobileVerificationCodeRepository;
+use AppBundle\Repository\UserRepository;
 use AppBundle\Event\MobileVerificationCodeEvent;
 use AppBundle\Event\MobileVerificationCodeEvents;
+use AppBundle\Exception\PayProException;
+use AppBundle\Service\PhoneNumberValidatorService;
 
 /**
  * Class CreateMobileVerificationCodeService
@@ -16,7 +19,6 @@ use AppBundle\Event\MobileVerificationCodeEvents;
  */
 class CreateMobileVerificationCodeService
 {
-    protected $em;
     protected $dispatcher;
     protected $userRepository;
     protected $mobileVerificationCodeRepository;
@@ -25,11 +27,16 @@ class CreateMobileVerificationCodeService
      * @param EntityManager            $em
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(EntityManager $em, EventDispatcherInterface $eventDispatcher)
+    public function __construct(
+        UserRepository $userRepository,
+        MobileVerificationCodeRepository $mobileVerificationCodeRepository,
+        PhoneNumberValidatorService $phoneNumberValidatorService,
+        EventDispatcherInterface $eventDispatcher
+    )
     {
-        $this->em = $em;
-        $this->userRepository = $this->em->getRepository('AppBundle:User');
-        $this->mobileVerificationCodeRepository = $this->em->getRepository('AppBundle:MobileVerificationCode');
+        $this->userRepository = $userRepository;
+        $this->mobileVerificationCodeRepository = $mobileVerificationCodeRepository;
+        $this->phoneNumberValidatorService = $phoneNumberValidatorService;
         $this->dispatcher = $eventDispatcher;
     }
 
@@ -37,16 +44,12 @@ class CreateMobileVerificationCodeService
      * This method will create a mobile verification code and dispatch an event of the creation.
      * 
      * @param  phoneNumber $phoneNumber
-     * @return something to reflect if something goes ok or not
+     * @return Array
      */
     public function execute(String $phoneNumber) : Array
     {
-        $phoneNumberUtil = PhoneNumberUtil::getInstance();
-
-        try {
-            $phoneNumberObject = $phoneNumberUtil->parse($phoneNumber, null);
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage(), 400);
+        if (!$this->phoneNumberValidatorService->isValid($phoneNumber)) {
+            throw new PayProException("Invalid phone number", 400);
         }
 
         $user = $this->userRepository->findOneByUsername($phoneNumber);

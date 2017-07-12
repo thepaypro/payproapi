@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
-use Exception;
+use AppBundle\Exception\PayProException;
 
 /**
  * Account controller.
@@ -50,7 +50,7 @@ class AccountController extends Controller
     {
         $requestData = $request->request->all();
 
-        // try {
+        try {
             $account = $this->get('payproapi.create_account_service')->execute(
                 $user->getId(),
                 $requestData['forename'],
@@ -65,9 +65,9 @@ class AccountController extends Controller
                 $requestData['city'],
                 $requestData['country']
             );
-        // } catch (Exception $e) {
-        //     $responseData = ['error' => $e->getMessage()];
-        // }
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()]);
+        }
 
         return $this->JWTResponse($user, ['account' => $account]);
     }
@@ -89,7 +89,7 @@ class AccountController extends Controller
             $responseData = $this->get('payproapi.account_manager')->updateAccount(
             /* Here lack some parameters */
             );
-        } catch (Exception $e) {
+        } catch (PayProException $e) {
             $responseData = ['error' => $e->getErrorMessage()];
         }
 

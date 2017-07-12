@@ -3,6 +3,7 @@
 namespace AppBundle\Service;
 
 use libphonenumber\PhoneNumberUtil;
+use libphonenumber\NumberParseException;
 
 /**
  * Class PhoneNumberValidatorService
@@ -22,7 +23,7 @@ class PhoneNumberValidatorService
      * @param  String  $phoneNumber
      * @return boolean
      */
-    private function isValid(String $phoneNumber) : Boolean
+    public function isValid(String $phoneNumber) : bool
     {
         try {
             $phoneNumberObject = $this->phoneUtil->parse($phoneNumber, null);

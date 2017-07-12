@@ -163,6 +163,10 @@ class Account implements \JsonSerializable
         $this->postcode = $postcode;
         $this->city = $city;
         $this->country = $country;
+
+        $this->sentTransactions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->receivedTransactions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function jsonSerialize()
@@ -188,9 +192,9 @@ class Account implements \JsonSerializable
      *
      * @return User
      */
-    public function getUser()
+    public function getUsers()
     {
-        return $this->user;
+        return $this->users;
     }
 
     /**
@@ -597,5 +601,125 @@ class Account implements \JsonSerializable
     {
         $clientClass = new \ReflectionClass(__CLASS__);
         return $clientClass->getConstants();
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return Account
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Account
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Account
+     */
+    public function addUser(\AppBundle\Entity\User $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \AppBundle\Entity\User $user
+     */
+    public function removeUser(\AppBundle\Entity\User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Add sentTransaction
+     *
+     * @param \AppBundle\Entity\Transaction $sentTransaction
+     *
+     * @return Account
+     */
+    public function addSentTransaction(\AppBundle\Entity\Transaction $sentTransaction)
+    {
+        $this->sentTransactions[] = $sentTransaction;
+
+        return $this;
+    }
+
+    /**
+     * Remove sentTransaction
+     *
+     * @param \AppBundle\Entity\Transaction $sentTransaction
+     */
+    public function removeSentTransaction(\AppBundle\Entity\Transaction $sentTransaction)
+    {
+        $this->sentTransactions->removeElement($sentTransaction);
+    }
+
+    /**
+     * Get sentTransactions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSentTransactions()
+    {
+        return $this->sentTransactions;
+    }
+
+    /**
+     * Add receivedTransaction
+     *
+     * @param \AppBundle\Entity\Transaction $receivedTransaction
+     *
+     * @return Account
+     */
+    public function addReceivedTransaction(\AppBundle\Entity\Transaction $receivedTransaction)
+    {
+        $this->receivedTransactions[] = $receivedTransaction;
+
+        return $this;
+    }
+
+    /**
+     * Remove receivedTransaction
+     *
+     * @param \AppBundle\Entity\Transaction $receivedTransaction
+     */
+    public function removeReceivedTransaction(\AppBundle\Entity\Transaction $receivedTransaction)
+    {
+        $this->receivedTransactions->removeElement($receivedTransaction);
+    }
+
+    /**
+     * Get receivedTransactions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReceivedTransactions()
+    {
+        return $this->receivedTransactions;
     }
 }

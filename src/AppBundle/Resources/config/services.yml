@@ -14,9 +14,12 @@ services:
       - "%twilio_phone_number%"
 
   payproapi.phone_number_validation_service:
-    class: AppBundle\Service\PhoneNumberValidatorSerice
+    class: AppBundle\Service\PhoneNumberValidatorService
 
 imports:
-  - { resource: managers.yml }
+  - { resource: account.yml }
+  - { resource: mobileVerificationCode.yml }
+  - { resource: contact.yml }
+  - { resource: user.yml }
   - { resource: subscribers.yml }
   - { resource: contis.yml }
