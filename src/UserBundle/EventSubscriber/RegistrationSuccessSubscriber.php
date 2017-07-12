@@ -38,6 +38,6 @@ class RegistrationSuccessSubscriber implements EventSubscriberInterface
     {
         $data = $event->getRequest()->request->all()['app_user_registration'];
 
-        $this->userValidatorService->validate($data['username'], $data['validationCode']);
+        $this->userValidatorService->validate($data['username'], $data['mobileVerificationCode']);
     }
 }
