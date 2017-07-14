@@ -62,7 +62,6 @@ class Account
         $requestParams = [
             'Token' => $params['Token'],
             'ClientUniqueReferenceID' => strtotime('now')
-
         ];
 
         $params = [$this->hashingService->generateHashDataStringAndHash($params)];
@@ -72,6 +71,47 @@ class Account
 
         if ($response['CardHolder_CreateResult']['Description'] == 'Success ') {
             return $response['CardHolder_CreateResult']['ResultObject'][0];
+        }
+        dump($response);die();
+    }
+
+    /**
+     * Update an account (CardHolder in Contis)
+     * @param  AccountEntity $account
+     * @return Array $response
+     */
+    public function update(AccountEntity $account) : Array
+    {
+        $params = [
+            'AgreementCode' => $account->getAgreement()->getContisAgreementCode(),
+            'Buildingno' => $account->getBuildingNumber(),
+            'City' => $account->getCity(),
+            'Country' => $account->getCountry()->getIsoNumeric(),
+            'County' => $account->getCountry()->getIso2(),
+            'DOB' => '/Date('.$account->getBirthdate()->getTimeStamp().')/',
+            'FirstName' => $account->getForename(),
+            'LastName' => $account->getLastname(),
+            'Postcode' => $account->getPostcode(),
+            'Nationalidcardline1' => $account->getDocumentType() == AccountEntity::DOCUMENT_TYPE_DNI ? $account->getDocumentNumber() : '',
+            'Drivinglicence' => $account->getDocumentType() == AccountEntity::DOCUMENT_TYPE_PASSPORT ? $account->getDocumentNumber() : '',
+            'Passportnumber' => $account->getDocumentType() == AccountEntity::DOCUMENT_TYPE_DRIVING_LICENSE ? $account->getDocumentNumber() : '',
+            'Street' => $account->getStreet(),
+        ];
+
+        $params['Token'] = $this->authenticationService->getAuthenticationToken();
+
+        $requestParams = [
+            'Token' => $params['Token'],
+            'ClientUniqueReferenceID' => strtotime('now')
+        ];
+
+        $params = [$this->hashingService->generateHashDataStringAndHash($params)];
+        $requestParams = $this->hashingService->generateHashDataStringAndHash($requestParams);
+
+        $response = $this->requestService->call('CardHolder_Update', $params, $requestParams);
+
+        if ($response['CardHolder_UpdateResult']['Description'] == 'Success ') {
+            return $response['CardHolder_UpdateResult']['ResultObject'][0];
         }
         dump($response);die();
     }

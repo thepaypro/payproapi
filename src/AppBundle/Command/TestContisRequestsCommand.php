@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -16,21 +17,27 @@ class TestContisRequestsCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $params = [
-            'CardHolderID'  => 0,
-            'FirstName'     => 'Bethany',
-            'LastName'      => 'Harriman',
-            'MobileNumber'  => '',
-            'EmailAddress'  => 'beth.harriman@contisgroup.com',
-            'AccountNumber' => '04079462',
-            'CardID'        => 0,
-            'HashCardNumber'=> '',
-            'UserName'      => '',
-            'SortCode'      => '623053'
-        ];
+        // $params = [
+        //     'CardHolderID'  => 131232,
+        //     'FirstName'     => 'Bethany',
+        //     'LastName'      => 'Harriman',
+        //     'EmailAddress'  => 'beth.harriman@contisgroup.com',
+        //     'AccountNumber' => '04079462',
+        //     'SortCode'      => '623053'
+        // ];
+
+        // $params = [
+        //     'CardHolderID'  => 131366,
+        //     'FirstName'     => 'Beth',
+        //     'LastName'      => 'Harriman',
+        //     'EmailAddress'  => 'beth.harriman@contisgroup.com',
+        //     'AccountNumber' => '04079834',
+        //     'SortCode'      => '623053'
+        // ];
+
         $endpoint = 'CardHolder_Lookup_GetInfo';
 
-        $params['Token'] = $this->getContainer()->get('payproapi.contis_authentication_service')->getAuthenticationToken();
+        $params['Token'] = $this->getContainer()->get('contis_api_client.authentication_service')->getAuthenticationToken();
 
         $requestParams = [
             'Token' => $params['Token'],
@@ -38,10 +45,10 @@ class TestContisRequestsCommand extends ContainerAwareCommand
             'SchemeCode' => 'PAYPRO'
         ];
 
-        $params = $this->getContainer()->get('payproapi.contis_hashing_service')->generateHashDataStringAndHash($params);
-        $requestParams = $this->getContainer()->get('payproapi.contis_hashing_service')->generateHashDataStringAndHash($requestParams);
+        $params = $this->getContainer()->get('contis_api_client.hashing_service')->generateHashDataStringAndHash($params);
+        $requestParams = $this->getContainer()->get('contis_api_client.hashing_service')->generateHashDataStringAndHash($requestParams);
 
-        $response = $this->getContainer()->get('payproapi.contis_request_service')->call($endpoint, $params, $requestParams);
+        $response = $this->getContainer()->get('contis_api_client.request_service')->call($endpoint, $params, $requestParams);
 
         dump($response);die();
     }
