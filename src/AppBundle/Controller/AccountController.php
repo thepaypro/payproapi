@@ -66,7 +66,7 @@ class AccountController extends Controller
                 $requestData['country']
             );
         } catch (PayProException $e) {
-            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()]);
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
 
         return $this->JWTResponse($user, ['account' => $account]);
@@ -78,21 +78,34 @@ class AccountController extends Controller
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/{id}", name="accounts_update")
+     * @Route("/{accountId}", name="accounts_update")
      * @Method("PUT")
      */
     public function updateAction(UserInterface $user, Request $request) : JsonResponse
     {
+        $accountId = $request->attributes->get('accountId');
         $requestData = $request->request->all();
 
         try {
-            $responseData = $this->get('payproapi.account_manager')->updateAccount(
-            /* Here lack some parameters */
+            $account = $this->get('payproapi.update_account_service')->execute(
+                $accountId,
+                $user->getId(),
+                $requestData['forename'] ? $requestData['forename'] : null,
+                $requestData['lastname'] ? $requestData['lastname'] : null,
+                $requestData['birthDate'] ? $requestData['birthDate'] : null,
+                $requestData['documentType'] ? $requestData['documentType'] : null,
+                $requestData['documentNumber'] ? $requestData['documentNumber'] : null,
+                $requestData['agreement'] ? $requestData['agreement'] : null,
+                $requestData['street'] ? $requestData['street'] : null,
+                $requestData['buildingNumber'] ? $requestData['buildingNumber'] : null,
+                $requestData['postcode'] ? $requestData['postcode'] : null,
+                $requestData['city'] ? $requestData['city'] : null,
+                $requestData['country'] ? $requestData['country'] : null
             );
         } catch (PayProException $e) {
-            $responseData = ['error' => $e->getErrorMessage()];
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
 
-        return $this->JWTResponse($user, $responseData);
+        return $this->JWTResponse($user, ['account' => $account]);
     }
 }

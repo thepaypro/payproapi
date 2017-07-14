@@ -45,6 +45,20 @@ class MobileVerificationCode
     }
 
     /**
+     * Set id
+     *
+     * @param string $id
+     *
+     * @return MobileVerificationCode
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Set code
      *
      * @param string $code

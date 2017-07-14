@@ -39,7 +39,7 @@ class UserController extends Controller
     {
         $id = $request->attributes->get('id');
 
-        if ($id != $user->getId()) {//TODO: change that when the account is multiuser.
+        if ($id != $user->getId()) {//TODO: change that, the account have become multiuser.
             
         }
 
@@ -90,7 +90,7 @@ class UserController extends Controller
                 $payload['mobileVerificationCode']
             );   
         } catch (PayProException $e) {
-            return $this->JWTResponse($user, ['message' => $e->getMessage()], $e->getCode());
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
 
         return $this->JWTResponse($user, ['user' => $user]);
@@ -162,7 +162,7 @@ class UserController extends Controller
         try {
             $this->get('payproapi.delete_user_service')->execute($user->getId(), $id);
         } catch (PayProException $e) {
-            return $this->JWTResponse($user, ['message' => $e->getMessage()], $e->getCode());
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
 
         return $this->JWTResponse($user, ['message' => 'User deleted']);

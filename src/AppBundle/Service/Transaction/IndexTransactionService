@@ -1,0 +1,75 @@
+<?php
+
+namespace AppBundle\Service\Account;
+
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
+use DateTime;
+
+use AppBundle\Repository\TransactionRepository;
+use AppBundle\Repository\UserRepository;
+use AppBundle\Service\ContisApiClient\Account as ContisAccountApiClient;
+use AppBundle\Exception\PayProException;
+
+/**
+ * Class IndexTransactionService
+ */
+class IndexTransactionService
+{
+    protected $transactionRepository;
+    protected $userRepository;
+    protected $validationService;
+    protected $contisTransactionApiClient;
+
+    /**
+     * @param TransactionRepository      $transactionRepository
+     * @param ValidatorInterface         $validationService
+     * @param ContisTransactionApiClient $contisAccountApiClient
+     */
+    public function __construct(
+        TransactionRepository $transactionRepository,
+        UserRepository $userRepository,
+        ValidatorInterface $validationService,
+        ContisTransactionApiClient $contisAccountApiClient
+    ) {
+        $this->transactionRepository = $transactionRepository;
+        $this->userRepository = $userRepository;
+        $this->validationService = $validationService;
+        $this->contisAccountApiClient = $contisAccountApiClient;
+    }
+
+    /**
+     * This method will retrieve all the transactions from the database and from Contis and will merge them.
+     *
+     * @param  int    $userId
+     * @param  int    $payerId
+     * @param  int    $beneficiaryId
+     * @param  String $fromDate
+     * @param  String $toDate
+     * @return Array  $transactions
+     */
+    public function execute(
+        int $userId,
+        int $payerId,
+        int $beneficiaryId,
+        String $fromDate,
+        String $toDate
+    ) : Array
+    {
+        if ($userId != $payerId && $userId != $beneficiaryId) {
+            throw new PayProException("Payer or Beneficiary not found", 404);
+        }
+
+        $payer = $this->userRepository->findOneById($payerId);
+        $beneficiary = $this->userRepository->findOneById($beneficiaryId);
+
+        $this->transactionRepository->findBy([
+            'payer' => $payer,
+            'beneficiary' => $beneficiary,
+            'fromDate' => $fromDate,
+            'toDate' => $toDate
+        ]);
+
+        return;
+    }
+}

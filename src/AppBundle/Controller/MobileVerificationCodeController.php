@@ -33,7 +33,7 @@ class MobileVerificationCodeController extends Controller
                     ->execute($phoneNumber)
             );
         } catch (PayProException $e) {
-            return $this->json(['statusCode' => $e->getCode(),'message' => $e->getMessage()]);            
+            return $this->json(['errorMessage' => $e->getMessage()], $e->getCode());
         }
 
     }

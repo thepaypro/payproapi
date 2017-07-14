@@ -15,9 +15,9 @@ use AppBundle\Service\ContisApiClient\Account as ContisAccountApiClient;
 use AppBundle\Exception\PayProException;
 
 /**
- * Class CreateAccountService
+ * Class UpdateAccountService
  */
-class CreateAccountService
+class UpdateAccountService
 {
     protected $agreementRepository;
     protected $countryRepository;
@@ -43,27 +43,15 @@ class CreateAccountService
         $this->userRepository = $userRepository;
         $this->validationService = $validationService;
         $this->contisAccountApiClient = $contisAccountApiClient;
-
     }
 
     /**
      * This method will create the cardHolder on Contis system and will persist the new account of the user.
-     *
-     * @param  int      $userId
-     * @param  String   $forename
-     * @param  String   $lastname
-     * @param  String   $birthDate
-     * @param  String   $documentType
-     * @param  String   $documentNumber
-     * @param  Int      $agreementId
-     * @param  String   $street
-     * @param  String   $buildingNumber
-     * @param  String   $postcode
-     * @param  String   $city
-     * @param  Int      $countryId
-     * @return Account  $account
+     * @param  Account $account
+     * @return something to reflect if something goes ok or not
      */
     public function execute(
+        int $accountId,
         int $userId,
         String $forename,
         String $lastname,
@@ -76,42 +64,45 @@ class CreateAccountService
         String $postcode,
         String $city,
         Int $countryId
-    ) : Account
+    )
     {
-        $agreement = $this->agreementRepository->findOneById($agreementId);
-        $country = $this->countryRepository->findOneById($countryId);
+        $account = $this->accountRepository->findOneById($accountId);
         $user = $this->userRepository->findOneById($userId);
 
-        $birthDate = new DateTime($birthDate);
+        if (!$account || !$account->getUsers()->contain($user)) {
+            throw new PayProException("Account not found", 404);
+        }
 
-        $account = new Account(
-            $user,
-            $forename,
-            $lastname,
-            $birthDate,
-            $documentType,
-            $documentNumber,
-            $agreement,
-            $street,
-            $buildingNumber,
-            $postcode,
-            $city,
-            $country
-        );
+        $account->setForename($forename ? $forename : $account->getForename());
+        $account->setLastname($lastname ? $lastname : $account->getLastname());
+        $account->setBirthDate($birthDate ? new DateTime($birthDate) : $account->getBirthDate());
+        $account->setDocumentType($documentType ? $documentType : $account->getDocumentType());
+        $account->setDocumentNumber($documentNumber ? $documentNumber : $account->getDocumentNumber());
+
+        if ($agreementId) {
+            $agreement = $this->agreementRepository->findOneById($agreementId);
+            $account->setAgreement($agreement);        
+        }
+
+        $account->setStreet($street ? $street : $account->getStreet());
+        $account->setBuildingNumber($buildingNumber ? $buildingNumber : $account->getBuildingNumber());
+        $account->setPostcode($postcode ? $postcode : $account->getPostcode());
+        $account->setCity($city ? $city : $account->getCity());
+
+        if ($countryId) {
+            $country = $this->countryRepository->findOneById($countryId);
+            $account->setCountry($country);
+        }
 
         $errors = $this->validationService->validate($account);
 
         if (count($errors) > 0) {
             foreach ($errors as $key => $error) {
-                throw new PayProException($error->getPropertyPath().': '.$error->getMessage(), 404);
+                throw new PayProException($error->getMessage());
             }
         }
 
-        $response = $this->contisAccountApiClient->create($account);
-
-        $account->setCardHolderId($response['CardHolderID']);
-        $account->setAccountNumber($response['AccountNumber']);
-        $account->setSortCode($response['SortCode']);
+        $response = $this->contisAccountApiClient->update($account);
 
         $this->accountRepository->save($account);
 

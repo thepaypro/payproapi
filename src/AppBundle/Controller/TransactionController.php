@@ -47,7 +47,7 @@ class TransactionController extends Controller
      */
     public function createAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $transactions = []; 
+        $transactions = [];
         return $this->JWTResponse($user, $data);
     }
 
@@ -62,7 +62,20 @@ class TransactionController extends Controller
      */
     public function indexAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $data = [];
-        return $this->JWTResponse($user, $data);
+        $filters = $request->query->all();
+
+        try {
+            $transactions = $this->get('payproapi.transaction_index_service')->execute(
+                $user->getId(),
+                $filters['payerId'],
+                $filters['beneficiaryId'],
+                $filters['fromDate'],
+                $filters['toDate']
+            );
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $$e->getMessage()], $e->getCode());
+        }
+
+        return $this->JWTResponse($user, ['transactions' => $transactions]);
     }
 }

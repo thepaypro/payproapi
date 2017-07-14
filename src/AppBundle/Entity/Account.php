@@ -5,12 +5,15 @@ namespace AppBundle\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="Accounts")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AccountRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity("documentNumber")
  */
 class Account implements \JsonSerializable
 {
@@ -152,6 +155,11 @@ class Account implements \JsonSerializable
         Country $country
     )
     {
+        $this->sentTransactions = new ArrayCollection();
+        $this->receivedTransactions = new ArrayCollection();
+        $this->users = new ArrayCollection();
+
+        $this->users[] = $user;
         $this->forename = $forename;
         $this->lastname = $lastname;
         $this->birthDate = $birthDate;
@@ -163,17 +171,15 @@ class Account implements \JsonSerializable
         $this->postcode = $postcode;
         $this->city = $city;
         $this->country = $country;
-
-        $this->sentTransactions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->receivedTransactions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function jsonSerialize()
     {
         $allProperties = get_object_vars($this);
 
-        $allProperties['user'] = $this->user->getId();
+        $allProperties['users'] = $this->users->map(function($user) {
+            $user->getId();
+        });
         return $allProperties;
     }
 
