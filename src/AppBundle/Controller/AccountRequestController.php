@@ -28,7 +28,7 @@ class AccountRequestController extends Controller
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("", name="accounts_create")
+     * @Route("", name="account_requests_create")
      * @Method("POST")
      */
     public function createAction(UserInterface $user, Request $request) : JsonResponse
