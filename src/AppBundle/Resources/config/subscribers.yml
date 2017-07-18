@@ -1,6 +1,6 @@
 services:
-  payproapi.registration_success_subscriber:
-    class: UserBundle\EventSubscriber\RegistrationSuccessSubscriber
+  payproapi.registration_subscriber:
+    class: UserBundle\EventSubscriber\RegistrationSubscriber
     arguments: 
       - "@payproapi.user_validator_service"
     tags:

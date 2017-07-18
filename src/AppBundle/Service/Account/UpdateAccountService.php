@@ -51,37 +51,42 @@ class UpdateAccountService
      * @return something to reflect if something goes ok or not
      */
     public function execute(
-        int $accountId,
-        int $userId,
-        String $forename,
-        String $lastname,
-        String $birthDate,
-        String $documentType,
-        String $documentNumber,
-        Int $agreementId,
-        String $street,
-        String $buildingNumber,
-        String $postcode,
-        String $city,
-        Int $countryId
+        int $accountId = null,
+        int $userId = null,
+        string $forename = null,
+        string $lastname = null,
+        string $email = null,
+        string $birthDate = null,
+        string $documentType = null,
+        string $documentNumber = null,
+        int $agreementId = null,
+        string $street = null,
+        string $buildingNumber = null,
+        string $postcode = null,
+        string $city = null,
+        int $countryId = null
     )
     {
         $account = $this->accountRepository->findOneById($accountId);
         $user = $this->userRepository->findOneById($userId);
 
-        if (!$account || !$account->getUsers()->contain($user)) {
+        dump($account);
+        dump($account->getUsers());
+        die();
+        if (!$account || !$account->getUsers()->contains($user)) {
             throw new PayProException("Account not found", 404);
         }
 
         $account->setForename($forename ? $forename : $account->getForename());
         $account->setLastname($lastname ? $lastname : $account->getLastname());
+        $account->setEmail($email ? $email : $account->getEmail());
         $account->setBirthDate($birthDate ? new DateTime($birthDate) : $account->getBirthDate());
         $account->setDocumentType($documentType ? $documentType : $account->getDocumentType());
         $account->setDocumentNumber($documentNumber ? $documentNumber : $account->getDocumentNumber());
 
         if ($agreementId) {
             $agreement = $this->agreementRepository->findOneById($agreementId);
-            $account->setAgreement($agreement);        
+            $account->setAgreement($agreement);
         }
 
         $account->setStreet($street ? $street : $account->getStreet());
@@ -98,7 +103,7 @@ class UpdateAccountService
 
         if (count($errors) > 0) {
             foreach ($errors as $key => $error) {
-                throw new PayProException($error->getMessage());
+                throw new PayProException($error->getPropertyPath().': '.$error->getMessage(), 404);
             }
         }
 
