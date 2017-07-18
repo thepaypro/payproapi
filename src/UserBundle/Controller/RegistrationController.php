@@ -10,6 +10,8 @@ use FOS\UserBundle\Controller\RegistrationController as BaseRegistrationControll
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use AppBundle\Exception\PayProException;
+
 /**
  * Controller managing the registration.
  */
@@ -54,7 +56,6 @@ class RegistrationController extends BaseRegistrationController
 
                     $data['user'] = $user;
                     $data['token'] = $this->get('lexik_jwt_authentication.jwt_manager')->create($user);
-
                     $response = new JsonResponse($data);
 
                     $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
@@ -69,8 +70,8 @@ class RegistrationController extends BaseRegistrationController
                     return $response;
                 }
             }
-        } catch (\Exception $e) {
-            return $this->json(['statusCode' => $e->getCode(), 'message' => $e->getMessage()]);
+        } catch (PayProException $e) {
+            return $this->json(['message' => $e->getMessage()], $e->getCode());
         }
     }
 }

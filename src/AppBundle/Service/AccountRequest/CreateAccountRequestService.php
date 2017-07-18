@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Service\Account;
+namespace AppBundle\Service\AccountRequest;
 
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -11,20 +11,19 @@ use AppBundle\Repository\CountryRepository;
 use AppBundle\Repository\AgreementRepository;
 use AppBundle\Repository\AccountRepository;
 use AppBundle\Repository\UserRepository;
-use AppBundle\Service\ContisApiClient\Account as ContisAccountApiClient;
 use AppBundle\Exception\PayProException;
-
+use AppBundle\Service\MailingService;
 /**
- * Class CreateAccountService
+ * Class CreateAccountRequestService
  */
-class CreateAccountService
+class CreateAccountRequestService
 {
     protected $agreementRepository;
     protected $countryRepository;
     protected $accountRepository;
     protected $userRepository;
     protected $validationService;
-    protected $contisAccountApiClient;
+    protected $mailingService;
 
     /**
      * @param EntityManager $em
@@ -35,14 +34,14 @@ class CreateAccountService
         CountryRepository $countryRepository,
         UserRepository $userRepository,
         ValidatorInterface $validationService,
-        ContisAccountApiClient $contisAccountApiClient
+        MailingService $mailingService
     ) {
         $this->accountRepository = $accountRepository;
         $this->agreementRepository = $agreementRepository;
         $this->countryRepository = $countryRepository;
         $this->userRepository = $userRepository;
         $this->validationService = $validationService;
-        $this->contisAccountApiClient = $contisAccountApiClient;
+        $this->mailingService = $mailingService;
 
     }
 
@@ -69,18 +68,20 @@ class CreateAccountService
         String $lastname,
         String $birthDate,
         String $documentType,
-        String $documentNumber,
+        String $base64DocumentPicture1,
+        String $base64DocumentPicture2,
         Int $agreementId,
         String $street,
         String $buildingNumber,
         String $postcode,
         String $city,
         Int $countryId
-    ) : Account
+    ) : bool
     {
         $agreement = $this->agreementRepository->findOneById($agreementId);
         $country = $this->countryRepository->findOneById($countryId);
         $user = $this->userRepository->findOneById($userId);
+        $documentNumber = 'isInPicture';
 
         if ($user->getAccount()) {
             throw new PayProException("You already have an account", 404);
@@ -111,15 +112,6 @@ class CreateAccountService
             }
         }
 
-        $response = $this->contisAccountApiClient->create($account);
-
-        $account->setCardHolderId($response['CardHolderID']);
-        $account->setAccountNumber($response['AccountNumber']);
-        $account->setSortCode($response['SortCode']);
-        $user->setAccount($account);
-
-        $this->accountRepository->save($account);
-
-        return $account;
+        return $this->mailingService->sendAccountRequest($account, [$base64DocumentPicture1, $base64DocumentPicture2]);
     }
 }

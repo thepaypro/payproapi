@@ -62,8 +62,7 @@ class CreateMobileVerificationCodeService
 
         if (!$mobileVerificationCode) {
             $mobileVerificationCode = new MobileVerificationCode($phoneNumber);
-            $this->em->persist($mobileVerificationCode);
-            $this->em->flush();
+            $this->mobileVerificationCodeRepository->save($mobileVerificationCode);
         }
 
         $this->dispatcher->dispatch(

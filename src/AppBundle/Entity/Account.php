@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="Accounts")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AccountRepository")
  * @ORM\HasLifecycleCallbacks()
- * @UniqueEntity("documentNumber")
+ * @UniqueEntity(fields={"documentNumber", "email"}, ignoreNull=true)
  */
 class Account implements \JsonSerializable
 {
@@ -123,6 +123,12 @@ class Account implements \JsonSerializable
      * @Assert\NotBlank()
      */
     protected $country;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\Email()
+     */
+    protected $email;
 
     /**
      * @var \DateTime
@@ -727,5 +733,29 @@ class Account implements \JsonSerializable
     public function getReceivedTransactions()
     {
         return $this->receivedTransactions;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return Account
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 }

@@ -90,17 +90,18 @@ class AccountController extends Controller
             $account = $this->get('payproapi.update_account_service')->execute(
                 $accountId,
                 $user->getId(),
-                $requestData['forename'] ? $requestData['forename'] : null,
-                $requestData['lastname'] ? $requestData['lastname'] : null,
-                $requestData['birthDate'] ? $requestData['birthDate'] : null,
-                $requestData['documentType'] ? $requestData['documentType'] : null,
-                $requestData['documentNumber'] ? $requestData['documentNumber'] : null,
-                $requestData['agreement'] ? $requestData['agreement'] : null,
-                $requestData['street'] ? $requestData['street'] : null,
-                $requestData['buildingNumber'] ? $requestData['buildingNumber'] : null,
-                $requestData['postcode'] ? $requestData['postcode'] : null,
-                $requestData['city'] ? $requestData['city'] : null,
-                $requestData['country'] ? $requestData['country'] : null
+                isset($requestData['forename']) ? $requestData['forename'] : null,
+                isset($requestData['lastname']) ? $requestData['lastname'] : null,
+                isset($requestData['email']) ? $requestData['email'] : null,
+                isset($requestData['birthDate']) ? $requestData['birthDate'] : null,
+                isset($requestData['documentType']) ? $requestData['documentType'] : null,
+                isset($requestData['documentNumber']) ? $requestData['documentNumber'] : null,
+                isset($requestData['agreement']) ? $requestData['agreement'] : null,
+                isset($requestData['street']) ? $requestData['street'] : null,
+                isset($requestData['buildingNumber']) ? $requestData['buildingNumber'] : null,
+                isset($requestData['postcode']) ? $requestData['postcode'] : null,
+                isset($requestData['city']) ? $requestData['city'] : null,
+                isset($requestData['country']) ? $requestData['country'] : null
             );
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());

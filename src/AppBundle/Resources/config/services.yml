@@ -16,10 +16,17 @@ services:
   payproapi.phone_number_validation_service:
     class: AppBundle\Service\PhoneNumberValidatorService
 
+  payproapi.mailing_service:
+    class: AppBundle\Service\MailingService
+    arguments:
+      - "%mailer_user%"
+      - "%user_administrator_email%"
+      - "@mailer"
 imports:
   - { resource: account.yml }
   - { resource: mobileVerificationCode.yml }
   - { resource: contact.yml }
+  - { resource: accountRequest.yml }
   - { resource: user.yml }
   - { resource: subscribers.yml }
   - { resource: contis.yml }
