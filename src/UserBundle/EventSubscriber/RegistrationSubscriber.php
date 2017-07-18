@@ -4,12 +4,13 @@ namespace UserBundle\EventSubscriber;
 
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\GetResponseUserEvent;
+use FOS\UserBundle\Event\FormEvent;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use AppBundle\Service\User\Validator\UserValidatorService;
 
-class RegistrationSuccessSubscriber implements EventSubscriberInterface
+class RegistrationSubscriber implements EventSubscriberInterface
 {
     private $userValidatorService;
 
@@ -27,6 +28,9 @@ class RegistrationSuccessSubscriber implements EventSubscriberInterface
             FOSUserEvents::REGISTRATION_INITIALIZE => [
                 ['onRegistrationInitialize', -10],
             ],
+            FOSUserEvents::REGISTRATION_FAILURE => [
+                ['onRegistrationFailed', 0],
+            ],
         ];
     }
 
@@ -39,5 +43,16 @@ class RegistrationSuccessSubscriber implements EventSubscriberInterface
         $data = $event->getRequest()->request->all()['app_user_registration'];
 
         $this->userValidatorService->validate($data['username'], $data['mobileVerificationCode']);
+    }
+
+    /**
+     * Listener to set a response when the registration form fail.
+     * @param  FormEvent $event
+     */
+    public function onRegistrationFailed(FormEvent $event)
+    {
+        $response = new JsonResponse($event->getForm()->getErrors()->__toString(), 400);
+
+        $event->setResponse($response);
     }
 }

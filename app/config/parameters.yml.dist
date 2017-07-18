@@ -7,7 +7,7 @@ parameters:
     database_password: aHGajkASgfdkJASHd7823ajdgJHGSW
     mailer_transport: gmail
     mailer_host: null
-    mailer_user: kilian@thepaypro.com
+    mailer_user: someemail@email.com
     mailer_password:
     secret: 98996e818bd6b7910999bffc5e43133092f983a9
 
@@ -28,3 +28,5 @@ parameters:
     contis_hash_pan_key: '82117C6AB41E198A'
     contis_3des_pin_IV_key: '729B06BA0F609553'
     contis_3des_pin_secret_key: '3F70D22CF1378D6DC8884A6855BFAA6D'
+
+    user_administrator_email: someemail@email.com

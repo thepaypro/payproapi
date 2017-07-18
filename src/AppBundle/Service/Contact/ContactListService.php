@@ -7,7 +7,7 @@ use libphonenumber\NumberParseException;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use AppBundle\Service\PhoneNumberValidatorService;
 
 use Exception;
 
