@@ -82,6 +82,10 @@ class CreateAccountService
         $country = $this->countryRepository->findOneById($countryId);
         $user = $this->userRepository->findOneById($userId);
 
+        if ($user->getAccount()) {
+            throw new PayProException("You already have an account", 404);
+        }
+
         $birthDate = new DateTime($birthDate);
 
         $account = new Account(
@@ -112,6 +116,7 @@ class CreateAccountService
         $account->setCardHolderId($response['CardHolderID']);
         $account->setAccountNumber($response['AccountNumber']);
         $account->setSortCode($response['SortCode']);
+        $user->setAccount($account);
 
         $this->accountRepository->save($account);
 
