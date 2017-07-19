@@ -56,16 +56,16 @@ class IndexTransactionService
         $user = $this->userRepository->findOneById($userId);
         $account = $user->getAccount();
 
-        if ($fromDate) {
-            $queryParams['fromDate'] = $fromDate;
+        if (!$fromDate) {
+            $fromDate = $account->getCreatedAt();
+            $fromDate = DateTime::createFromFormat('m/d/Y', '5/7/2017');
         }
 
-        if ($toDate) {
-            $queryParams['toDate'] = $toDate;
+        if (!$toDate) {
+            $toDate = new DateTime();
         }
-
         // $payProTransactions = $this->transactionRepository->findBy($queryParams);
-        $contisTransactions = $this->contisTransactionApiClient->getAll(/**$user->getAccount(), $fromDate, $toDate**/);
+        $contisTransactions = $this->contisTransactionApiClient->getAll($account, $fromDate, $toDate);
 
         return $contisTransactions;
     }

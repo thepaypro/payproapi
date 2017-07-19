@@ -5,6 +5,8 @@ namespace AppBundle\Service\ContisApiClient;
 use Exception;
 use DateTime;
 
+use AppBundle\Entity\Account;
+
 /**
  * Class Transaction
  * @package AppBundle\Service\ContisApiClient
@@ -34,28 +36,25 @@ class Transaction
      * Get a list of transactions from Contis.
      * @return Array $response
      */
-    public function getAll(/**Account $account, DateTime $fromDate = null, DateTime $toDate = null**/) : Array
+    public function getAll(Account $account, DateTime $fromDate, DateTime $toDate) : Array
     {
         $params = [
             // 'CardHolderId' => $account->getCardHolderId(),
             'CardHolderId' => '131232',
-            // 'AccountNumber' => $account->getAccountNumber()
-            'AccountNumber' => '04079462'
+            // 'AccountNumber' => $account->getAccountNumber(),
+            'AccountNumber' => '04079462',
+            // 'SortCode' => $account->getSortCode(),
+            'SortCode' => '623053',
+            'FromDate' => '/Date('.$fromDate->getTimeStamp().')/',
+            'ToDate' => '/Date('.$toDate->getTimeStamp().')/' 
         ];
-
-        // if ($fromDate) {
-        //     $params['FromDate'] = $fromDate->getTimestamp();
-        // }
-
-        // if ($toDate) {
-        //     $params['ToDate'] = $toDate->getTimestamp();
-        // }
 
         $params['Token'] = $this->authenticationService->getAuthenticationToken();
 
         $requestParams = [
             'Token' => $params['Token'],
-            'ClientUniqueReferenceID' => strtotime('now')
+            'ClientUniqueReferenceID' => strtotime('now'),
+            'SchemeCode' => 'PAYPRO'
         ];
 
         $params = [$this->hashingService->generateHashDataStringAndHash($params)];
