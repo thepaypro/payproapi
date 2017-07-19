@@ -27,7 +27,7 @@ class Card implements \JsonSerializable
     /**
      * @ORM\Column(type="string", nullable=false)
      */
-    protected $contisCardCode;
+    protected $contisCardId;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
@@ -61,27 +61,27 @@ class Card implements \JsonSerializable
     }
 
     /**
-     * Set contisCardCode
+     * Set contisCardId
      *
-     * @param string $contisCardCode
+     * @param string $contisCardId
      *
      * @return Card
      */
-    public function setContisCardCode($contisCardCode)
+    public function setContisCardId($contisCardId)
     {
-        $this->contisCardCode = $contisCardCode;
+        $this->contisCardId = $contisCardId;
 
         return $this;
     }
 
     /**
-     * Get contisCardCode
+     * Get contisCardId
      *
      * @return string
      */
-    public function getContisCardCode()
+    public function getContisCardId()
     {
-        return $this->contisCardCode;
+        return $this->contisCardId;
     }
 
     /**
