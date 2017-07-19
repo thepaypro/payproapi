@@ -58,7 +58,6 @@ class IndexTransactionService
 
         if (!$fromDate) {
             $fromDate = $account->getCreatedAt();
-            $fromDate = DateTime::createFromFormat('m/d/Y', '5/7/2017');
         }
 
         if (!$toDate) {
