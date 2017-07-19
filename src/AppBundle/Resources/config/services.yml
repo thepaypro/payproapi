@@ -28,5 +28,6 @@ imports:
   - { resource: contact.yml }
   - { resource: accountRequest.yml }
   - { resource: user.yml }
+  - { resource: transaction.yml }
   - { resource: subscribers.yml }
   - { resource: contis.yml }

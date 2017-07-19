@@ -65,13 +65,7 @@ class TransactionController extends Controller
         $filters = $request->query->all();
 
         try {
-            $transactions = $this->get('payproapi.transaction_index_service')->execute(
-                $user->getId(),
-                $filters['payerId'],
-                $filters['beneficiaryId'],
-                $filters['fromDate'],
-                $filters['toDate']
-            );
+            $transactions = $this->get('payproapi.index_transaction_service')->execute($user->getId());
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $$e->getMessage()], $e->getCode());
         }
