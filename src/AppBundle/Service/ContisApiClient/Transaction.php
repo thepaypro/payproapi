@@ -5,6 +5,8 @@ namespace AppBundle\Service\ContisApiClient;
 use Exception;
 use DateTime;
 
+use AppBundle\Entity\Account;
+
 /**
  * Class Transaction
  * @package AppBundle\Service\ContisApiClient
@@ -34,37 +36,31 @@ class Transaction
      * Get a list of transactions from Contis.
      * @return Array $response
      */
-    public function getAll(/**Account $account, DateTime $fromDate = null, DateTime $toDate = null**/) : Array
+    public function getAll(Account $account, DateTime $fromDate, DateTime $toDate) : Array
     {
         $params = [
-            // 'CardHolderId' => $account->getCardHolderId(),
-            'CardHolderId' => '131232',
-            // 'AccountNumber' => $account->getAccountNumber()
-            'AccountNumber' => '04079462'
+            'CardHolderId' => $account->getCardHolderId(),
+            'AccountNumber' => $account->getAccountNumber(),
+            'SortCode' => $account->getSortCode(),
+            'FromDate' => '/Date('.$fromDate->getTimeStamp().')/',
+            'ToDate' => '/Date('.$toDate->getTimeStamp().')/' 
         ];
-
-        // if ($fromDate) {
-        //     $params['FromDate'] = $fromDate->getTimestamp();
-        // }
-
-        // if ($toDate) {
-        //     $params['ToDate'] = $toDate->getTimestamp();
-        // }
 
         $params['Token'] = $this->authenticationService->getAuthenticationToken();
 
         $requestParams = [
             'Token' => $params['Token'],
-            'ClientUniqueReferenceID' => strtotime('now')
+            'ClientUniqueReferenceID' => strtotime('now'),
+            'SchemeCode' => 'PAYPRO'
         ];
 
-        $params = [$this->hashingService->generateHashDataStringAndHash($params)];
+        $params = $this->hashingService->generateHashDataStringAndHash($params);
         $requestParams = $this->hashingService->generateHashDataStringAndHash($requestParams);
 
         $response = $this->requestService->call('Account_GetStatement', $params, $requestParams);
 
         if ($response['Account_GetStatementResult']['Description'] == 'Success ') {
-            return $response['Account_GetStatementResult']['ResultObject'][0];
+            return [$response['Account_GetStatementResult']['ResultObject']];
         }
         dump($response);die();
     }
