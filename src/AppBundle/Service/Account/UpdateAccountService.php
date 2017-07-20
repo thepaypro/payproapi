@@ -100,7 +100,7 @@ class UpdateAccountService
 
         if (count($errors) > 0) {
             foreach ($errors as $key => $error) {
-                throw new PayProException($error->getPropertyPath().': '.$error->getMessage(), 404);
+                throw new PayProException($error->getPropertyPath().': '.$error->getMessage(), 400);
             }
         }
 

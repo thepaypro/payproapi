@@ -1,0 +1,8 @@
+services:
+  payproapi.request_card_service:
+    class: AppBundle\Service\Card\RequestCardService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Card')"
+      - "@contis_api_client.card_service"
+      - "@validator"
