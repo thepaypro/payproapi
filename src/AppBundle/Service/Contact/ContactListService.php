@@ -6,7 +6,7 @@ use libphonenumber\PhoneNumberUtil;
 use libphonenumber\NumberParseException;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Common\Persistence\ObjectRepository as ObjectRepositoryInterface;
 
 use Exception;
 
@@ -25,7 +25,7 @@ class ContactListService
      * @param UserRepository              $userRepository
      * @param PhoneNumberValidatorService $phoneNumberValidator
      */
-    public function __construct(ObjectRepository $userRepository, PhoneNumberValidatorService $phoneNumberValidator)
+    public function __construct(ObjectRepositoryInterface $userRepository, PhoneNumberValidatorService $phoneNumberValidator)
     {
         $this->userRepository = $userRepository;
         $this->phoneUtil = PhoneNumberUtil::getInstance();

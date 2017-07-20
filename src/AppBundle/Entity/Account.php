@@ -34,6 +34,11 @@ class Account implements \JsonSerializable
     private $users;
 
     /**
+     * @ORM\OneToOne(targetEntity="Card", mappedBy="account")
+     */
+    protected $card;
+
+    /**
      * @ORM\Column(type="string", nullable=false)
      * @Assert\NotBlank()
      */
@@ -757,5 +762,29 @@ class Account implements \JsonSerializable
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set card
+     *
+     * @param \AppBundle\Entity\Card $card
+     *
+     * @return Account
+     */
+    public function setCard(\AppBundle\Entity\Card $card = null)
+    {
+        $this->card = $card;
+
+        return $this;
+    }
+
+    /**
+     * Get card
+     *
+     * @return \AppBundle\Entity\Card
+     */
+    public function getCard()
+    {
+        return $this->card;
     }
 }

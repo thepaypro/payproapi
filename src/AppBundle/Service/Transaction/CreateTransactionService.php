@@ -2,17 +2,19 @@
 
 namespace AppBundle\Service\Transaction;
 
-use DateTime;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+use AppBundle\Entity\Transaction;
 use AppBundle\Repository\TransactionRepository;
 use AppBundle\Repository\AccountRepository;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Exception\PayProException;
 use AppBundle\Service\ContisApiClient\Transaction as ContisTransactionApiClient;
+
 /**
- * Class IndexTransactionService
+ * Class CreateTransactionService
  */
-class IndexTransactionService
+class CreateTransactionService
 {
     protected $transactionRepository;
     protected $accountRepository;
@@ -29,43 +31,56 @@ class IndexTransactionService
         TransactionRepository $transactionRepository,
         AccountRepository $accountRepository,
         UserRepository $userRepository,
+        ValidatorInterface $validationService,
         ContisTransactionApiClient $contisTransactionApiClient
     ) {
         $this->transactionRepository = $transactionRepository;
         $this->accountRepository = $accountRepository;
         $this->userRepository = $userRepository;
+        $this->validationService = $validationService;
         $this->contisTransactionApiClient = $contisTransactionApiClient;
     }
 
     /**
      * This method will retrieve all the transactions from the database and from Contis and will merge them.
      *
-     * @param  int    $userId
-     * @param  int    $payerId
-     * @param  int    $beneficiaryId
-     * @param  String $fromDate
-     * @param  String $toDate
-     * @return Array  $transactions
+     * @param  int          $userId
+     * @param  int          $beneficiaryId
+     * @param  int          $amount
+     * @return Transaction  $transaction
      */
     public function execute(
         int $userId,
-        String $fromDate = null,
-        String $toDate = null
-    ) : Array
+        String $beneficiaryId,
+        float $amount,
+        String $subject
+    ) : Transaction
     {
         $user = $this->userRepository->findOneById($userId);
-        $account = $user->getAccount();
+        $payer = $user->getAccount();
+        $beneficiary = $this->accountRepository->findOneById($beneficiaryId);
 
-        if (!$fromDate) {
-            $fromDate = $account->getCreatedAt();
+        $transaction = new Transaction(
+            $payer,
+            $beneficiary,
+            $amount,
+            $subject
+        );
+
+        $errors = $this->validationService->validate($transaction);
+
+        if (count($errors) > 0) {
+            foreach ($errors as $key => $error) {
+                throw new PayProException($error->getPropertyPath().': '.$error->getMessage(), 404);
+            }
         }
 
-        if (!$toDate) {
-            $toDate = new DateTime();
-        }
-        // $payProTransactions = $this->transactionRepository->findBy($queryParams);
-        $contisTransactions = $this->contisTransactionApiClient->getAll($account, $fromDate, $toDate);
+        $contisTransaction = $this->contisTransactionApiClient->create($transaction);
 
-        return $contisTransactions;
+        $transaction->setContisTransactionId($contisTransaction['ID']);
+
+        $this->transactionRepository->save($transaction);
+
+        return $transaction;
     }
 }

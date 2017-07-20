@@ -32,8 +32,13 @@ class CardController extends Controller
      */
     public function requestAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $data = [];
-        return $this->JWTResponse($user, $data);
+        try {
+            $card = $this->get('payproapi.request_card_service')->execute($user->getId());
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
+        }
+
+        return $this->JWTResponse($user, ['card' => $card]);
     }
 
     /**

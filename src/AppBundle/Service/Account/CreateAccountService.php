@@ -83,7 +83,7 @@ class CreateAccountService
         $user = $this->userRepository->findOneById($userId);
 
         if ($user->getAccount()) {
-            throw new PayProException("You already have an account", 404);
+            throw new PayProException("You already have an account", 400);
         }
 
         $birthDate = new DateTime($birthDate);
@@ -107,7 +107,7 @@ class CreateAccountService
 
         if (count($errors) > 0) {
             foreach ($errors as $key => $error) {
-                throw new PayProException($error->getPropertyPath().': '.$error->getMessage(), 404);
+                throw new PayProException($error->getPropertyPath().': '.$error->getMessage(), 400);
             }
         }
 

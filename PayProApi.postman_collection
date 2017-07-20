@@ -61,7 +61,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"agreement\": \"1\",\n\t\"forename\": \"asdadadsasd\",\n\t\"lastname\": \"aaaaaaaaaaaaaa\",\n\t\"birthDate\": \"08/06/1990\",\n\t\"documentType\": \"DNI\",\n\t\"documentNumber\": \"12341234K\",\n\t\"street\": \"Ametller\",\n\t\"buildingNumber\": \"6\",\n\t\"postcode\": \"08293\",\n\t\"city\": \"Barcelona\",\n\t\"country\": \"239\"\n}"
+							"raw": "{\n\t\"agreement\": \"1\",\n\t\"forename\": \"adasdfas\",\n\t\"lastname\": \"Marasdfasdfasdf\",\n\t\"birthDate\": \"08/06/1992\",\n\t\"documentType\": \"DNI\",\n\t\"documentNumber\": \"12341234K\",\n\t\"street\": \"Ametller\",\n\t\"buildingNumber\": \"6\",\n\t\"postcode\": \"08293\",\n\t\"city\": \"Barcelona\",\n\t\"country\": \"239\"\n}"
 						},
 						"description": ""
 					},
@@ -172,6 +172,37 @@
 			]
 		},
 		{
+			"name": "Cards",
+			"description": "",
+			"item": [
+				{
+					"name": "Request",
+					"request": {
+						"url": "{{host}}/cards/request",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Contacts",
 			"description": "",
 			"item": [
@@ -275,6 +306,59 @@
 						"body": {
 							"mode": "raw",
 							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"description": "",
+			"item": [
+				{
+					"name": "Index",
+					"request": {
+						"url": "{{host}}/transactions",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"url": "{{host}}/transactions",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"beneficiary\":\"1\",\n\t\"amount\":\"1.99\",\n\t\"subject\":\"barcos y cosas\"\n}\n"
 						},
 						"description": ""
 					},
