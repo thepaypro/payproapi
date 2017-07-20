@@ -22,12 +22,14 @@ services:
       - "%mailer_user%"
       - "%user_administrator_email%"
       - "@mailer"
+
 imports:
   - { resource: account.yml }
   - { resource: mobileVerificationCode.yml }
   - { resource: contact.yml }
   - { resource: accountRequest.yml }
   - { resource: user.yml }
+  - { resource: card.yml }
   - { resource: transaction.yml }
   - { resource: subscribers.yml }
   - { resource: contis.yml }
