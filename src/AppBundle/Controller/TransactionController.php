@@ -47,8 +47,20 @@ class TransactionController extends Controller
      */
     public function createAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $transactions = [];
-        return $this->JWTResponse($user, $data);
+        $requestData = $request->request->all();
+
+        try {
+            $transaction = $this->get('payproapi.create_transaction_service')->execute(
+                $user->getId(),
+                $requestData['beneficiary'],
+                $requestData['amount'],
+                $requestData['subject']
+            );
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
+        }
+
+        return $this->JWTResponse($user, ['transaction' => $transaction]);
     }
 
     /**

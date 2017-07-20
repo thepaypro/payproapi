@@ -6,6 +6,7 @@ use Exception;
 use DateTime;
 
 use AppBundle\Entity\Account;
+use AppBundle\Entity\Transaction as TransactionEntity;
 
 /**
  * Class Transaction
@@ -30,6 +31,35 @@ class Transaction
         $this->requestService = $requestService;
         $this->hashingService = $hashingService;
         $this->authenticationService = $authenticationService;
+    }
+
+    public function create(TransactionEntity $transaction) : Array
+    {
+        $params = [
+            'FromAccountNumber' => $transaction->getPayer()->getAccountNumber(),
+            'ToAccountNumber' => $transaction->getBeneficiary()->getAccountNumber(),
+            'Amount' => $transaction->getAmount()*100,
+            'CurrencyCode' => '826',
+            'Description' => $transaction->getSubject()
+        ];
+
+        $params['Token'] = $this->authenticationService->getAuthenticationToken();
+
+        $requestParams = [
+            'Token' => $params['Token'],
+            'ClientUniqueReferenceID' => strtotime('now'),
+            'SchemeCode' => 'PAYPRO'
+        ];
+
+        $params = $this->hashingService->generateHashDataStringAndHash($params);
+        $requestParams = $this->hashingService->generateHashDataStringAndHash($requestParams);
+
+        $response = $this->requestService->call('Account_TransferMoney', $params, $requestParams);
+
+        if ($response['Account_TransferMoneyResult']['Description'] == 'Success ') {
+            return [$response['Account_TransferMoneyResult']['ResultObject']];
+        }
+        dump($response);die();
     }
 
     /**
