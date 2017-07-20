@@ -39,7 +39,7 @@ class Transaction
             'FromAccountNumber' => $transaction->getPayer()->getAccountNumber(),
             'ToAccountNumber' => $transaction->getBeneficiary()->getAccountNumber(),
             'Amount' => $transaction->getAmount()*100,
-            'CurrencyCode' => 'GBP',
+            'CurrencyCode' => '826',
             'Description' => $transaction->getSubject()
         ];
 
