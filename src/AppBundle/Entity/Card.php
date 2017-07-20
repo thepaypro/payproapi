@@ -39,8 +39,11 @@ class Card implements \JsonSerializable
      */
     protected $isEnabled;
 
-    public function __construct()
+    public function __construct(Account $account, bool $isActive, bool $isEnabled)
     {
+        $this->account = $account;
+        $this->isActive = $isActive;
+        $this->isEnabled = $isEnabled;
     }
 
     public function jsonSerialize()
