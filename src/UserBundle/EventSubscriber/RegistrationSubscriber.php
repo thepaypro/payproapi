@@ -7,8 +7,10 @@ use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FormEvent;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use AppBundle\Service\User\Validator\UserValidatorService;
+use AppBundle\Exception\PayProException;
 
 class RegistrationSubscriber implements EventSubscriberInterface
 {
@@ -41,6 +43,10 @@ class RegistrationSubscriber implements EventSubscriberInterface
     public function onRegistrationInitialize(GetResponseUserEvent $event)
     {
         $data = $event->getRequest()->request->all()['app_user_registration'];
+
+        if ($data['plainPassword']['first'] != $data['plainPassword']['second']) {
+            throw new PayProException('Passwords dont match', 400);
+        }
 
         $this->userValidatorService->validate($data['username'], $data['mobileVerificationCode']);
     }
