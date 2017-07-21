@@ -66,6 +66,5 @@ class RequestCardService
         $this->cardRepository->save($card);
 
         return $card;
-
     }
 }

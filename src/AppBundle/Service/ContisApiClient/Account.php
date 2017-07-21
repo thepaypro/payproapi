@@ -54,7 +54,8 @@ class Account
             'IsMain' => 'true',
             'Relationship' => '01',
             'Street' => $account->getStreet(),
-            'Title' => 'Other'
+            'Title' => 'Other',
+            'IsSkipCardIssuance' => true
         ];
 
         $params['Token'] = $this->authenticationService->getAuthenticationToken();
