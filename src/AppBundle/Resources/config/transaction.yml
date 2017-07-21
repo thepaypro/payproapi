@@ -1,0 +1,17 @@
+services:
+  payproapi.index_transaction_service:
+    class: AppBundle\Service\Transaction\IndexTransactionService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Transaction')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Account')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@contis_api_client.transaction_service"
+
+  payproapi.create_transaction_service:
+    class: AppBundle\Service\Transaction\CreateTransactionService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Transaction')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Account')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@validator"
+      - "@contis_api_client.transaction_service"

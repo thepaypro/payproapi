@@ -1,0 +1,6 @@
+services:
+  payproapi.contact_list_service:
+    class: AppBundle\Service\Contact\ContactListService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@payproapi.phone_number_validation_service"

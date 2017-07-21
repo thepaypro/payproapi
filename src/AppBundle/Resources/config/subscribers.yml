@@ -1,0 +1,24 @@
+services:
+  payproapi.registration_subscriber:
+    class: UserBundle\EventSubscriber\RegistrationSubscriber
+    arguments: 
+      - "@payproapi.user_validator_service"
+    tags:
+      - { name: kernel.event_subscriber }
+
+  payproapi.kernel_request_subscriber:
+    class: AppBundle\EventSubscriber\KernelRequestSubscriber
+    tags:
+      - { name: kernel.event_subscriber }
+
+  payproapi.mobile_verification_code_subscriber:
+    class: AppBundle\EventSubscriber\MobileVerificationCodeSubscriber
+    arguments:
+      - '@payproapi.twilio_short_message_service'
+    tags:
+      - { name: kernel.event_subscriber }
+
+  payproapi.authentication_subscriber:
+    class: AppBundle\EventSubscriber\AuthenticationSubscriber
+    tags:
+      - { name: kernel.event_subscriber }

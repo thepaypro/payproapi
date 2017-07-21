@@ -1,0 +1,8 @@
+services:
+  payproapi.create_mobile_verification_code_service:
+    class: AppBundle\Service\MobileVerificationCode\CreateMobileVerificationCodeService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:MobileVerificationCode')"
+      - "@payproapi.phone_number_validation_service"
+      - "@event_dispatcher"
