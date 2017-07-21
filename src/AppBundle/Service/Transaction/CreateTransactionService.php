@@ -77,7 +77,7 @@ class CreateTransactionService
 
         $contisTransaction = $this->contisTransactionApiClient->create($transaction);
 
-        $transaction->setContisTransactionId($contisTransaction['ID']);
+        $transaction->setContisTransactionId($contisTransaction['TransactionID']);
 
         $this->transactionRepository->save($transaction);
 

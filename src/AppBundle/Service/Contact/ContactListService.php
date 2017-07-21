@@ -7,7 +7,6 @@ use libphonenumber\NumberParseException;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\ObjectRepository as ObjectRepositoryInterface;
-use AppBundle\Service\PhoneNumberValidatorService;
 
 use Exception;
 

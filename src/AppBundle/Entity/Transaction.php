@@ -52,14 +52,13 @@ class Transaction implements \JsonSerializable
 
     /**
      * @ORM\OneToOne(targetEntity="TransactionInvite", mappedBy="transaction")
-     * @ORM\Column(nullable=false)
      */
     protected $transactionInvite;
 
     public function __construct(
         Account $payer,
         Account $beneficiary,
-        int $amount,
+        float $amount,
         String $subject
     )
     {

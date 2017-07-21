@@ -24,7 +24,8 @@ class Card
         RequestService $requestService,
         HashingService $hashingService,
         AuthenticationService $authenticationService
-    ) {
+    )
+    {
         $this->requestService = $requestService;
         $this->hashingService = $hashingService;
         $this->authenticationService = $authenticationService;

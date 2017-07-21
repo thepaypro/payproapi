@@ -172,6 +172,37 @@
 			]
 		},
 		{
+			"name": "Cards",
+			"description": "",
+			"item": [
+				{
+					"name": "Request",
+					"request": {
+						"url": "{{host}}/cards/request",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Contacts",
 			"description": "",
 			"item": [
@@ -304,6 +335,31 @@
 							}
 						],
 						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"url": "{{host}}/transactions",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"beneficiary\":\"1\",\n\t\"amount\":\"1.99\",\n\t\"subject\":\"barcos y cosas\"\n}\n"
+						},
 						"description": ""
 					},
 					"response": []

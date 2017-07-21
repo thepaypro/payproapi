@@ -54,7 +54,8 @@ class Account
             'IsMain' => 'true',
             'Relationship' => '01',
             'Street' => $account->getStreet(),
-            'Title' => 'Other'
+            'Title' => 'Other',
+            'IsSkipCardIssuance' => true
         ];
 
         $params['Token'] = $this->authenticationService->getAuthenticationToken();
@@ -83,6 +84,7 @@ class Account
     public function update(AccountEntity $account) : Array
     {
         $params = [
+            'CardHolderID' => $account->getCardHolderId(),
             'AgreementCode' => $account->getAgreement()->getContisAgreementCode(),
             'Buildingno' => $account->getBuildingNumber(),
             'City' => $account->getCity(),
@@ -95,7 +97,9 @@ class Account
             'Nationalidcardline1' => $account->getDocumentType() == AccountEntity::DOCUMENT_TYPE_DNI ? $account->getDocumentNumber() : '',
             'Drivinglicence' => $account->getDocumentType() == AccountEntity::DOCUMENT_TYPE_PASSPORT ? $account->getDocumentNumber() : '',
             'Passportnumber' => $account->getDocumentType() == AccountEntity::DOCUMENT_TYPE_DRIVING_LICENSE ? $account->getDocumentNumber() : '',
+            'Relationship' => '01',
             'Street' => $account->getStreet(),
+            'Title' => 'Other'
         ];
 
         $params['Token'] = $this->authenticationService->getAuthenticationToken();
@@ -105,7 +109,7 @@ class Account
             'ClientUniqueReferenceID' => strtotime('now')
         ];
 
-        $params = [$this->hashingService->generateHashDataStringAndHash($params)];
+        $params = $this->hashingService->generateHashDataStringAndHash($params);
         $requestParams = $this->hashingService->generateHashDataStringAndHash($requestParams);
 
         $response = $this->requestService->call('CardHolder_Update', $params, $requestParams);
