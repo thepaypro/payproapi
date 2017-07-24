@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -21,30 +22,51 @@ class Transaction implements \JsonSerializable
     /**
      * @ORM\ManyToOne(targetEntity="Account", inversedBy="sentTransactions")
      * @ORM\JoinColumn(name="payer_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      */
     protected $payer;
 
     /**
      * @ORM\ManyToOne(targetEntity="Account", inversedBy="receivedTransactions")
      * @ORM\JoinColumn(name="beneficiary_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      */
     protected $beneficiary;
 
     /**
      * @ORM\Column(type="string", nullable=false)
      */
-    protected $contisCode;
+    protected $contisTransactionId;
 
     /**
      * @ORM\Column(type="float", nullable=false)
+     * @Assert\NotBlank()
      */
     protected $amount;
 
     /**
+     * @ORM\Column(type="string", nullable=false)
+     * @Assert\NotBlank()
+     */
+    protected $subject;
+
+    /**
      * @ORM\OneToOne(targetEntity="TransactionInvite", mappedBy="transaction")
-     * @ORM\Column(nullable=false)
      */
     protected $transactionInvite;
+
+    public function __construct(
+        Account $payer,
+        Account $beneficiary,
+        float $amount,
+        String $subject
+    )
+    {
+        $this->payer = $payer;
+        $this->beneficiary = $beneficiary;
+        $this->amount = $amount;
+        $this->subject = $subject;
+    }
 
     public function jsonSerialize()
     {
@@ -66,27 +88,27 @@ class Transaction implements \JsonSerializable
     }
 
     /**
-     * Set contisCode
+     * Set contisTransactionId
      *
-     * @param string $contisCode
+     * @param string $contisTransactionId
      *
      * @return Transaction
      */
-    public function setContisCode($contisCode)
+    public function setContisTransactionId($contisTransactionId)
     {
-        $this->contisCode = $contisCode;
+        $this->contisTransactionId = $contisTransactionId;
 
         return $this;
     }
 
     /**
-     * Get contisCode
+     * Get contisTransactionId
      *
      * @return string
      */
-    public function getContisCode()
+    public function getContisTransactionId()
     {
-        return $this->contisCode;
+        return $this->contisTransactionId;
     }
 
     /**
@@ -183,5 +205,29 @@ class Transaction implements \JsonSerializable
     public function getBeneficiary()
     {
         return $this->beneficiary;
+    }
+
+    /**
+     * Set subject
+     *
+     * @param String $subject
+     *
+     * @return Transaction
+     */
+    public function setSubject(String $subject = null)
+    {
+        $this->subject = $subject;
+
+        return $this;
+    }
+
+    /**
+     * Get subject
+     *
+     * @return String
+     */
+    public function getSubject()
+    {
+        return $this->subject;
     }
 }

@@ -25,3 +25,17 @@ services:
       - "@contis_api_client.request_service"
       - "@contis_api_client.hashing_service"
       - "@contis_api_client.authentication_service"
+
+  contis_api_client.transaction_service:
+    class: AppBundle\Service\ContisApiClient\Transaction
+    arguments:
+      - "@contis_api_client.request_service"
+      - "@contis_api_client.hashing_service"
+      - "@contis_api_client.authentication_service"
+
+  contis_api_client.card_service:
+    class: AppBundle\Service\ContisApiClient\Card
+    arguments:
+      - "@contis_api_client.request_service"
+      - "@contis_api_client.hashing_service"
+      - "@contis_api_client.authentication_service"

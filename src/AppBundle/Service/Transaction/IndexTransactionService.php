@@ -1,22 +1,21 @@
 <?php
 
-namespace AppBundle\Service\Account;
-
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+namespace AppBundle\Service\Transaction;
 
 use DateTime;
 
 use AppBundle\Repository\TransactionRepository;
+use AppBundle\Repository\AccountRepository;
 use AppBundle\Repository\UserRepository;
-use AppBundle\Service\ContisApiClient\Account as ContisAccountApiClient;
 use AppBundle\Exception\PayProException;
-
+use AppBundle\Service\ContisApiClient\Transaction as ContisTransactionApiClient;
 /**
  * Class IndexTransactionService
  */
 class IndexTransactionService
 {
     protected $transactionRepository;
+    protected $accountRepository;
     protected $userRepository;
     protected $validationService;
     protected $contisTransactionApiClient;
@@ -28,14 +27,14 @@ class IndexTransactionService
      */
     public function __construct(
         TransactionRepository $transactionRepository,
+        AccountRepository $accountRepository,
         UserRepository $userRepository,
-        ValidatorInterface $validationService,
-        ContisTransactionApiClient $contisAccountApiClient
+        ContisTransactionApiClient $contisTransactionApiClient
     ) {
         $this->transactionRepository = $transactionRepository;
+        $this->accountRepository = $accountRepository;
         $this->userRepository = $userRepository;
-        $this->validationService = $validationService;
-        $this->contisAccountApiClient = $contisAccountApiClient;
+        $this->contisTransactionApiClient = $contisTransactionApiClient;
     }
 
     /**
@@ -50,26 +49,23 @@ class IndexTransactionService
      */
     public function execute(
         int $userId,
-        int $payerId,
-        int $beneficiaryId,
-        String $fromDate,
-        String $toDate
+        String $fromDate = null,
+        String $toDate = null
     ) : Array
     {
-        if ($userId != $payerId && $userId != $beneficiaryId) {
-            throw new PayProException("Payer or Beneficiary not found", 404);
+        $user = $this->userRepository->findOneById($userId);
+        $account = $user->getAccount();
+
+        if (!$fromDate) {
+            $fromDate = $account->getCreatedAt();
         }
 
-        $payer = $this->userRepository->findOneById($payerId);
-        $beneficiary = $this->userRepository->findOneById($beneficiaryId);
+        if (!$toDate) {
+            $toDate = new DateTime();
+        }
+        // $payProTransactions = $this->transactionRepository->findBy($queryParams);
+        $contisTransactions = $this->contisTransactionApiClient->getAll($account, $fromDate, $toDate);
 
-        $this->transactionRepository->findBy([
-            'payer' => $payer,
-            'beneficiary' => $beneficiary,
-            'fromDate' => $fromDate,
-            'toDate' => $toDate
-        ]);
-
-        return;
+        return $contisTransactions;
     }
 }

@@ -47,8 +47,20 @@ class TransactionController extends Controller
      */
     public function createAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $transactions = [];
-        return $this->JWTResponse($user, $data);
+        $requestData = $request->request->all();
+
+        try {
+            $transaction = $this->get('payproapi.create_transaction_service')->execute(
+                $user->getId(),
+                $requestData['beneficiary'],
+                $requestData['amount'],
+                $requestData['subject']
+            );
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
+        }
+
+        return $this->JWTResponse($user, ['transaction' => $transaction]);
     }
 
     /**
@@ -65,13 +77,7 @@ class TransactionController extends Controller
         $filters = $request->query->all();
 
         try {
-            $transactions = $this->get('payproapi.transaction_index_service')->execute(
-                $user->getId(),
-                $filters['payerId'],
-                $filters['beneficiaryId'],
-                $filters['fromDate'],
-                $filters['toDate']
-            );
+            $transactions = $this->get('payproapi.index_transaction_service')->execute($user->getId());
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $$e->getMessage()], $e->getCode());
         }

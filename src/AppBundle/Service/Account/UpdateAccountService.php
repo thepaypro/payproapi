@@ -48,7 +48,7 @@ class UpdateAccountService
     /**
      * This method will create the cardHolder on Contis system and will persist the new account of the user.
      * @param  Account $account
-     * @return something to reflect if something goes ok or not
+     * @return Account
      */
     public function execute(
         int $accountId = null,
@@ -70,9 +70,6 @@ class UpdateAccountService
         $account = $this->accountRepository->findOneById($accountId);
         $user = $this->userRepository->findOneById($userId);
 
-        dump($account);
-        dump($account->getUsers());
-        die();
         if (!$account || !$account->getUsers()->contains($user)) {
             throw new PayProException("Account not found", 404);
         }
@@ -103,7 +100,7 @@ class UpdateAccountService
 
         if (count($errors) > 0) {
             foreach ($errors as $key => $error) {
-                throw new PayProException($error->getPropertyPath().': '.$error->getMessage(), 404);
+                throw new PayProException($error->getPropertyPath().': '.$error->getMessage(), 400);
             }
         }
 
