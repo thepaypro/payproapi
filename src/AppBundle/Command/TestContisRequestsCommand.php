@@ -17,7 +17,6 @@ class TestContisRequestsCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         /** Fake CardHolders created by Beth **/
         // $params = [
         //     'CardHolderID'  => 131232,
@@ -27,6 +26,14 @@ class TestContisRequestsCommand extends ContainerAwareCommand
         //     'AccountNumber' => '04079462',
         //     'SortCode'      => '623053'
         // ];
+        $params = [
+            'CardHolderID'  => 131232,
+            'FirstName'     => 'Bethany',
+            'LastName'      => 'Harriman',
+            'EmailAddress'  => 'beth.harriman@contisgroup.com',
+            'AccountNumber' => '04079462',
+            'SortCode'      => '623053'
+        ];
 
         // $params = [
         //     'CardHolderID'  => 131366,
@@ -36,7 +43,6 @@ class TestContisRequestsCommand extends ContainerAwareCommand
         //     'AccountNumber' => '04079834',
         //     'SortCode'      => '623053'
         // ];
-
 
         $params = [
             'CardHolderID'  => 131544
