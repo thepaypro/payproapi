@@ -59,7 +59,7 @@ class CreateAccountRequestService
      * @param  String   $buildingNumber
      * @param  String   $postcode
      * @param  String   $city
-     * @param  Int      $countryId
+     * @param  String   $countryIso2
      * @return Account  $account
      */
     public function execute(
@@ -75,14 +75,17 @@ class CreateAccountRequestService
         String $buildingNumber,
         String $postcode,
         String $city,
-        Int $countryId
+        String $countryIso2
     ) : bool
     {
         $agreement = $this->agreementRepository->findOneById($agreementId);
-        $country = $this->countryRepository->findOneById($countryId);
+        $country = $this->countryRepository->findOneByIso2($countryIso2);
         $user = $this->userRepository->findOneById($userId);
         $documentNumber = 'isInPicture';
 
+        if (!$user) {
+            throw new PayProException("User not found", 400);
+        }
         if ($user->getAccount()) {
             throw new PayProException("You already have an account", 400);
         }

@@ -47,24 +47,37 @@ class UpdateAccountService
 
     /**
      * This method will create the cardHolder on Contis system and will persist the new account of the user.
-     * @param  Account $account
+     * @param  int|null     $accountId
+     * @param  int|null     $userId
+     * @param  String|null  $forename
+     * @param  String|null  $lastname
+     * @param  String|null  $email
+     * @param  String|null  $birthDate
+     * @param  String|null  $documentType
+     * @param  String|null  $documentNumber
+     * @param  int|null     $agreementId
+     * @param  String|null  $street
+     * @param  String|null  $buildingNumber
+     * @param  String|null  $postcode
+     * @param  String|null  $city
+     * @param  String|null  $countryIso2
      * @return Account
      */
     public function execute(
         int $accountId = null,
         int $userId = null,
-        string $forename = null,
-        string $lastname = null,
-        string $email = null,
-        string $birthDate = null,
-        string $documentType = null,
-        string $documentNumber = null,
+        String $forename = null,
+        String $lastname = null,
+        String $email = null,
+        String $birthDate = null,
+        String $documentType = null,
+        String $documentNumber = null,
         int $agreementId = null,
-        string $street = null,
-        string $buildingNumber = null,
-        string $postcode = null,
-        string $city = null,
-        int $countryId = null
+        String $street = null,
+        String $buildingNumber = null,
+        String $postcode = null,
+        String $city = null,
+        int $countryIso2 = null
     )
     {
         $account = $this->accountRepository->findOneById($accountId);
@@ -91,8 +104,8 @@ class UpdateAccountService
         $account->setPostcode($postcode ? $postcode : $account->getPostcode());
         $account->setCity($city ? $city : $account->getCity());
 
-        if ($countryId) {
-            $country = $this->countryRepository->findOneById($countryId);
+        if ($countryIso2) {
+            $country = $this->countryRepository->findOneByIso2($countryIso2);
             $account->setCountry($country);
         }
 
