@@ -30,7 +30,7 @@ class TransactionInvite
      */
     protected $invite;
 
-     /**
+    /**
      * @ORM\OneToOne(targetEntity="Transaction", inversedBy="transactionInvite")
      * @ORM\JoinColumn(name="transaction_id", referencedColumnName="id")
      */

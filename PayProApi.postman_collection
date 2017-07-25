@@ -172,6 +172,7 @@
 			]
 		},
 		{
+<<<<<<< HEAD
 			"name": "Cards",
 			"description": "",
 			"item": [
@@ -203,6 +204,8 @@
 			]
 		},
 		{
+=======
+>>>>>>> 5318e52ad25120e48721c1231387058f22fa2827
 			"name": "Contacts",
 			"description": "",
 			"item": [
@@ -338,6 +341,7 @@
 						"description": ""
 					},
 					"response": []
+<<<<<<< HEAD
 				},
 				{
 					"name": "Create",
@@ -363,6 +367,8 @@
 						"description": ""
 					},
 					"response": []
+=======
+>>>>>>> 5318e52ad25120e48721c1231387058f22fa2827
 				}
 			]
 		},

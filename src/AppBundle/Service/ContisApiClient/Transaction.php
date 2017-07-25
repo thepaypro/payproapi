@@ -76,14 +76,6 @@ class Transaction
             'ToDate' => '/Date('.$toDate->getTimeStamp().')/' 
         ];
 
-        // $params = [
-        //     'CardHolderID'  => 131232,
-        //     'AccountNumber' => '04079462',
-        //     'SortCode'      => '623053',
-        //     'FromDate' => '/Date('.((DateTime::createFromFormat('d/m/Y', '6/7/2017'))->getTimeStamp()).')/',
-        //     'ToDate' => '/Date('.((new DateTime())->getTimeStamp()).')/' 
-        // ];
-
         $params['Token'] = $this->authenticationService->getAuthenticationToken();
 
         $requestParams = [
@@ -97,7 +89,6 @@ class Transaction
 
         $response = $this->requestService->call('Account_GetStatement', $params, $requestParams);
 
-        dump($response);die();
         if ($response['Account_GetStatementResult']['Description'] == 'Success ') {
             return [$response['Account_GetStatementResult']['ResultObject']];
         }
