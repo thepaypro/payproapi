@@ -60,7 +60,7 @@ class CreateAccountService
      * @param  String   $buildingNumber
      * @param  String   $postcode
      * @param  String   $city
-     * @param  Int      $countryId
+     * @param  String      $countryIso2
      * @return Account  $account
      */
     public function execute(
@@ -75,11 +75,11 @@ class CreateAccountService
         String $buildingNumber,
         String $postcode,
         String $city,
-        Int $countryId
+        String $countryIso2
     ) : Account
     {
         $agreement = $this->agreementRepository->findOneById($agreementId);
-        $country = $this->countryRepository->findOneById($countryId);
+        $country = $this->countryRepository->findOneByIso2($countryIso2);
         $user = $this->userRepository->findOneById($userId);
 
         if ($user->getAccount()) {
