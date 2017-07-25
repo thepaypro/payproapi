@@ -12,7 +12,7 @@ Steps to set up the project:
 2.- Clone ansible project for paypro in the same folder
 
 
-3.- cp payproapi/Vagrantfile.dist payproapi/Vagrantfile
+3.- cp payproapi/Vagrantfile.dist payproapi/Vagrantfile (modify the path to ansible folder)
 
 
 4.- cp payproapi/app/config/parameters.yml.dist payproapi/app/config/parameters.yml (fill properly the blank parameters)
