@@ -49,6 +49,7 @@ class MailingService
             $this->userAdministratorEmail,
             $pictures,
             [
+                'userId' => $account->getUsers()->first()->getId(),
                 'agreement' => $account->getAgreement()->getId(),
                 'forename' => $account->getForename(),
                 'lastname' => $account->getLastname(),

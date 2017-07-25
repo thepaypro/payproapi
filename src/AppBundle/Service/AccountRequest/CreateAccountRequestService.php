@@ -83,6 +83,9 @@ class CreateAccountRequestService
         $user = $this->userRepository->findOneById($userId);
         $documentNumber = 'isInPicture';
 
+        if (!$user) {
+            throw new PayProException("User not found", 400);
+        }
         if ($user->getAccount()) {
             throw new PayProException("You already have an account", 400);
         }
