@@ -52,14 +52,13 @@ class Transaction implements \JsonSerializable
 
     /**
      * @ORM\OneToOne(targetEntity="TransactionInvite", mappedBy="transaction")
-     * @ORM\Column(nullable=false)
      */
     protected $transactionInvite;
 
     public function __construct(
         Account $payer,
         Account $beneficiary,
-        int $amount,
+        float $amount,
         String $subject
     )
     {
@@ -71,11 +70,16 @@ class Transaction implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $allProperties = get_object_vars($this);
+        $publicProperties = [
+            'id' => $this->id,
+            'payer' => $this->payer,
+            'beneficiary' => $this->beneficiary,
+            'amount' => $this->amount,
+            'subject' => $this->subject,
+            'transactionInvite' => $this->transactionInvite
+        ];
 
-        unset($allProperties['contisCode']);
-
-        return $allProperties;
+        return $publicProperties;
     }
 
     /**

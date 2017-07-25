@@ -49,18 +49,14 @@ class User extends BaseUser implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $allProperties = get_object_vars($this);
+        $publicProperties = [
+            'id' => $this->id,
+            'username' => $this->username,
+            'account' => $this->account,
+            'invites' => $this->invites
+        ];
 
-        unset($allProperties['usernameCanonical']);
-        unset($allProperties['emailCanonical']);
-        unset($allProperties['salt']);
-        unset($allProperties['password']);
-        unset($allProperties['plainPassword']);
-        unset($allProperties['lastLogin']);
-        unset($allProperties['confirmationToken']);
-        unset($allProperties['passwordRequestedAt']);
-
-        return $allProperties;
+        return $publicProperties;
     }
 
     /**

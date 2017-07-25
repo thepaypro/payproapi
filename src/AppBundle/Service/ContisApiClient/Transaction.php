@@ -57,7 +57,7 @@ class Transaction
         $response = $this->requestService->call('Account_TransferMoney', $params, $requestParams);
 
         if ($response['Account_TransferMoneyResult']['Description'] == 'Success ') {
-            return [$response['Account_TransferMoneyResult']['ResultObject']];
+            return $response['Account_TransferMoneyResult']['ResultObject'][0];
         }
         dump($response);die();
     }

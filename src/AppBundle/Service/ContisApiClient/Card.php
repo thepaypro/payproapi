@@ -24,18 +24,19 @@ class Card
         RequestService $requestService,
         HashingService $hashingService,
         AuthenticationService $authenticationService
-    ) {
+    )
+    {
         $this->requestService = $requestService;
         $this->hashingService = $hashingService;
         $this->authenticationService = $authenticationService;
     }
 
     /**
-     * Create an account (CardHolder in Contis).
-     * @param  Card $account
-     * @return Array $response
+     * Request a card.
+     * @param  Card $card
+     * @return true
      */
-    public function request(CardEntity $card) : Array
+    public function request(CardEntity $card) : bool
     {
         $params = [
             'AccountNumber' => $card->getAccount()->getAccountNumber(),
@@ -56,7 +57,100 @@ class Card
         $response = $this->requestService->call('Card_Request', $params, $requestParams, 'objCardRequestInfo');
 
         if ($response['Card_RequestResult']['Description'] == 'Success ') {
-            return $response['Card_RequestResult']['ResultObject'][0];
+            return true;
+        }
+        dump($response);die();
+    }
+
+    /**
+     * Activate a card.
+     * @param  Card $card
+     * @return true
+     */
+    public function getActivateCode(CardEntity $card) : bool
+    {
+        $params = [
+            'AccountNumber' => $card->getAccount()->getAccountNumber(),
+            'CardHolderID' => $card->getAccount()->getCardHolderId(),
+            'SortCode' => $card->getAccount()->getSortCode()
+        ];
+
+        $params['Token'] = $this->authenticationService->getAuthenticationToken();
+
+        $requestParams = [
+            'Token' => $params['Token'],
+            'ClientUniqueReferenceID' => strtotime('now'),
+            'SchemeCode' => 'PAYPRO'
+        ];
+
+        $params = $this->hashingService->generateHashDataStringAndHash($params);
+        $requestParams = $this->hashingService->generateHashDataStringAndHash($requestParams);
+
+        $response = $this->requestService->call('Card_GetActivationCode', $params, $requestParams);
+
+        if ($response['Card_GetActivationCodeResult']['Description'] == 'Success ') {
+            return $response['Card_GetActivationCodeResult']['ResultObject'];
+        }
+        dump($response);die();
+    }
+
+    /**
+     * Activate a card.
+     * @param  Card $card
+     * @return true
+     */
+    public function activate(CardEntity $card) : bool
+    {
+        $params = [
+            'CardHolderID' => $card->getAccount()->getCardHolderId(),
+            'CardActivationCode' => $card->getContisCardActivationCode(),
+            'CardID' => $card->getContisCardID(),
+        ];
+
+        $params['Token'] = $this->authenticationService->getAuthenticationToken();
+
+        $requestParams = [
+            'Token' => $params['Token'],
+            'ClientUniqueReferenceID' => strtotime('now'),
+            'SchemeCode' => 'PAYPRO'
+        ];
+
+        $response = $this->requestService->call('Card_Activate', $params, $requestParams);
+
+        if ($response['Card_ActivateResult']['Description'] == 'Success ') {
+            return $response['Card_ActivateResult']['ResultObject'];
+        }
+        dump($response);die();
+    }
+
+    /**
+     * Change the status of a card.
+     * @param  Card $card
+     * @return true
+     */
+    public function update(CardEntity $card) : bool
+    {
+        $params = [
+            'AccountNumber' => $card->getAccount()->getAccountNumber(),
+            'CardHolderID' => $card->getAccount()->getCardHolderId(),
+            'SortCode' => $card->getAccount()->getSortCode()
+        ];
+
+        $params['Token'] = $this->authenticationService->getAuthenticationToken();
+
+        $requestParams = [
+            'Token' => $params['Token'],
+            'ClientUniqueReferenceID' => strtotime('now'),
+            'SchemeCode' => 'PAYPRO'
+        ];
+
+        $params = $this->hashingService->generateHashDataStringAndHash($params);
+        $requestParams = $this->hashingService->generateHashDataStringAndHash($requestParams);
+
+        $response = $this->requestService->call('Card_Activate', $params, $requestParams);
+
+        if ($response['Card_ActivateResult']['Description'] == 'Success ') {
+            return $response['Card_ActivateResult']['ResultObject'];
         }
         dump($response);die();
     }
