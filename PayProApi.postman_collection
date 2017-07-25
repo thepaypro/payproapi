@@ -61,7 +61,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"agreement\": \"1\",\n\t\"forename\": \"adasdfas\",\n\t\"lastname\": \"Marasdfasdfasdf\",\n\t\"birthDate\": \"08/06/1992\",\n\t\"documentType\": \"DNI\",\n\t\"documentNumber\": \"12341234K\",\n\t\"street\": \"Ametller\",\n\t\"buildingNumber\": \"6\",\n\t\"postcode\": \"08293\",\n\t\"city\": \"Barcelona\",\n\t\"country\": \"239\"\n}"
+							"raw": "{\n\t\"agreement\": \"1\",\n\t\"forename\": \"LOLOLOLOLOLOLO\",\n\t\"lastname\": \"Marasdfasdfasdf\",\n\t\"birthDate\": \"08/06/1992\",\n\t\"documentType\": \"DNI\",\n\t\"documentNumber\": \"12341234K\",\n\t\"street\": \"Ametller\",\n\t\"buildingNumber\": \"6\",\n\t\"postcode\": \"08293\",\n\t\"city\": \"Barcelona\",\n\t\"country\": \"239\"\n}"
 						},
 						"description": ""
 					},
@@ -172,7 +172,6 @@
 			]
 		},
 		{
-<<<<<<< HEAD
 			"name": "Cards",
 			"description": "",
 			"item": [
@@ -200,12 +199,60 @@
 						"description": ""
 					},
 					"response": []
+				},
+				{
+					"name": "Activate",
+					"request": {
+						"url": "{{host}}/cards/activation",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"url": "{{host}}/cards/1",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"enabled\":\"false\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
 				}
 			]
 		},
 		{
-=======
->>>>>>> 5318e52ad25120e48721c1231387058f22fa2827
 			"name": "Contacts",
 			"description": "",
 			"item": [
@@ -341,7 +388,6 @@
 						"description": ""
 					},
 					"response": []
-<<<<<<< HEAD
 				},
 				{
 					"name": "Create",
@@ -362,13 +408,11 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"beneficiary\":\"1\",\n\t\"amount\":\"1.99\",\n\t\"subject\":\"barcos y cosas\"\n}\n"
+							"raw": "{\n\t\"beneficiary\":\"2\",\n\t\"amount\":\"0.01\",\n\t\"subject\":\"barcos y cosas\"\n}\n"
 						},
 						"description": ""
 					},
 					"response": []
-=======
->>>>>>> 5318e52ad25120e48721c1231387058f22fa2827
 				}
 			]
 		},
