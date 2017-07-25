@@ -186,12 +186,31 @@ class Account implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $allProperties = get_object_vars($this);
-
-        $allProperties['users'] = $this->users->map(function($user) {
+        $publicProperties['users'] = $this->users->map(function($user) {
             $user->getId();
         });
-        return $allProperties;
+        $publicProperties['id'] = $this->id;
+        $publicProperties['forename'] = $this->forename;
+        $publicProperties['lastname'] = $this->lastname;
+        $publicProperties['email'] = $this->email;
+        $publicProperties['card'] = $this->card;
+        $publicProperties['birthDate'] = $this->birthDate;
+        $publicProperties['documentType'] = $this->documentType;
+        $publicProperties['documentNumber'] = $this->documentNumber;
+        $publicProperties['agreement'] = $this->agreement;
+        $publicProperties['accountNumber'] = $this->accountNumber;
+        $publicProperties['sortCode'] = $this->sortCode;
+        $publicProperties['street'] = $this->street;
+        $publicProperties['buildingNumber'] = $this->buildingNumber;
+        $publicProperties['postcode'] = $this->postcode;
+        $publicProperties['city'] = $this->city;
+        $publicProperties['country'] = $this->country;
+        $publicProperties['sentTransactions'] = $this->sentTransactions;
+        $publicProperties['receivedTransactions'] = $this->receivedTransactions;
+        $publicProperties['createdAt'] = $this->createdAt;
+        $publicProperties['updatedAt'] = $this->updatedAt;
+
+        return $publicProperties;
     }
 
     /**

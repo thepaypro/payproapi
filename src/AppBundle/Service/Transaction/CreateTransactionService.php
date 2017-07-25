@@ -60,6 +60,9 @@ class CreateTransactionService
         $payer = $user->getAccount();
         $beneficiary = $this->accountRepository->findOneById($beneficiaryId);
 
+        if (!$payer) {throw new PayProException('Account not found', 400);}
+        if (!$beneficiary) {throw new PayProException('Beneficiary not found', 400);}
+
         $transaction = new Transaction(
             $payer,
             $beneficiary,

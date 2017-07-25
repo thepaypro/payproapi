@@ -77,9 +77,18 @@ class Country implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $allProperties = get_object_vars($this);
+        $publicProperties = [
+            'id' => $this->id,
+            'iso2' => $this->iso2,
+            'iso3' => $this->iso3,
+            'isoNumeric' => $this->isoNumeric,
+            'name' => $this->name,
+            'active' => $this->active,
+            'createdAt' => $this->createdAt,
+            'updatedAt' => $this->updatedAt,
+        ];
 
-        return $allProperties;
+        return $publicProperties;
     }
 
     /**

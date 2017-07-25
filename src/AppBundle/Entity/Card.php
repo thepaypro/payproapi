@@ -25,9 +25,14 @@ class Card implements \JsonSerializable
     protected $account;
 
     /**
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string")
      */
     protected $contisCardId;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $contisCardActivationCode;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
@@ -48,9 +53,14 @@ class Card implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $allProperties = get_object_vars($this);
+        $publicProperties = [
+            'id' => $this->id,
+            'account' => $this->account,
+            'isActive' => $this->isActive,
+            'isEnabled' => $this->isEnabled
+        ]; 
 
-        return $allProperties;
+        return $publicProperties;
     }
 
     /**
@@ -157,5 +167,29 @@ class Card implements \JsonSerializable
     public function getAccount()
     {
         return $this->account;
+    }
+
+    /**
+     * Set contisCardActivationCode
+     *
+     * @param string $contisCardActivationCode
+     *
+     * @return Card
+     */
+    public function setContisCardActivationCode($contisCardActivationCode)
+    {
+        $this->contisCardActivationCode = $contisCardActivationCode;
+
+        return $this;
+    }
+
+    /**
+     * Get contisCardActivationCode
+     *
+     * @return string
+     */
+    public function getContisCardActivationCode()
+    {
+        return $this->contisCardActivationCode;
     }
 }

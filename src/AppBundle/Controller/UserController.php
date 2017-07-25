@@ -39,8 +39,8 @@ class UserController extends Controller
     {
         $id = $request->attributes->get('id');
 
-        if ($id != $user->getId()) {//TODO: change that, the account have become multiuser.
-            
+        if ($id != $user->getId()) {
+            return $this->JWTResponse($user, ['errorMessage' => 'User not found'], 404);
         }
 
         $userRepository = $this->getDoctrine()->getRepository('AppBundle:User');
