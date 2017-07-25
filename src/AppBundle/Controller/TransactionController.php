@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
+use AppBundle\Exception\PayProException;
 
 /**
  * Transaction controller.

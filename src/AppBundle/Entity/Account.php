@@ -13,7 +13,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="Accounts")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AccountRepository")
  * @ORM\HasLifecycleCallbacks()
- * @UniqueEntity(fields={"documentNumber", "email"}, ignoreNull=true)
+ * @UniqueEntity(fields={"documentNumber"})
+ * @UniqueEntity(fields={"email"}, ignoreNull=true)
  */
 class Account implements \JsonSerializable
 {

@@ -64,6 +64,9 @@ class Transaction
 
     /**
      * Get a list of transactions from Contis.
+     * @param  Account  $account
+     * @param  DateTime $fromDate
+     * @param  DateTime $toDate
      * @return Array $response
      */
     public function getAll(Account $account, DateTime $fromDate, DateTime $toDate) : Array
@@ -72,8 +75,8 @@ class Transaction
             'CardHolderId' => $account->getCardHolderId(),
             'AccountNumber' => $account->getAccountNumber(),
             'SortCode' => $account->getSortCode(),
-            'FromDate' => '/Date('.$fromDate->getTimeStamp().')/',
-            'ToDate' => '/Date('.$toDate->getTimeStamp().')/' 
+            'FromDate' => '/Date('.(intval($fromDate->getTimeStamp()*1000)).')/',
+            'ToDate' => '/Date('.(intval($toDate->getTimeStamp()*1000)).')/' 
         ];
 
         $params['Token'] = $this->authenticationService->getAuthenticationToken();

@@ -25,12 +25,12 @@ class Card implements \JsonSerializable
     protected $account;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $contisCardId;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $contisCardActivationCode;
 
