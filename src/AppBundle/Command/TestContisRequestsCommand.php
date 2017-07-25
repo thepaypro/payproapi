@@ -112,6 +112,14 @@ class TestContisRequestsCommand extends ContainerAwareCommand
         //     'AccountNumber' => '04079462',
         //     'SortCode'      => '623053'
         // ];
+        $params = [
+            'CardHolderID'  => 131232,
+            'FirstName'     => 'Bethany',
+            'LastName'      => 'Harriman',
+            'EmailAddress'  => 'beth.harriman@contisgroup.com',
+            'AccountNumber' => '04079462',
+            'SortCode'      => '623053'
+        ];
 
         // $params = [
         //     'CardHolderID'  => 131366,
