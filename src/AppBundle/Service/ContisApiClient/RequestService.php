@@ -40,12 +40,12 @@ class RequestService
      */
     public function call(String $endpoint, Array $params, Array $requestParams = [], String $jsonParamtersKey = 'objInfo') : Array
     {
-        $payload[$jsonParamtersKey] = $params;
         $payload['objReqInfo'] = $requestParams;
+        $payload[$jsonParamtersKey] = $params;
 
         $payload = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         if ($endpoint != 'Login') {
-            dump($payload);die();
+            // dump($payload);die();
         }
         try {
             $response = $this->httpClient->request(

@@ -10,10 +10,10 @@ use AppBundle\Exception\PayProException;
 use AppBundle\Entity\Card;
 
 /**
- * Class RequestCardService
+ * Class ActivateCardService
  * @package AppBundle\Service\Card
  */
-class RequestCardService
+class ActivateCardService
 {
     protected $userRepository;
     protected $cardRepository;
@@ -34,26 +34,28 @@ class RequestCardService
     )
     {
         $this->userRepository = $userRepository;
-        $this->cardRepository = $cardRepository;
         $this->contisCardApiClient = $contisCardApiClient;
         $this->validationService = $validationService;
     }
 
     /**
-     * This method create a Card entity, persist it and request a card to Contis.
+     * This method activate the card in Contis and update the card in PayPro.
      * 
      * @param  int $userId
-     * @return Card
+     * @return Array
      */
-    public function execute(int $userId) : Card
+    public function execute(int $userId)
     {
         $user = $this->userRepository->findOneById($userId);
 
         if (!$account = $user->getAccount()) {
             throw new PayProException('You must have an account to request a card', 400);
         }
+        if (!$card = $account->getCard()) {
+            throw new PayProException('You must request a card to activate it', 400);
+        }
 
-        $card = new Card($account, false, false);
+        $card->setIsActive(true);
 
         $errors = $this->validationService->validate($card);
 
@@ -63,7 +65,12 @@ class RequestCardService
             }
         }
 
-        $response = $this->contisCardApiClient->request($card);
+        $response = $this->contisCardApiClient->getActivationCode($card);
+
+        $card->setContisCardID($response['CardID']);
+        $card->setContisCardActivationCode($response['CardActivationCode']);
+
+        $response = $this->contisCardApiClient->activate($card);
 
         $this->cardRepository->save($card);
 
