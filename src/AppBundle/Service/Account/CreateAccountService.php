@@ -2,6 +2,7 @@
 
 namespace AppBundle\Service\Account;
 
+use AppBundle\Event\AccountEvents;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 use DateTime;
@@ -119,6 +120,11 @@ class CreateAccountService
         $user->setAccount($account);
 
         $this->accountRepository->save($account);
+
+        $this->dispatcher->dispatch(
+            AccountEvents::ACCOUNT_CREATED,
+            new AccountEvent($account)
+        );
 
         return $account;
     }

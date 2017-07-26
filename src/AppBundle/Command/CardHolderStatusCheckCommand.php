@@ -24,7 +24,7 @@ class CardHolderStatusCheckCommand extends ContainerAwareCommand
     private function getCardHolder()
     {
 
-        // Query the accounts older than 20 mins here.
+        //TODO: Query the accounts older than 20 mins here.
         $params = [
             'CardHolderID' => 1234
         ];
@@ -44,7 +44,7 @@ class CardHolderStatusCheckCommand extends ContainerAwareCommand
 
         $response = $this->getContainer()->get('contis_api_client.request_service')->call($endpoint, $params, $requestParams);
 
-        // Dispatch an event for every single account with non-pending status.
+        //TODO: Dispatch an event for every single account with non-pending status.
 
         dump($response);die();
     }
