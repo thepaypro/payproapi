@@ -43,6 +43,7 @@ class ActivateCardService
      * 
      * @param  int $userId
      * @return Array
+     * @throws PayProException
      */
     public function execute(int $userId)
     {

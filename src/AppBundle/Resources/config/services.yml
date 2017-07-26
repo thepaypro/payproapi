@@ -31,6 +31,7 @@ imports:
   - { resource: contis.yml }
   - { resource: mobileVerificationCode.yml }
   - { resource: notification.yml }
+  - { resource: profile.yml }
   - { resource: subscribers.yml }
   - { resource: transaction.yml }
   - { resource: user.yml }

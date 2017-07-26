@@ -27,6 +27,7 @@ class Version20170523165703 extends AbstractMigration
         $this->addSql('CREATE TABLE MobileVerificationCodes (id INT AUTO_INCREMENT NOT NULL, code VARCHAR(255) NOT NULL, phone_number VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE Accounts (id INT AUTO_INCREMENT NOT NULL, agreement_id INT NOT NULL, country_id INT NOT NULL, forename VARCHAR(255) NOT NULL, lastname VARCHAR(255) NOT NULL, birth_date DATETIME NOT NULL, document_type VARCHAR(255) NOT NULL, document_number VARCHAR(255) NOT NULL, card_holder_id VARCHAR(255) NOT NULL, account_number VARCHAR(255) NOT NULL, sort_code VARCHAR(255) NOT NULL, street VARCHAR(255) NOT NULL, building_number VARCHAR(255) DEFAULT NULL, postcode VARCHAR(255) NOT NULL, city VARCHAR(255) NOT NULL, email VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_33BEFCFA24890B2B (agreement_id), INDEX IDX_33BEFCFAF92F3E70 (country_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE Countries (id INT AUTO_INCREMENT NOT NULL, iso2 VARCHAR(2) NOT NULL, iso3 VARCHAR(3) NOT NULL, iso_numeric VARCHAR(3) NOT NULL, name VARCHAR(100) NOT NULL, active TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE Profiles (id INT AUTO_INCREMENT NOT NULL, account_id INT DEFAULT NULL, picture LONGTEXT NOT NULL, UNIQUE INDEX UNIQ_7246E7669B6B5FBA (account_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE Notifications (id INT AUTO_INCREMENT NOT NULL, account_id INT DEFAULT NULL, is_sent TINYINT(1) NOT NULL, device_id VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_D37EFB269B6B5FBA (account_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE Invites ADD CONSTRAINT FK_CCC353F0B79F4F04 FOREIGN KEY (inviter_id) REFERENCES Users (id)');
         $this->addSql('ALTER TABLE Transactions ADD CONSTRAINT FK_F299C1B4C17AD9A9 FOREIGN KEY (payer_id) REFERENCES Accounts (id)');
@@ -37,6 +38,7 @@ class Version20170523165703 extends AbstractMigration
         $this->addSql('ALTER TABLE Users ADD CONSTRAINT FK_D5428AED9B6B5FBA FOREIGN KEY (account_id) REFERENCES Accounts (id)');
         $this->addSql('ALTER TABLE Accounts ADD CONSTRAINT FK_33BEFCFA24890B2B FOREIGN KEY (agreement_id) REFERENCES Agreements (id)');
         $this->addSql('ALTER TABLE Accounts ADD CONSTRAINT FK_33BEFCFAF92F3E70 FOREIGN KEY (country_id) REFERENCES Countries (id)');
+        $this->addSql('ALTER TABLE Profiles ADD CONSTRAINT FK_7246E7669B6B5FBA FOREIGN KEY (account_id) REFERENCES Accounts (id)');
         $this->addSql('ALTER TABLE Notifications ADD CONSTRAINT FK_D37EFB269B6B5FBA FOREIGN KEY (account_id) REFERENCES Accounts (id)');
     }
 
@@ -56,6 +58,7 @@ class Version20170523165703 extends AbstractMigration
         $this->addSql('ALTER TABLE Transactions DROP FOREIGN KEY FK_F299C1B4ECCAAFA0');
         $this->addSql('ALTER TABLE Cards DROP FOREIGN KEY FK_C50377F99B6B5FBA');
         $this->addSql('ALTER TABLE Users DROP FOREIGN KEY FK_D5428AED9B6B5FBA');
+        $this->addSql('ALTER TABLE Profiles DROP FOREIGN KEY FK_7246E7669B6B5FBA');
         $this->addSql('ALTER TABLE Notifications DROP FOREIGN KEY FK_D37EFB269B6B5FBA');
         $this->addSql('ALTER TABLE Accounts DROP FOREIGN KEY FK_33BEFCFAF92F3E70');
         $this->addSql('DROP TABLE Agreements');
@@ -67,6 +70,7 @@ class Version20170523165703 extends AbstractMigration
         $this->addSql('DROP TABLE MobileVerificationCodes');
         $this->addSql('DROP TABLE Accounts');
         $this->addSql('DROP TABLE Countries');
+        $this->addSql('DROP TABLE Profiles');
         $this->addSql('DROP TABLE Notifications');
     }
 }

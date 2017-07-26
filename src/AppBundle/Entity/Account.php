@@ -40,6 +40,11 @@ class Account implements \JsonSerializable
     protected $card;
 
     /**
+     * @ORM\OneToOne(targetEntity="Profile", mappedBy="account")
+     */
+    protected $profile;
+
+    /**
      * @ORM\OneToOne(targetEntity="Notification", mappedBy="account")
      */
     protected $notification;
