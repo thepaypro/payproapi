@@ -106,7 +106,6 @@ class Card
             'CardActivationCode' => $card->getContisCardActivationCode(),
             'CardID' => $card->getContisCardID(),
         ];
-        dump($params);
 
         $params['Token'] = $this->authenticationService->getAuthenticationToken();
 
