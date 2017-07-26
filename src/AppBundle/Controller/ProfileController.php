@@ -10,81 +10,77 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
+use AppBundle\Exception\PayProException;
 
 /**
- * Card controller.
+ * Profile controller.
  * @Security("has_role('ROLE_USER')")
  *
- * @Route("/cards")
+ * @Route("/profiles")
  */
-class CardController extends Controller
+class ProfileController extends Controller
 {
     use JWTResponseControllerTrait;
 
     /**
-     * Request the card for an account
+     * Returns the information of a given profile
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/request", name="card_request")
-     * @Method("POST")
+     * @Route("/{id}", name="profiles_show")
+     * @Method("GET")
      */
-    public function requestAction(UserInterface $user, Request $request) : JsonResponse
+    public function getAction(UserInterface $user, Request $request) : JsonResponse
     {
-        try {
-            $card = $this->get('payproapi.request_card_service')->execute($user->getId());
-        } catch (PayProException $e) {
-            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
-        }
-
-        return $this->JWTResponse($user, ['card' => $card]);
+        $profile = null;
+        return $this->JWTResponse($user, ['profile' => $profile]);
     }
 
     /**
-     * Activate the card for an account
+     * Create a profile
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/activation", name="card_activation")
+     * @Route("", name="profiles_create")
      * @Method("POST")
      */
-    public function activationAction(UserInterface $user, Request $request) : JsonResponse
+    public function createAction(UserInterface $user, Request $request) : JsonResponse
     {
+        $picture = $request->request->get('picture');
+
         try {
-            $card = $this->get('payproapi.activate_card_service')->execute($user->getId());
+            $profile = $this
+                ->get('payproapi.create_profile_service')
+                ->execute($user->getId(), $picture);
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
-        dump($card);
-        dump('OK');
-        die();
-        return $this->JWTResponse($user, ['card' => $card]);
+        return $this->JWTResponse($user, ['profile' => $profile]);
     }
 
     /**
-     * Update the card
+     * Update the information of the profile
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("/{id}", name="card_update")
+     * @Route("/{profileId}", name="profiles_update")
      * @Method("PUT")
      */
     public function updateAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $enable = $request->request->get('enable');
+        $picture = $request->request->get('picture');
+        $profileId = $request->attributes->get('profileId');
 
         try {
-            $card = $this->get('payproapi.update_card_service')->execute(
-                $user->getId(),
-                $enable
-            );
+            $profile = $this
+                ->get('payproapi.update_profile_service')
+                ->execute($profileId, $picture);
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
-
-        return $this->JWTResponse($user, ['card' => $card]);
+        return $this->JWTResponse($user, ['profile' => $profile]);
     }
 }

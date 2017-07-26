@@ -67,7 +67,7 @@ class Card
      * @param  Card $card
      * @return true
      */
-    public function getActivateCode(CardEntity $card) : bool
+    public function getActivationCode(CardEntity $card) : array
     {
         $params = [
             'AccountNumber' => $card->getAccount()->getAccountNumber(),
@@ -87,7 +87,7 @@ class Card
         $requestParams = $this->hashingService->generateHashDataStringAndHash($requestParams);
 
         $response = $this->requestService->call('Card_GetActivationCode', $params, $requestParams);
-
+        dump($response);
         if ($response['Card_GetActivationCodeResult']['Description'] == 'Success ') {
             return $response['Card_GetActivationCodeResult']['ResultObject'];
         }
@@ -99,13 +99,14 @@ class Card
      * @param  Card $card
      * @return true
      */
-    public function activate(CardEntity $card) : bool
+    public function activate(CardEntity $card) : array
     {
         $params = [
             'CardHolderID' => $card->getAccount()->getCardHolderId(),
             'CardActivationCode' => $card->getContisCardActivationCode(),
             'CardID' => $card->getContisCardID(),
         ];
+        dump($params);
 
         $params['Token'] = $this->authenticationService->getAuthenticationToken();
 
@@ -115,8 +116,8 @@ class Card
             'SchemeCode' => 'PAYPRO'
         ];
 
-        $response = $this->requestService->call('Card_Activate', $params, $requestParams);
-
+        $response = $this->requestService->call('Card_Activate', $params, $requestParams, 'objCardActivationInfo');
+        dump($response);
         if ($response['Card_ActivateResult']['Description'] == 'Success ') {
             return $response['Card_ActivateResult']['ResultObject'];
         }
@@ -128,7 +129,7 @@ class Card
      * @param  Card $card
      * @return true
      */
-    public function update(CardEntity $card) : bool
+    public function update(CardEntity $card) : array
     {
         $params = [
             'AccountNumber' => $card->getAccount()->getAccountNumber(),
