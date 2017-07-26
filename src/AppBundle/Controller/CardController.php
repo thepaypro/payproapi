@@ -57,9 +57,6 @@ class CardController extends Controller
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
-        dump($card);
-        dump('OK');
-        die();
         return $this->JWTResponse($user, ['card' => $card]);
     }
 

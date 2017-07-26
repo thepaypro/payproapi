@@ -87,7 +87,7 @@ class Card
         $requestParams = $this->hashingService->generateHashDataStringAndHash($requestParams);
 
         $response = $this->requestService->call('Card_GetActivationCode', $params, $requestParams);
-        dump($response);
+
         if ($response['Card_GetActivationCodeResult']['Description'] == 'Success ') {
             return $response['Card_GetActivationCodeResult']['ResultObject'];
         }
@@ -117,7 +117,7 @@ class Card
         ];
 
         $response = $this->requestService->call('Card_Activate', $params, $requestParams, 'objCardActivationInfo');
-        dump($response);
+
         if ($response['Card_ActivateResult']['Description'] == 'Success ') {
             return $response['Card_ActivateResult']['ResultObject'];
         }
