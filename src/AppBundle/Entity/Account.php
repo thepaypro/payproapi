@@ -39,6 +39,11 @@ class Account implements \JsonSerializable
     protected $card;
 
     /**
+     * @ORM\OneToOne(targetEntity="Notification", mappedBy="account")
+     */
+    protected $notification;
+
+    /**
      * @ORM\Column(type="string", nullable=false)
      * @Assert\NotBlank()
      */

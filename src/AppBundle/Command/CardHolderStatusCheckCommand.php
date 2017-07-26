@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use AppBundle\Entity\Account;
 
-class TestContisRequestsCommand extends ContainerAwareCommand
+class CardHolderStatusCheckCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -21,11 +21,12 @@ class TestContisRequestsCommand extends ContainerAwareCommand
         $this->getCardHolder();
     }
 
-    private function getCardHolder(Account $account)
+    private function getCardHolder()
     {
-        // This seems wrong in so many levels I don't even.
+
+        // Query the accounts older than 20 mins here.
         $params = [
-            'CardHolderID' => $account->getCardHolderId()
+            'CardHolderID' => 1234
         ];
 
         $endpoint = 'CardHolder_Lookup_GetInfo';
@@ -43,6 +44,8 @@ class TestContisRequestsCommand extends ContainerAwareCommand
 
         $response = $this->getContainer()->get('contis_api_client.request_service')->call($endpoint, $params, $requestParams);
 
-        return $response;
+        // Dispatch an event for every single account with non-pending status.
+
+        dump($response);die();
     }
 }
