@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Service\Account;
+namespace AppBundle\Service\Notification;
 
 use AppBundle\Entity\Notification;
 use AppBundle\Exception\PayProException;
@@ -34,7 +34,6 @@ class CreateNotificationService
     ): Notification
     {
         $account = $this->accountRepository->findOneById($accountId);
-
 
         if (!$account) {
             throw new PayProException("No account found", 400);

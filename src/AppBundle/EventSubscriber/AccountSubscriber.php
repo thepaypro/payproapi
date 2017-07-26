@@ -4,11 +4,18 @@ namespace AppBundle\EventSubscriber;
 
 use AppBundle\Event\AccountEvent;
 use AppBundle\Event\AccountEvents;
+use AppBundle\Service\Notification\CreateNotificationService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
 
 class AccountSubscriber implements EventSubscriberInterface
 {
+    protected $createNotificationService;
+
+    public function __construct(CreateNotificationService $createNotificationService)
+    {
+        $this->createNotificationService = $createNotificationService;
+    }
+
     public static function getSubscribedEvents()
     {
         return [
@@ -20,9 +27,9 @@ class AccountSubscriber implements EventSubscriberInterface
 
     public function createNotification(AccountEvent $event)
     {
-        $account = $event->getAccount();
+        $accountId = $event->getAccount()->getId();
         $deviceId = $event->getDeviceId();
 
-        //TODO: Add CreateNotificationService instance here.
+        $this->createNotificationService->execute($accountId, $deviceId);
     }
 }
