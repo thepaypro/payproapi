@@ -177,6 +177,8 @@ class Account implements \JsonSerializable
         $this->users = new ArrayCollection();
 
         $this->users[] = $user;
+        $this->card = $card;
+        $this->profile = $profile;
         $this->forename = $forename;
         $this->lastname = $lastname;
         $this->birthDate = $birthDate;
