@@ -40,6 +40,11 @@ class Account implements \JsonSerializable
     protected $card;
 
     /**
+     * @ORM\OneToOne(targetEntity="Profile", mappedBy="account")
+     */
+    protected $profile;
+
+    /**
      * @ORM\Column(type="string", nullable=false)
      * @Assert\NotBlank()
      */
