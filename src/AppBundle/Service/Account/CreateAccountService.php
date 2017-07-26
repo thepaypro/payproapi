@@ -28,7 +28,13 @@ class CreateAccountService
     protected $contisAccountApiClient;
 
     /**
-     * @param EntityManager $em
+     * CreateAccountService constructor.
+     * @param AccountRepository $accountRepository
+     * @param AgreementRepository $agreementRepository
+     * @param CountryRepository $countryRepository
+     * @param UserRepository $userRepository
+     * @param ValidatorInterface $validationService
+     * @param ContisAccountApiClient $contisAccountApiClient
      */
     public function __construct(
         AccountRepository $accountRepository,
@@ -63,6 +69,7 @@ class CreateAccountService
      * @param  String   $city
      * @param  Int      $countryId
      * @return Account  $account
+     * @throws PayProException
      */
     public function execute(
         int $userId,

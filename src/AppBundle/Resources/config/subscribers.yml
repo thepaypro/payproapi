@@ -22,3 +22,8 @@ services:
     class: AppBundle\EventSubscriber\AuthenticationSubscriber
     tags:
       - { name: kernel.event_subscriber }
+
+  payproapi.account_subscriber:
+    class: AppBundle\EventSubscriber\AccountSubscriber
+    tags:
+      - { name: kernel.event_subscriber }
