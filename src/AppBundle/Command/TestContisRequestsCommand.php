@@ -78,8 +78,8 @@ class TestContisRequestsCommand extends ContainerAwareCommand
     private function getCard()
     {
         $params = [
-            'CardHolderID'  => 131639,
-            'AccountNumber' => '04073795',
+            'CardHolderID'  => 131764,
+            'AccountNumber' => '04077705',
             'SortCode'      => '623053'
         ];
 

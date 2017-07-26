@@ -52,7 +52,7 @@ class AccountController extends Controller
 
         try {
             $account = $this->get('payproapi.create_account_service')->execute(
-                $user->getId(),
+                in_array('ROLE_ADMIN', $user->getRoles()) ? $requestData['userId'] : $user->getId(),
                 $requestData['forename'],
                 $requestData['lastname'],
                 $requestData['birthDate'],
