@@ -2,18 +2,18 @@
 
 namespace AppBundle\Service\Account;
 
-use AppBundle\Event\AccountEvents;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-
-use DateTime;
-
 use AppBundle\Entity\Account;
-use AppBundle\Repository\CountryRepository;
-use AppBundle\Repository\AgreementRepository;
+use AppBundle\Event\AccountEvent;
+use AppBundle\Event\AccountEvents;
+use AppBundle\Exception\PayProException;
 use AppBundle\Repository\AccountRepository;
+use AppBundle\Repository\AgreementRepository;
+use AppBundle\Repository\CountryRepository;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Service\ContisApiClient\Account as ContisAccountApiClient;
-use AppBundle\Exception\PayProException;
+use DateTime;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class CreateAccountService
@@ -26,6 +26,7 @@ class CreateAccountService
     protected $userRepository;
     protected $validationService;
     protected $contisAccountApiClient;
+    protected $dispatcher;
 
     /**
      * CreateAccountService constructor.
@@ -35,6 +36,7 @@ class CreateAccountService
      * @param UserRepository $userRepository
      * @param ValidatorInterface $validationService
      * @param ContisAccountApiClient $contisAccountApiClient
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         AccountRepository $accountRepository,
@@ -42,15 +44,17 @@ class CreateAccountService
         CountryRepository $countryRepository,
         UserRepository $userRepository,
         ValidatorInterface $validationService,
-        ContisAccountApiClient $contisAccountApiClient
-    ) {
+        ContisAccountApiClient $contisAccountApiClient,
+        EventDispatcherInterface $eventDispatcher
+    )
+    {
         $this->accountRepository = $accountRepository;
         $this->agreementRepository = $agreementRepository;
         $this->countryRepository = $countryRepository;
         $this->userRepository = $userRepository;
         $this->validationService = $validationService;
         $this->contisAccountApiClient = $contisAccountApiClient;
-
+        $this->dispatcher = $eventDispatcher;
     }
 
     /**
@@ -84,7 +88,7 @@ class CreateAccountService
         String $city,
         Int $countryId,
         String $deviceId
-    ) : Account
+    ): Account
     {
         $agreement = $this->agreementRepository->findOneById($agreementId);
         $country = $this->countryRepository->findOneById($countryId);
@@ -115,7 +119,7 @@ class CreateAccountService
 
         if (count($errors) > 0) {
             foreach ($errors as $key => $error) {
-                throw new PayProException($error->getPropertyPath().': '.$error->getMessage(), 400);
+                throw new PayProException($error->getPropertyPath() . ': ' . $error->getMessage(), 400);
             }
         }
 

@@ -1,17 +1,14 @@
 <?php
 namespace AppBundle\Service\MobileVerificationCode;
 
-use libphonenumber\PhoneNumberUtil;
-
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
 use AppBundle\Entity\MobileVerificationCode;
-use AppBundle\Repository\MobileVerificationCodeRepository;
-use AppBundle\Repository\UserRepository;
 use AppBundle\Event\MobileVerificationCodeEvent;
 use AppBundle\Event\MobileVerificationCodeEvents;
 use AppBundle\Exception\PayProException;
+use AppBundle\Repository\MobileVerificationCodeRepository;
+use AppBundle\Repository\UserRepository;
 use AppBundle\Service\PhoneNumberValidatorService;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class CreateMobileVerificationCodeService
@@ -24,7 +21,10 @@ class CreateMobileVerificationCodeService
     protected $mobileVerificationCodeRepository;
 
     /**
-     * @param EntityManager            $em
+     * CreateMobileVerificationCodeService constructor.
+     * @param UserRepository $userRepository
+     * @param MobileVerificationCodeRepository $mobileVerificationCodeRepository
+     * @param PhoneNumberValidatorService $phoneNumberValidatorService
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
@@ -42,9 +42,10 @@ class CreateMobileVerificationCodeService
 
     /**
      * This method will create a mobile verification code and dispatch an event of the creation.
-     * 
-     * @param  phoneNumber $phoneNumber
+     *
+     * @param String $phoneNumber
      * @return Array
+     * @throws PayProException
      */
     public function execute(String $phoneNumber) : Array
     {
