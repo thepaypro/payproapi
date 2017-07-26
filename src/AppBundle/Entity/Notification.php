@@ -57,13 +57,15 @@ class Notification
      * @param DateTime $createdAt
      * @param DateTime $updatedAt
      */
-    public function __construct($account, $isSent, $deviceId, DateTime $createdAt, DateTime $updatedAt)
+    public function __construct(
+        $account,
+        $isSent,
+        $deviceId
+    )
     {
         $this->account = $account;
         $this->isSent = $isSent;
         $this->deviceId = $deviceId;
-        $this->createdAt = $createdAt;
-        $this->updatedAt = $updatedAt;
     }
 
     /**

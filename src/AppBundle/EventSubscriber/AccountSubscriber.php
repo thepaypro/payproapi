@@ -21,6 +21,7 @@ class AccountSubscriber implements EventSubscriberInterface
     public function createNotification(AccountEvent $event)
     {
         $account = $event->getAccount();
+        $deviceId = $event->getDeviceId();
 
         //TODO: Add CreateNotificationService instance here.
     }

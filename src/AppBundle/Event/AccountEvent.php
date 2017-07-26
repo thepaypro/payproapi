@@ -9,9 +9,10 @@ class AccountEvent extends Event
 {
     protected $account;
 
-    public function __construct(Account $account)
+    public function __construct(Account $account, string $deviceId)
     {
         $this->account = $account;
+        $this->deviceId = $deviceId;
     }
 
     /**
@@ -20,5 +21,13 @@ class AccountEvent extends Event
     public function getAccount(): Account
     {
         return $this->account;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeviceId(): string
+    {
+        return $this->deviceId;
     }
 }

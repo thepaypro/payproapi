@@ -12,7 +12,7 @@ class CardHolderStatusCheckCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('payproapi:contis:cardholderstatuscheck')
+            ->setName('payproapi:contis:card-holder:status-check')
             ->setDescription('Checks the status of the Card Holders in the contis api');
     }
 

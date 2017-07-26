@@ -54,21 +54,20 @@ class CreateAccountService
     }
 
     /**
-     * This method will create the cardHolder on Contis system and will persist the new account of the user.
-     *
-     * @param  int      $userId
-     * @param  String   $forename
-     * @param  String   $lastname
-     * @param  String   $birthDate
-     * @param  String   $documentType
-     * @param  String   $documentNumber
-     * @param  Int      $agreementId
-     * @param  String   $street
-     * @param  String   $buildingNumber
-     * @param  String   $postcode
-     * @param  String   $city
-     * @param  Int      $countryId
-     * @return Account  $account
+     * @param int $userId
+     * @param String $forename
+     * @param String $lastname
+     * @param String $birthDate
+     * @param String $documentType
+     * @param String $documentNumber
+     * @param Int $agreementId
+     * @param String $street
+     * @param String $buildingNumber
+     * @param String $postcode
+     * @param String $city
+     * @param Int $countryId
+     * @param String $deviceId
+     * @return Account
      * @throws PayProException
      */
     public function execute(
@@ -83,7 +82,8 @@ class CreateAccountService
         String $buildingNumber,
         String $postcode,
         String $city,
-        Int $countryId
+        Int $countryId,
+        String $deviceId
     ) : Account
     {
         $agreement = $this->agreementRepository->findOneById($agreementId);
@@ -130,7 +130,7 @@ class CreateAccountService
 
         $this->dispatcher->dispatch(
             AccountEvents::ACCOUNT_CREATED,
-            new AccountEvent($account)
+            new AccountEvent($account, $deviceId)
         );
 
         return $account;
