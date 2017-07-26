@@ -45,7 +45,7 @@ class RequestService
 
         $payload = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         if ($endpoint != 'Login') {
-//            dump($payload);die();
+            dump($payload);die();
         }
         try {
             $response = $this->httpClient->request(
