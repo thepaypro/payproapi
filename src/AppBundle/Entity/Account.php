@@ -13,7 +13,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="Accounts")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AccountRepository")
  * @ORM\HasLifecycleCallbacks()
- * @UniqueEntity(fields={"documentNumber", "email"}, ignoreNull=true)
+ * @UniqueEntity(fields={"documentNumber"})
+ * @UniqueEntity(fields={"email"}, ignoreNull=true)
  */
 class Account implements \JsonSerializable
 {
@@ -191,7 +192,7 @@ class Account implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $publicProperties['users'] = $this->users->map(function($user) {
+        $publicProperties['users'] = $this->users->map(function ($user) {
             $user->getId();
         });
         $publicProperties['id'] = $this->id;
@@ -210,8 +211,12 @@ class Account implements \JsonSerializable
         $publicProperties['postcode'] = $this->postcode;
         $publicProperties['city'] = $this->city;
         $publicProperties['country'] = $this->country;
-        $publicProperties['sentTransactions'] = $this->sentTransactions;
-        $publicProperties['receivedTransactions'] = $this->receivedTransactions;
+        $publicProperties['sentTransactions'] = $this->sentTransactions->map(function ($transaction) {
+            $transaction->getId();
+        });
+        $publicProperties['receivedTransactions'] = $this->receivedTransactions->map(function ($transaction) {
+            $transaction->getId();
+        });
         $publicProperties['createdAt'] = $this->createdAt;
         $publicProperties['updatedAt'] = $this->updatedAt;
 

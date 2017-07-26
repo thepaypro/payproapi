@@ -47,11 +47,12 @@ class CreateTransactionService
      * @param  int          $userId
      * @param  int          $beneficiaryId
      * @param  int          $amount
+     * @param  String       $subject
      * @return Transaction  $transaction
      */
     public function execute(
         int $userId,
-        String $beneficiaryId,
+        int $beneficiaryId,
         float $amount,
         String $subject
     ) : Transaction
@@ -61,6 +62,7 @@ class CreateTransactionService
         $beneficiary = $this->accountRepository->findOneById($beneficiaryId);
 
         if (!$payer) {throw new PayProException('Account not found', 400);}
+        if ($payer == $beneficiary) {throw new PayProException('Beneficary account and destination account can not be the same', 400);}
         if (!$beneficiary) {throw new PayProException('Beneficiary not found', 400);}
 
         $transaction = new Transaction(

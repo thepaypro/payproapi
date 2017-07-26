@@ -58,21 +58,20 @@ class CreateAccountService
     }
 
     /**
-     * @param int $userId
-     * @param String $forename
-     * @param String $lastname
-     * @param String $birthDate
-     * @param String $documentType
-     * @param String $documentNumber
-     * @param Int $agreementId
-     * @param String $street
-     * @param String $buildingNumber
-     * @param String $postcode
-     * @param String $city
-     * @param Int $countryId
+     *  @param  int      $userId
+     * @param  String   $forename
+     * @param  String   $lastname
+     * @param  String   $birthDate
+     * @param  String   $documentType
+     * @param  String   $documentNumber
+     * @param  Int      $agreementId
+     * @param  String   $street
+     * @param  String   $buildingNumber
+     * @param  String   $postcode
+     * @param  String   $city
+     * @param  String   $countryIso2
      * @param String $deviceId
-     * @return Account
-     * @throws PayProException
+     * @return Account  * @throws PayProException
      */
     public function execute(
         int $userId,
@@ -86,14 +85,20 @@ class CreateAccountService
         String $buildingNumber,
         String $postcode,
         String $city,
-        Int $countryId,
+        String $countryIso2,
         String $deviceId
     ): Account
     {
         $agreement = $this->agreementRepository->findOneById($agreementId);
-        $country = $this->countryRepository->findOneById($countryId);
+        $country = $this->countryRepository->findOneByIso2($countryIso2);
         $user = $this->userRepository->findOneById($userId);
 
+        if (!$country) {
+            throw new PayProException("Country not found", 400);
+        }
+        if (!$agreement) {
+            throw new PayProException("Agreement not found", 400);
+        }
         if ($user->getAccount()) {
             throw new PayProException("You already have an account", 400);
         }

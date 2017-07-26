@@ -71,6 +71,6 @@ class CreateMobileVerificationCodeService
             new MobileVerificationCodeEvent($mobileVerificationCode)
         );
 
-        return ['isUser' => false]; 
+        return ['isUser' => false];
     }
 }
