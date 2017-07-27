@@ -1,0 +1,6 @@
+rms_push_notifications:
+    ios:
+        timeout: 60
+        sandbox: true
+        pem: '%apn_certificate_path%'
+        passphrase: '%apns_certificate_passphrase%'

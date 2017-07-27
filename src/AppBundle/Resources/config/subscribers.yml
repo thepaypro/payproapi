@@ -29,3 +29,10 @@ services:
       - '@payproapi.create_notification_service'
     tags:
       - { name: kernel.event_subscriber }
+
+  payproapi.card_holder_verification_subscriber:
+    class: AppBundle\EventSubscriber\CardHolderVerificationSubscriber
+    arguments:
+      - '@payproapi.send_notification_service'
+    tags:
+      - { name: kernel.event_subscriber }

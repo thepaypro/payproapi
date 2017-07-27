@@ -5,3 +5,8 @@ services:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Account')"
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Notification')"
       - "@validator"
+
+  payproapi.send_notification_service:
+    class: AppBundle\Service\Notification\SendNotificationService
+    arguments:
+      - "@=service('rms_push_notifications')"

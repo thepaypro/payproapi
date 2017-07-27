@@ -45,12 +45,11 @@ class CardHolderVerificationService
     {
         foreach ($accounts as $key => $account) {
 
-            $cardHolder = $this->getContainer()
-                ->contisAccountApiClient
-                ->getOne($account->getCardHolderId());
+            $cardHolder = $this->contisAccountApiClient->getOne($account->getCardHolderId());
 
             $deviceId = $account->getNotification()->getDeviceId();
 
+            //TODO: Add conditions of verification of CardHolder Contis account.
             $this->dispatcher->dispatch(
                 CardHolderVerificationEvents::CARD_HOLDER_VERIFICATION_COMPLETED,
                 new CardHolderVerificationEvent($cardHolder, $deviceId)

@@ -18,6 +18,10 @@ parameters:
     jwt_key_pass_phrase: dev-jwt                                     # ssh key pass phrase
     jwt_token_ttl:        3600
 
+    #Apple Push Notifications certificate
+    apn_certificate_path: '%kernel.root_dir%/../var/apn/aps.cer'
+    apns_certificate_passphrase: 'someString'
+
     twilio_account_id: 'AC3728b7395057e64047db32dfb6175d81'
     twilio_auth_token: '877ba70e2f95811f69586cd850fcc8fc'
     twilio_phone_number: '+16364863418'

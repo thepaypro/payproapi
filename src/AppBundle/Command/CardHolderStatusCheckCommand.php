@@ -22,12 +22,11 @@ class CardHolderStatusCheckCommand extends ContainerAwareCommand
 
     private function getCardHolder()
     {
-        $accountRepository = $this->getContainer()
+        $accounts = $this->getContainer()
             ->get('doctrine.orm.entity_manager')
-            ->getRepository('AppBundle:Account');
+            ->getRepository('AppBundle:Account')
+            ->findAccountsWithPendingNotification();
 
-        $accounts = $accountRepository->findAccountsWithPendingNotification();
-
-
+        $this->getContainer()->get('card_holder_verification_service')->execute($accounts);
     }
 }
