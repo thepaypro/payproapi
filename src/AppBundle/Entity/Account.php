@@ -66,19 +66,19 @@ class Account implements \JsonSerializable
      * @Assert\DateTime(format="d/m/Y")
      */
     protected $birthDate;
-    
+
     /**
      * @ORM\Column(type="string", nullable=false)
      * @Assert\Choice(callback = "getValidDocumentTypes")
      */
     protected $documentType;
-   
+
     /**
      * @ORM\Column(type="string", nullable=false)
      * @Assert\NotBlank()
      */
     protected $documentNumber;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Agreement", inversedBy="accounts", cascade={"all"})
      * @ORM\JoinColumn(name="agreement_id", referencedColumnName="id", nullable=false)
@@ -115,18 +115,18 @@ class Account implements \JsonSerializable
      * @Assert\NotBlank()
      */
     protected $street;
-    
+
     /**
      * @ORM\Column(type="string", nullable=true)
      */
     protected $buildingNumber;
-    
+
     /**
      * @ORM\Column(type="string", nullable=false)
      * @Assert\NotBlank()
      */
     protected $postcode;
-    
+
     /**
      * @ORM\Column(type="string", nullable=false)
      * @Assert\NotBlank()
@@ -247,6 +247,54 @@ class Account implements \JsonSerializable
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProfile()
+    {
+        return $this->profile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNotification()
+    {
+        return $this->notification;
+    }
+
+    /**
+     * @param mixed $profile
+     */
+    public function setProfile($profile)
+    {
+        $this->profile = $profile;
+    }
+
+    /**
+     * @param mixed $notification
+     */
+    public function setNotification($notification)
+    {
+        $this->notification = $notification;
+    }
+
+    /**
+     * @param mixed $sentTransactions
+     */
+    public function setSentTransactions($sentTransactions)
+    {
+        $this->sentTransactions = $sentTransactions;
+    }
+
+    /**
+     * @param mixed $receivedTransactions
+     */
+    public function setReceivedTransactions($receivedTransactions)
+    {
+        $this->receivedTransactions = $receivedTransactions;
     }
 
     /**

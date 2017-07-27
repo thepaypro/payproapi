@@ -18,7 +18,7 @@ class Account
     /**
      * @param RequestService $requestService
      * @param HashingService $hashingService
-     * @param AuthorizationService $authorizationService
+     * @param AuthenticationService $authenticationService
      */
     public function __construct(
         RequestService $requestService,
@@ -32,7 +32,7 @@ class Account
 
     /**
      * Create an account (CardHolder in Contis).
-     * @param  Account $account
+     * @param  AccountEntity $account
      * @return Array $response
      */
     public function create(AccountEntity $account) : Array
@@ -143,6 +143,9 @@ class Account
 
         $response = $this->requestService->call($endpoint, $params, $requestParams);
 
-        return $response;
+        if ($response['CardHolder_Lookup_GetInfoResult']['Description'] == 'Success ') {
+            return $response['CardHolder_Lookup_GetInfoResult']['ResultObject'][0];
+        }
+        dump($response);die();
     }
 }

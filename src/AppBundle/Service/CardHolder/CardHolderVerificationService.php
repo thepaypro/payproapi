@@ -35,17 +35,19 @@ class CardHolderVerificationService
     public function execute(
         Array $accounts)
     {
+        $allowedStatuses = ['01', '07', '09'];
+
         foreach ($accounts as $key => $account) {
 
             $cardHolder = $this->contisAccountApiClient->getOne($account->getCardHolderId());
-
             $deviceId = $account->getNotification()->getDeviceId();
 
-            //TODO: Add conditions of verification of CardHolder Contis account.
-            $this->dispatcher->dispatch(
-                CardHolderVerificationEvents::CARD_HOLDER_VERIFICATION_COMPLETED,
-                new CardHolderVerificationEvent($cardHolder, $deviceId)
-            );
+            if (in_array($cardHolder['Status'], $allowedStatuses)) {
+                $this->dispatcher->dispatch(
+                    CardHolderVerificationEvents::CARD_HOLDER_VERIFICATION_COMPLETED,
+                    new CardHolderVerificationEvent($cardHolder['Status'], $deviceId)
+                );
+            }
         }
     }
 }
