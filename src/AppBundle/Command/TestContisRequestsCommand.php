@@ -23,7 +23,7 @@ class TestContisRequestsCommand extends ContainerAwareCommand
         // $this->updateCardStatus();
     }
 
-    public function getCardActivationCode($value='')
+    public function getCardActivationCode()
     {
         $params = [
             'CardHolderID'  => 131639,
@@ -49,7 +49,7 @@ class TestContisRequestsCommand extends ContainerAwareCommand
         dump($response);die();
     }
 
-    public function updateCardStatus($value='')
+    public function updateCardStatus()
     {
         $params = [
             'CardHolderID'  => 131639,

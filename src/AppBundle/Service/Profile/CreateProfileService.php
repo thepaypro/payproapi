@@ -36,7 +36,7 @@ class CreateProfileService
      * @return Profile
      * @throws PayProException
      */
-    public function execute(int $userId, String $picture) : Profile
+    public function execute(int $userId, string $picture) : Profile
     {
         $user = $this->userRepository->findOneById($userId);
         $account = $user->getAccount();
