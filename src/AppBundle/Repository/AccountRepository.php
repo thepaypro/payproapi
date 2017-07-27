@@ -11,8 +11,8 @@ class AccountRepository extends BaseEntityRepository
     public function findAccountsWithPendingNotification(): array
     {
         $date = new DateTime("now");
-//        $minutesToSubstract = new DateInterval('PT20M');
-//        $date->sub($minutesToSubstract);
+        $minutesToSubstract = new DateInterval('PT20M');
+        $date->sub($minutesToSubstract);
         $qb = $this->getEntityManager()->createQueryBuilder();
         $query = $qb->select('a')->from('AppBundle\Entity\Account', 'a')
                     ->innerJoin('AppBundle\Entity\Notification', 'n', 'WITH', 'n.account = a.id')

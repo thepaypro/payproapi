@@ -20,6 +20,11 @@ class CardHolderStatusCheckCommand extends ContainerAwareCommand
         $this->getCardHolder();
     }
 
+    /**
+     * Executes the query to find the accounts older than 20 minutes
+     * without a notification sent to them and calls the Card Holder
+     * verification service.
+     */
     private function getCardHolder()
     {
         $accounts = $this->getContainer()

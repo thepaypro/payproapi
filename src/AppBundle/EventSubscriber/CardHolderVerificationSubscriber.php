@@ -11,7 +11,8 @@ class CardHolderVerificationSubscriber implements EventSubscriberInterface
 {
     protected $sendNotificationService;
 
-    public function __construct(SendNotificationService $sendNotificationService)
+    public function __construct(
+        SendNotificationService $sendNotificationService)
     {
         $this->sendNotificationService = $sendNotificationService;
     }
@@ -28,8 +29,8 @@ class CardHolderVerificationSubscriber implements EventSubscriberInterface
     public function sendNotification(CardHolderVerificationEvent $event)
     {
         $message = $event->getMessage();
-        $deviceId = $event->getDeviceId();
+        $notification = $event->getNotification();
 
-        $this->sendNotificationService->execute($message, $deviceId);
+        $this->sendNotificationService->execute($message, $notification);
     }
 }

@@ -40,12 +40,12 @@ class CardHolderVerificationService
         foreach ($accounts as $key => $account) {
 
             $cardHolder = $this->contisAccountApiClient->getOne($account->getCardHolderId());
-            $deviceId = $account->getNotification()->getDeviceId();
+            $notification = $account->getNotification();
 
             if (in_array($cardHolder['Status'], $allowedStatuses)) {
                 $this->dispatcher->dispatch(
                     CardHolderVerificationEvents::CARD_HOLDER_VERIFICATION_COMPLETED,
-                    new CardHolderVerificationEvent($cardHolder['Status'], $deviceId)
+                    new CardHolderVerificationEvent($cardHolder['Status'], $notification)
                 );
             }
         }

@@ -3,17 +3,18 @@
 namespace AppBundle\Event;
 
 use AppBundle\Entity\Account;
+use AppBundle\Entity\Notification;
 use Symfony\Component\EventDispatcher\Event;
 
 class CardHolderVerificationEvent extends Event
 {
     protected $message;
-    protected $deviceId;
+    protected $notification;
 
-    public function __construct(String $message, string $deviceId)
+    public function __construct(String $message, Notification $notification)
     {
         $this->message = $message;
-        $this->deviceId = $deviceId;
+        $this->notification = $notification;
     }
 
     /**
@@ -25,10 +26,10 @@ class CardHolderVerificationEvent extends Event
     }
 
     /**
-     * @return string
+     * @return Notification
      */
-    public function getDeviceId(): string
+    public function getNotification(): Notification
     {
-        return $this->deviceId;
+        return $this->notification;
     }
 }
