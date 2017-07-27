@@ -58,20 +58,21 @@ class CreateAccountService
     }
 
     /**
-     *  @param  int      $userId
-     * @param  String   $forename
-     * @param  String   $lastname
-     * @param  String   $birthDate
-     * @param  String   $documentType
-     * @param  String   $documentNumber
-     * @param  Int      $agreementId
-     * @param  String   $street
-     * @param  String   $buildingNumber
-     * @param  String   $postcode
-     * @param  String   $city
-     * @param  String   $countryIso2
+     * @param  int $userId
+     * @param  String $forename
+     * @param  String $lastname
+     * @param  String $birthDate
+     * @param  String $documentType
+     * @param  String $documentNumber
+     * @param  Int $agreementId
+     * @param  String $street
+     * @param  String $buildingNumber
+     * @param  String $postcode
+     * @param  String $city
+     * @param  String $countryIso2
      * @param String $deviceId
-     * @return Account  * @throws PayProException
+     * @return Account
+     * @throws PayProException
      */
     public function execute(
         int $userId,

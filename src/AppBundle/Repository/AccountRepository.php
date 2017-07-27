@@ -7,7 +7,7 @@ use DateTime;
 
 class AccountRepository extends BaseEntityRepository
 {
-    public function findAccountsOlderThan20minutes(): array
+    public function findAccountsWithPendingNotification(): array
     {
         $date = new DateTime("now");
         $minutesToSubstract = new DateInterval('PT20M');
@@ -17,6 +17,6 @@ class AccountRepository extends BaseEntityRepository
         $query = $qb->select('a')->from('AppBundle\Entity\Account', 'a')
                     ->innerJoin('a.notifications', 'n', 'WITH', 'n.accountId = a.id')
                     ->where($qb->expr()->eq('n.isSent', 'false'))
-                    ->andWhere($qb->expr()->lower($date));
+                    ->andWhere($qb->expr()->lte( 'a.createdAt', $date));
     }
 }

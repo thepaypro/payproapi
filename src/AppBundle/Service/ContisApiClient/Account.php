@@ -121,4 +121,28 @@ class Account
         }
         dump($response);die();
     }
+
+    public function getOne(String $cardHolderId)
+    {
+        $params = [
+            'CardHolderID' => $cardHolderId
+        ];
+
+        $endpoint = 'CardHolder_Lookup_GetInfo';
+
+        $params['Token'] = $this->authenticationService->getAuthenticationToken();
+
+        $requestParams = [
+            'Token' => $params['Token'],
+            'ClientRequestReference' => 'contis123',
+            'SchemeCode' => 'PAYPRO'
+        ];
+
+        $params = $this->hashingService->generateHashDataStringAndHash($params);
+        $requestParams = $this->hashingService->generateHashDataStringAndHash($requestParams);
+
+        $response = $this->requestService->call($endpoint, $params, $requestParams);
+
+        return $response;
+    }
 }

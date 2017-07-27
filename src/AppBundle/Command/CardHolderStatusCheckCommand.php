@@ -23,30 +23,15 @@ class CardHolderStatusCheckCommand extends ContainerAwareCommand
 
     private function getCardHolder()
     {
+        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $accountRepository = $entityManager->getRepository('AppBundle:Account');
 
-        //TODO: Query the accounts older than 20 mins here.
+        $accounts = $accountRepository->findAccountsWithPendingNotification();
 
-        $params = [
-            'CardHolderID' => 1234
-        ];
-
-        $endpoint = 'CardHolder_Lookup_GetInfo';
-
-        $params['Token'] = $this->getContainer()->get('contis_api_client.authentication_service')->getAuthenticationToken();
-
-        $requestParams = [
-            'Token' => $params['Token'],
-            'ClientRequestReference' => 'contis123',
-            'SchemeCode' => 'PAYPRO'
-        ];
-
-        $params = $this->getContainer()->get('contis_api_client.hashing_service')->generateHashDataStringAndHash($params);
-        $requestParams = $this->getContainer()->get('contis_api_client.hashing_service')->generateHashDataStringAndHash($requestParams);
-
-        $response = $this->getContainer()->get('contis_api_client.request_service')->call($endpoint, $params, $requestParams);
-
-        //TODO: Dispatch an event for every single account with non-pending status.
-
-        dump($response);die();
+        foreach ($accounts as $key => $account)
+        {
+            $cardHolder = $this->getContainer()->get('contis_api_client.account_service')->getOne($account->getCardHolderId());
+            //TODO: Dispatch an event for every single account with non-pending status.
+        }
     }
 }
