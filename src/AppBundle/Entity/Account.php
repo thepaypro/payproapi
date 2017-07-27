@@ -182,8 +182,6 @@ class Account implements \JsonSerializable
         $this->users = new ArrayCollection();
 
         $this->users[] = $user;
-        $this->card = $card;
-        $this->profile = $profile;
         $this->forename = $forename;
         $this->lastname = $lastname;
         $this->birthDate = $birthDate;
@@ -207,6 +205,7 @@ class Account implements \JsonSerializable
         $publicProperties['lastname'] = $this->lastname;
         $publicProperties['email'] = $this->email;
         $publicProperties['card'] = $this->card;
+        $publicProperties['profile'] = $this->profile;
         $publicProperties['birthDate'] = $this->birthDate;
         $publicProperties['documentType'] = $this->documentType;
         $publicProperties['documentNumber'] = $this->documentNumber;

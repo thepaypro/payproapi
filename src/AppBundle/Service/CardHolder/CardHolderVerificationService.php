@@ -1,22 +1,14 @@
 <?php
 
-namespace AppBundle\Service\Account;
+namespace AppBundle\Service\CardHolder;
 
-use AppBundle\Entity\Account;
-use AppBundle\Event\AccountEvent;
 use AppBundle\Event\CardHolderVerificationEvent;
 use AppBundle\Event\CardHolderVerificationEvents;
-use AppBundle\Exception\PayProException;
-use AppBundle\Repository\AccountRepository;
-use AppBundle\Repository\AgreementRepository;
-use AppBundle\Repository\CountryRepository;
-use AppBundle\Repository\UserRepository;
 use AppBundle\Service\ContisApiClient\Account as ContisAccountApiClient;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Class CreateAccountService
+ * Class CardHolderVerificationService
  */
 class CardHolderVerificationService
 {

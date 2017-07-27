@@ -27,6 +27,6 @@ class CardHolderStatusCheckCommand extends ContainerAwareCommand
             ->getRepository('AppBundle:Account')
             ->findAccountsWithPendingNotification();
 
-        $this->getContainer()->get('card_holder_verification_service')->execute($accounts);
+        $this->getContainer()->get('payproapi.card_holder_verification_service')->execute($accounts);
     }
 }
