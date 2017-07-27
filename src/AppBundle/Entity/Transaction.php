@@ -4,10 +4,12 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use \DateTime;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="Transactions")
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TransactionRepository")
  */
 class Transaction implements \JsonSerializable
@@ -55,17 +57,36 @@ class Transaction implements \JsonSerializable
      */
     protected $transactionInvite;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     *
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
+     *
+     */
+    protected $updatedAt;
+
     public function __construct(
-        Account $payer,
-        Account $beneficiary,
+        Account $payer = null,
+        Account $beneficiary = null,
         float $amount,
-        String $subject
+        string $subject,
+        DateTime $creationDate
     )
     {
         $this->payer = $payer;
         $this->beneficiary = $beneficiary;
         $this->amount = $amount;
         $this->subject = $subject;
+        $this->createdAt = $creationDate;
+        $this->updatedAt = $creationDate;
     }
 
     public function jsonSerialize()
@@ -234,5 +255,46 @@ class Transaction implements \JsonSerializable
     public function getSubject()
     {
         return $this->subject;
+    }
+
+   /**
+     * Gets triggered only on insert
+     *
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->createdAt = new \DateTime("now");
+        $this->updatedAt = new \DateTime("now");
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Gets triggered every time on update
+     *
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updatedAt = new \DateTime("now");
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }
