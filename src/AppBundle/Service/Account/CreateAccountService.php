@@ -59,35 +59,35 @@ class CreateAccountService
 
     /**
      * @param  int $userId
-     * @param  String $forename
-     * @param  String $lastname
-     * @param  String $birthDate
-     * @param  String $documentType
-     * @param  String $documentNumber
+     * @param  string $forename
+     * @param  string $lastname
+     * @param  string $birthDate
+     * @param  string $documentType
+     * @param  string $documentNumber
      * @param  Int $agreementId
-     * @param  String $street
-     * @param  String $buildingNumber
-     * @param  String $postcode
-     * @param  String $city
-     * @param  String $countryIso2
-     * @param String $deviceId
+     * @param  string $street
+     * @param  string $buildingNumber
+     * @param  string $postcode
+     * @param  string $city
+     * @param  string $countryIso2
+     * @param string $deviceId
      * @return Account
      * @throws PayProException
      */
     public function execute(
         int $userId,
-        String $forename,
-        String $lastname,
-        String $birthDate,
-        String $documentType,
-        String $documentNumber,
+        string $forename,
+        string $lastname,
+        string $birthDate,
+        string $documentType,
+        string $documentNumber,
         Int $agreementId,
-        String $street,
-        String $buildingNumber,
-        String $postcode,
-        String $city,
-        String $countryIso2,
-        String $deviceId
+        string $street,
+        string $buildingNumber,
+        string $postcode,
+        string $city,
+        string $countryIso2,
+        string $deviceId
     ): Account
     {
         $agreement = $this->agreementRepository->findOneById($agreementId);

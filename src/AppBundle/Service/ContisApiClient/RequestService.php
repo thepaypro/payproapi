@@ -22,23 +22,23 @@ class RequestService
     protected $session;
 
     /**
-     * @param String $contisSecretKey
-     * @param String $contisApiHost
+     * @param string $contisSecretKey
+     * @param string $contisApiHost
      */
-    public function __construct(String $contisApiHost) {
+    public function __construct(string $contisApiHost) {
         $this->contisApiHost = $contisApiHost;
         $this->httpClient = new Client();
     }
 
     /**
      * This method authenticates with Contis if needed and create the hash data string and hash required by contis to execute the call.
-     * @param String $endpoint
-     * @param Array $params
-     * @param Array $requestParams
-     * @param String $jsonParametersKey
-     * @return Array
+     * @param string $endpoint
+     * @param array $params
+     * @param array $requestParams
+     * @param string $jsonParametersKey
+     * @return array
      */
-    public function call(String $endpoint, Array $params, Array $requestParams = [], String $jsonParamtersKey = 'objInfo') : Array
+    public function call(string $endpoint, array $params, array $requestParams = [], string $jsonParamtersKey = 'objInfo') : array
     {
         $payload['objReqInfo'] = $requestParams;
         $payload[$jsonParamtersKey] = $params;

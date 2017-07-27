@@ -47,14 +47,14 @@ class CreateTransactionService
      * @param  int          $userId
      * @param  int          $beneficiaryId
      * @param  int          $amount
-     * @param  String       $subject
+     * @param  string       $subject
      * @return Transaction  $transaction
      */
     public function execute(
         int $userId,
         int $beneficiaryId,
         float $amount,
-        String $subject
+        string $subject
     ) : Transaction
     {
         $user = $this->userRepository->findOneById($userId);

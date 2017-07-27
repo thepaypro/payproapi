@@ -43,11 +43,11 @@ class CreateMobileVerificationCodeService
     /**
      * This method will create a mobile verification code and dispatch an event of the creation.
      *
-     * @param String $phoneNumber
-     * @return Array
+     * @param string $phoneNumber
+     * @return array
      * @throws PayProException
      */
-    public function execute(String $phoneNumber) : Array
+    public function execute(string $phoneNumber) : array
     {
         if (!$this->phoneNumberValidatorService->isValid($phoneNumber)) {
             throw new PayProException("Invalid phone number", 400);

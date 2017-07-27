@@ -43,15 +43,15 @@ class IndexTransactionService
      * @param  int    $userId
      * @param  int    $payerId
      * @param  int    $beneficiaryId
-     * @param  String $fromDate
-     * @param  String $toDate
-     * @return Array  $transactions
+     * @param  string $fromDate
+     * @param  string $toDate
+     * @return array  $transactions
      */
     public function execute(
         int $userId,
-        String $fromDate = null,
-        String $toDate = null
-    ) : Array
+        string $fromDate = null,
+        string $toDate = null
+    ) : array
     {
         $user = $this->userRepository->findOneById($userId);
         $account = $user->getAccount();

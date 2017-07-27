@@ -49,33 +49,33 @@ class CreateAccountRequestService
      * This method will create the cardHolder on Contis system and will persist the new account of the user.
      *
      * @param  int      $userId
-     * @param  String   $forename
-     * @param  String   $lastname
-     * @param  String   $birthDate
-     * @param  String   $documentType
-     * @param  String   $documentNumber
+     * @param  string   $forename
+     * @param  string   $lastname
+     * @param  string   $birthDate
+     * @param  string   $documentType
+     * @param  string   $documentNumber
      * @param  Int      $agreementId
-     * @param  String   $street
-     * @param  String   $buildingNumber
-     * @param  String   $postcode
-     * @param  String   $city
-     * @param  String   $countryIso2
+     * @param  string   $street
+     * @param  string   $buildingNumber
+     * @param  string   $postcode
+     * @param  string   $city
+     * @param  string   $countryIso2
      * @return Account  $account
      */
     public function execute(
         int $userId,
-        String $forename,
-        String $lastname,
-        String $birthDate,
-        String $documentType,
-        String $base64DocumentPicture1,
-        String $base64DocumentPicture2,
+        string $forename,
+        string $lastname,
+        string $birthDate,
+        string $documentType,
+        string $base64DocumentPicture1,
+        string $base64DocumentPicture2,
         Int $agreementId,
-        String $street,
-        String $buildingNumber,
-        String $postcode,
-        String $city,
-        String $countryIso2
+        string $street,
+        string $buildingNumber,
+        string $postcode,
+        string $city,
+        string $countryIso2
     ) : bool
     {
         $agreement = $this->agreementRepository->findOneById($agreementId);

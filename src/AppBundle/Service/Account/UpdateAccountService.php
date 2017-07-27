@@ -54,17 +54,17 @@ class UpdateAccountService
     /**
      * @param int|null $accountId
      * @param int|null $userId
-     * @param String|null $forename
-     * @param String|null $lastname
-     * @param String|null $email
-     * @param String|null $birthDate
-     * @param String|null $documentType
-     * @param String|null $documentNumber
+     * @param string|null $forename
+     * @param string|null $lastname
+     * @param string|null $email
+     * @param string|null $birthDate
+     * @param string|null $documentType
+     * @param string|null $documentNumber
      * @param int|null $agreementId
-     * @param String|null $street
-     * @param String|null $buildingNumber
-     * @param String|null $postcode
-     * @param String|null $city
+     * @param string|null $street
+     * @param string|null $buildingNumber
+     * @param string|null $postcode
+     * @param string|null $city
      * @param int|null $countryIso2
      * @return mixed
      * @throws PayProException
@@ -72,17 +72,17 @@ class UpdateAccountService
     public function execute(
         int $accountId = null,
         int $userId = null,
-        String $forename = null,
-        String $lastname = null,
-        String $email = null,
-        String $birthDate = null,
-        String $documentType = null,
-        String $documentNumber = null,
+        string $forename = null,
+        string $lastname = null,
+        string $email = null,
+        string $birthDate = null,
+        string $documentType = null,
+        string $documentNumber = null,
         int $agreementId = null,
-        String $street = null,
-        String $buildingNumber = null,
-        String $postcode = null,
-        String $city = null,
+        string $street = null,
+        string $buildingNumber = null,
+        string $postcode = null,
+        string $city = null,
         int $countryIso2 = null
     )
     {

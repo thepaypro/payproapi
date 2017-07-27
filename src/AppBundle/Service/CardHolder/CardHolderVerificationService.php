@@ -33,7 +33,7 @@ class CardHolderVerificationService
      * @param array $accounts
      */
     public function execute(
-        Array $accounts)
+        array $accounts)
     {
         $allowedStatuses = ['01', '07', '09'];
 

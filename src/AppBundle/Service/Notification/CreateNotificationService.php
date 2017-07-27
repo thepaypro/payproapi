@@ -30,7 +30,7 @@ class CreateNotificationService
 
     public function execute(
         int $accountId,
-        String $deviceId
+        string $deviceId
     ): Notification
     {
         $account = $this->accountRepository->findOneById($accountId);

@@ -33,9 +33,9 @@ class Account
     /**
      * Create an account (CardHolder in Contis).
      * @param  AccountEntity $account
-     * @return Array $response
+     * @return array $response
      */
-    public function create(AccountEntity $account) : Array
+    public function create(AccountEntity $account) : array
     {
         $params = [
             'AgreementCode' => $account->getAgreement()->getContisAgreementCode(),
@@ -79,9 +79,9 @@ class Account
     /**
      * Update an account (CardHolder in Contis)
      * @param  AccountEntity $account
-     * @return Array $response
+     * @return array $response
      */
-    public function update(AccountEntity $account) : Array
+    public function update(AccountEntity $account) : array
     {
         $params = [
             'CardHolderID' => $account->getCardHolderId(),
@@ -122,7 +122,7 @@ class Account
         dump($response);die();
     }
 
-    public function getOne(String $cardHolderId)
+    public function getOne(string $cardHolderId)
     {
         $params = [
             'CardHolderID' => $cardHolderId

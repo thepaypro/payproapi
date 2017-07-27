@@ -15,7 +15,12 @@ class AccountRepository extends BaseEntityRepository
         $date->sub($minutesToSubstract);
         $qb = $this->getEntityManager()->createQueryBuilder();
         $query = $qb->select('a')->from('AppBundle\Entity\Account', 'a')
-                    ->innerJoin('AppBundle\Entity\Notification', 'n', 'WITH', 'n.account = a.id')
+                    ->innerJoin(
+                        'AppBundle\Entity\Notification',
+                        'n',
+                        'WITH',
+                        'n.account = a.id'
+                    )
                     ->where($qb->expr()->eq('n.isSent', 'false'))
                     ->andWhere($qb->expr()->lte( 'a.createdAt', ':date'))
                     ->getQuery()

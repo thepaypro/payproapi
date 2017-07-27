@@ -23,18 +23,18 @@ class AuthenticationService
     protected $contisPassword;
 
     /**
-     * @param String $session
-     * @param String $contisApiHost
-     * @param String $contisUsername
-     * @param String $contisPassword
+     * @param string $session
+     * @param string $contisApiHost
+     * @param string $contisUsername
+     * @param string $contisPassword
      */
     public function __construct(
         Session $session,
         RequestService $requestService,
         HashingService $hashingService,
-        String $contisApiHost,
-        String $contisUsername,
-        String $contisPassword
+        string $contisApiHost,
+        string $contisUsername,
+        string $contisPassword
     ) {
         $this->session = $session;
         $this->requestService = $requestService;
@@ -46,9 +46,9 @@ class AuthenticationService
 
     /**
      * Return the token in session and if it's expired refresh it.
-     * @return String $token
+     * @return string $token
      */
-    public function getAuthenticationToken() : String
+    public function getAuthenticationToken() : string
     {
         if (!$this->session->has(self::CONTIS_TOKEN_KEY) || !$this->session->has(self::TOKEN_EXPIRY_DATE_KEY)) {
             return $this->authenticate();
@@ -67,9 +67,9 @@ class AuthenticationService
 
     /**
      * Authenticates with Contis
-     * @return Return String
+     * @return Return string
      */
-    private function authenticate() : String
+    private function authenticate() : string
     {
         $params = $this->hashingService->generateHashDataStringAndHash([
             'UserName' => $this->contisUsername,

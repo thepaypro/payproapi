@@ -43,7 +43,7 @@ class UpdateCardService
      * This method disable/enable the card in Contis and PayPro.
      * 
      * @param  int $userId
-     * @return Array
+     * @return array
      */
     public function execute(int $userId, bool $isEnabled)
     {

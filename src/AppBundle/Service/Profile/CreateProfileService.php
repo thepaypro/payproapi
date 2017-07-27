@@ -32,11 +32,11 @@ class CreateProfileService
      * Create the profile
      * 
      * @param  int      $userId
-     * @param  String   $picture
+     * @param  string   $picture
      * @return Profile
      * @throws PayProException
      */
-    public function execute(int $userId, String $picture) : Profile
+    public function execute(int $userId, string $picture) : Profile
     {
         $user = $this->userRepository->findOneById($userId);
         $account = $user->getAccount();

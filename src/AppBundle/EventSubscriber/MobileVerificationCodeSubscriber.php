@@ -17,7 +17,7 @@ class MobileVerificationCodeSubscriber implements EventSubscriberInterface
         $this->shortMessageService = $shortMessageService;
     }
 
-    public static function getSubscribedEvents() : Array
+    public static function getSubscribedEvents() : array
     {
         return array(
             MobileVerificationCodeEvents::MOBILE_VERIFICATION_CODE_REQUESTED => array('sendMobileVerificationCode', 0)

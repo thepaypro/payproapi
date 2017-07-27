@@ -11,16 +11,16 @@ class CardHolderVerificationEvent extends Event
     protected $message;
     protected $notification;
 
-    public function __construct(String $message, Notification $notification)
+    public function __construct(string $message, Notification $notification)
     {
         $this->message = $message;
         $this->notification = $notification;
     }
 
     /**
-     * @return String
+     * @return string
      */
-    public function getMessage(): String
+    public function getMessage(): string
     {
         return $this->message;
     }

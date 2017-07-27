@@ -32,10 +32,10 @@ class UpdateNotificationService
         int $notificationId,
         boolean $isSent,
         int $accountId,
-        String $deviceId
+        string $deviceId
     ): Notification
     {
-        $notification = $notificationRepository.findOne($notificationId);
+        $notification = $this->notificationRepository->findOne($notificationId);
 
         if ($accountId) {
             $account = $this->accountRepository->findOneById($accountId);

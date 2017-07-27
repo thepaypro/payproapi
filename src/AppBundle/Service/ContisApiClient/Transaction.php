@@ -33,7 +33,7 @@ class Transaction
         $this->authenticationService = $authenticationService;
     }
 
-    public function create(TransactionEntity $transaction) : Array
+    public function create(TransactionEntity $transaction) : array
     {
         $params = [
             'FromAccountNumber' => $transaction->getPayer()->getAccountNumber(),
@@ -67,9 +67,9 @@ class Transaction
      * @param  Account  $account
      * @param  DateTime $fromDate
      * @param  DateTime $toDate
-     * @return Array $response
+     * @return array $response
      */
-    public function getAll(Account $account, DateTime $fromDate, DateTime $toDate) : Array
+    public function getAll(Account $account, DateTime $fromDate, DateTime $toDate) : array
     {
         $params = [
             'CardHolderId' => $account->getCardHolderId(),

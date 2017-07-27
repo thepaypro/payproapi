@@ -32,11 +32,11 @@ class UpdateProfileService
      * Create the profile
      * 
      * @param  int      $profileId
-     * @param  String   $picture
+     * @param  string   $picture
      * @return Profile
      * @throws PayProException
      */
-    public function execute(int $profileId, String $picture) : Profile
+    public function execute(int $profileId, string $picture) : Profile
     {
         $profile = $this->profileRepository->findOneById($profileId);
 

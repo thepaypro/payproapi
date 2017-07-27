@@ -15,14 +15,14 @@ class MailingService
     private $userAdministratorEmail;
     private $mailer;
 
-    function __construct(String $from, String $userAdministratorEmail, Swift_Mailer $mailer)
+    function __construct(string $from, string $userAdministratorEmail, Swift_Mailer $mailer)
     {
         $this->sender = $from;
         $this->userAdministratorEmail = $userAdministratorEmail;
         $this->mailer = $mailer;
     }
 
-    private function sendMail(String $from, String $to, Array $pictures, Array $data)
+    private function sendMail(string $from, string $to, array $pictures, array $data)
     {
         $message = (new \Swift_Message())
         ->setFrom($from)
@@ -42,7 +42,7 @@ class MailingService
         return true;
     }
 
-    public function sendAccountRequest(Account $account, Array $pictures)
+    public function sendAccountRequest(Account $account, array $pictures)
     {
         return $this->sendMail(
             $this->sender,

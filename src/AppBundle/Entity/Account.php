@@ -164,16 +164,16 @@ class Account implements \JsonSerializable
 
     public function __construct(
         User $user,
-        String $forename,
-        String $lastname,
+        string $forename,
+        string $lastname,
         DateTime $birthDate,
-        String $documentType,
-        String $documentNumber,
+        string $documentType,
+        string $documentNumber,
         Agreement $agreement,
-        String $street,
-        String $buildingNumber,
-        String $postcode,
-        String $city,
+        string $street,
+        string $buildingNumber,
+        string $postcode,
+        string $city,
         Country $country
     )
     {
@@ -242,7 +242,7 @@ class Account implements \JsonSerializable
     /**
      * Get user
      *
-     * @return User
+     * @return ArrayCollection
      */
     public function getUsers()
     {
@@ -433,29 +433,6 @@ class Account implements \JsonSerializable
     public function getAgreement()
     {
         return $this->agreement;
-    }
-
-    /**
-     * Set accountTypeId
-     *
-     * @param string $accountTypeId
-     * @return Account
-     */
-    public function setAccountTypeId($accountTypeId)
-    {
-        $this->accountTypeId = $accountTypeId;
-
-        return $this;
-    }
-
-    /**
-     * Get accountTypeId
-     *
-     * @return string
-     */
-    public function getAccountTypeId()
-    {
-        return $this->accountTypeId;
     }
 
     /**
@@ -684,9 +661,9 @@ class Account implements \JsonSerializable
     }
 
     /**
-     * @return Array
+     * @return array
      */
-    public function getValidDocumentTypes() : Array
+    public function getValidDocumentTypes() : array
     {
         $constants = self::getConstants();
         $key_types =  array_filter(array_flip($constants), function ($k) {

@@ -3,7 +3,6 @@
 namespace AppBundle\Service\Notification;
 
 use AppBundle\Entity\Notification;
-use AppBundle\Service\Notification\UpdateNotificationService
 use RMS\PushNotificationsBundle\Message\iOSMessage;
 use RMS\PushNotificationsBundle\Service\Notifications as PushNotifications;
 
@@ -14,9 +13,11 @@ class SendNotificationService
 {
     protected $pushNotifications;
     protected $updateNotificationService;
+
     /**
      * SendNotificationService constructor.
      * @param PushNotifications $pushNotifications
+     * @param UpdateNotificationService $updateNotificationService
      */
     public function __construct(
         PushNotifications $pushNotifications,
@@ -27,11 +28,11 @@ class SendNotificationService
     }
 
     /**
-     * @param String $message
+     * @param string $message
      * @param Notification $notification
      */
     public function execute(
-        String $message,
+        string $message,
         Notification $notification)
     {
         $pushNotification = new iOSMessage();
@@ -44,6 +45,6 @@ class SendNotificationService
             $notification->getId(),
             true,
             $notification->getAccount()->getId(),
-            $notification->getDeviceId())
+            $notification->getDeviceId());
     }
 }
