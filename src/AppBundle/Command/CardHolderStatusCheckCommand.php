@@ -25,6 +25,7 @@ class CardHolderStatusCheckCommand extends ContainerAwareCommand
     {
 
         //TODO: Query the accounts older than 20 mins here.
+
         $params = [
             'CardHolderID' => 1234
         ];
