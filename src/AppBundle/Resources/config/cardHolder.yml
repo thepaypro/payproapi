@@ -1,0 +1,6 @@
+services:
+  payproapi.validate_card_holder:
+    class: AppBundle\Service\CardHolder\CardHolderVerificationService
+    arguments:
+      - "@contis_api_client.account_service"
+      - "@event_dispatcher"

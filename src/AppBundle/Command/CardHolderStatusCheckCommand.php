@@ -5,7 +5,6 @@ namespace AppBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use AppBundle\Entity\Account;
 
 class CardHolderStatusCheckCommand extends ContainerAwareCommand
 {
@@ -23,15 +22,12 @@ class CardHolderStatusCheckCommand extends ContainerAwareCommand
 
     private function getCardHolder()
     {
-        $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $accountRepository = $entityManager->getRepository('AppBundle:Account');
+        $accountRepository = $this->getContainer()
+            ->get('doctrine.orm.entity_manager')
+            ->getRepository('AppBundle:Account');
 
         $accounts = $accountRepository->findAccountsWithPendingNotification();
 
-        foreach ($accounts as $key => $account)
-        {
-            $cardHolder = $this->getContainer()->get('contis_api_client.account_service')->getOne($account->getCardHolderId());
-            //TODO: Dispatch an event for every single account with non-pending status.
-        }
+
     }
 }

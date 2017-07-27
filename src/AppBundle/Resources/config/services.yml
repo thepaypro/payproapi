@@ -27,6 +27,7 @@ imports:
   - { resource: account.yml }
   - { resource: accountRequest.yml }
   - { resource: card.yml }
+  - { resource: cardHolder.yml }
   - { resource: contact.yml }
   - { resource: contis.yml }
   - { resource: mobileVerificationCode.yml }

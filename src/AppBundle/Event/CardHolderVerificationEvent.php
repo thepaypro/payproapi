@@ -5,23 +5,23 @@ namespace AppBundle\Event;
 use AppBundle\Entity\Account;
 use Symfony\Component\EventDispatcher\Event;
 
-class AccountEvent extends Event
+class CardHolderVerificationEvent extends Event
 {
-    protected $account;
+    protected $message;
     protected $deviceId;
 
-    public function __construct(Account $account, string $deviceId)
+    public function __construct(String $message, string $deviceId)
     {
-        $this->account = $account;
+        $this->message = $message;
         $this->deviceId = $deviceId;
     }
 
     /**
-     * @return Account
+     * @return String
      */
-    public function getAccount(): Account
+    public function getMessage(): String
     {
-        return $this->account;
+        return $this->message;
     }
 
     /**
