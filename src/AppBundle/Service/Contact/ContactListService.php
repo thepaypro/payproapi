@@ -36,10 +36,10 @@ class ContactListService
     /**
      * This method will create a list with contacts.
      * 
-     * @param  Array $phoneNumbers
-     * @return Array
+     * @param  array $phoneNumbers
+     * @return array
      */
-    public function createList(string $userPhoneNumber, Array $phoneNumbers) : Array
+    public function createList(string $userPhoneNumber, array $phoneNumbers) : array
     {
         $userPhoneNumberObject = $this->phoneUtil->parse($userPhoneNumber, null);
         $contactsList = [];
