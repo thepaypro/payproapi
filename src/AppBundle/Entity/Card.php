@@ -55,7 +55,7 @@ class Card implements \JsonSerializable
     {
         $publicProperties = [
             'id' => $this->id,
-            'account' => $this->account,
+            'account' => $this->account->getId(),
             'isActive' => $this->isActive,
             'isEnabled' => $this->isEnabled
         ]; 

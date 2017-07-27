@@ -29,7 +29,7 @@ class CreateUserService
      * Insert in database the user with the given phoneNumber (if it's valid).
      * @param  GetResponseUserEvent $event
      */
-    public function execute(int $requesterUserId, String $phoneNumber, String $verificationCode)
+    public function execute(int $requesterUserId, string $phoneNumber, string $verificationCode)
     {
         $requesterUser = $this->userRepository->findOneById($requesterUserId);
 

@@ -18,12 +18,12 @@ class TestContisRequestsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // $this->getCardHolder();
-        $this->getCard();
+        // $this->getCard();
         // $this->getCardActivationCode();
         // $this->updateCardStatus();
     }
 
-    public function getCardActivationCode($value='')
+    public function getCardActivationCode()
     {
         $params = [
             'CardHolderID'  => 131639,
@@ -49,7 +49,7 @@ class TestContisRequestsCommand extends ContainerAwareCommand
         dump($response);die();
     }
 
-    public function updateCardStatus($value='')
+    public function updateCardStatus()
     {
         $params = [
             'CardHolderID'  => 131639,
@@ -112,14 +112,6 @@ class TestContisRequestsCommand extends ContainerAwareCommand
         //     'AccountNumber' => '04079462',
         //     'SortCode'      => '623053'
         // ];
-        $params = [
-            'CardHolderID'  => 131232,
-            'FirstName'     => 'Bethany',
-            'LastName'      => 'Harriman',
-            'EmailAddress'  => 'beth.harriman@contisgroup.com',
-            'AccountNumber' => '04079462',
-            'SortCode'      => '623053'
-        ];
 
         // $params = [
         //     'CardHolderID'  => 131366,
@@ -131,7 +123,7 @@ class TestContisRequestsCommand extends ContainerAwareCommand
         // ];
 
         $params = [
-            'CardHolderID'  => 131544
+            'CardHolderID'  => 131764
             // 'FirstName'     => 'Beth',
             // 'LastName'      => 'Harriman',
             // 'EmailAddress'  => 'beth.harriman@contisgroup.com',

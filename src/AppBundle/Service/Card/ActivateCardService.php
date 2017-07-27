@@ -34,6 +34,7 @@ class ActivateCardService
     )
     {
         $this->userRepository = $userRepository;
+        $this->cardRepository = $cardRepository;
         $this->contisCardApiClient = $contisCardApiClient;
         $this->validationService = $validationService;
     }
@@ -43,6 +44,7 @@ class ActivateCardService
      * 
      * @param  int $userId
      * @return Array
+     * @throws PayProException
      */
     public function execute(int $userId)
     {

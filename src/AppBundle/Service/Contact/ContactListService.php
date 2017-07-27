@@ -19,6 +19,7 @@ use AppBundle\Service\PhoneNumberValidatorService;
 class ContactListService
 {
     protected $userRepository;
+    protected $phoneUtil;
     protected $phoneNumberValidator;
 
     /**
@@ -38,7 +39,7 @@ class ContactListService
      * @param  Array $phoneNumbers
      * @return Array
      */
-    public function createList(String $userPhoneNumber, Array $phoneNumbers) : Array
+    public function createList(string $userPhoneNumber, Array $phoneNumbers) : Array
     {
         $userPhoneNumberObject = $this->phoneUtil->parse($userPhoneNumber, null);
         $contactsList = [];

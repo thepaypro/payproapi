@@ -40,6 +40,11 @@ class Account implements \JsonSerializable
     protected $card;
 
     /**
+     * @ORM\OneToOne(targetEntity="Profile", mappedBy="account")
+     */
+    protected $profile;
+
+    /**
      * @ORM\Column(type="string", nullable=false)
      * @Assert\NotBlank()
      */
@@ -172,6 +177,8 @@ class Account implements \JsonSerializable
         $this->users = new ArrayCollection();
 
         $this->users[] = $user;
+        $this->card = $card;
+        $this->profile = $profile;
         $this->forename = $forename;
         $this->lastname = $lastname;
         $this->birthDate = $birthDate;
@@ -187,9 +194,10 @@ class Account implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $publicProperties['users'] = $this->users->map(function($user) {
-            $user->getId();
-        });
+        $publicProperties['users'] = $this->users->map(function ($user) {
+            return $user->getId();
+        })->toArray();
+
         $publicProperties['id'] = $this->id;
         $publicProperties['forename'] = $this->forename;
         $publicProperties['lastname'] = $this->lastname;
@@ -206,8 +214,12 @@ class Account implements \JsonSerializable
         $publicProperties['postcode'] = $this->postcode;
         $publicProperties['city'] = $this->city;
         $publicProperties['country'] = $this->country;
-        $publicProperties['sentTransactions'] = $this->sentTransactions;
-        $publicProperties['receivedTransactions'] = $this->receivedTransactions;
+        $publicProperties['sentTransactions'] = $this->sentTransactions->map(function ($transaction) {
+            return $transaction->getId();
+        })->toArray();
+        $publicProperties['receivedTransactions'] = $this->receivedTransactions->map(function ($transaction) {
+            return $transaction->getId();
+        })->toArray();
         $publicProperties['createdAt'] = $this->createdAt;
         $publicProperties['updatedAt'] = $this->updatedAt;
 

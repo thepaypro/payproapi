@@ -114,10 +114,8 @@ class Account
 
         $response = $this->requestService->call('CardHolder_Update', $params, $requestParams);
 
-        dump($response);die();
-
         if ($response['CardHolder_UpdateResult']['Description'] == 'Success ') {
-            return $response['CardHolder_UpdateResult']['ResultObject'][0];
+            return $response['CardHolder_UpdateResult']['ResultObject'];
         }
         dump($response);die();
     }
