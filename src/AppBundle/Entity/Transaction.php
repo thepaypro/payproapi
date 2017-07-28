@@ -78,7 +78,7 @@ class Transaction implements \JsonSerializable
         Account $beneficiary = null,
         float $amount,
         string $subject,
-        DateTime $creationDate
+        DateTime $creationDate = null
     )
     {
         $this->payer = $payer;

@@ -5,6 +5,7 @@ namespace AppBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use DateTime;
 
 class TestContisRequestsCommand extends ContainerAwareCommand
 {
@@ -19,6 +20,7 @@ class TestContisRequestsCommand extends ContainerAwareCommand
     {
         // $this->getCardHolder();
         // $this->getCard();
+        $this->login();
         // $this->getCardActivationCode();
         // $this->updateCardStatus();
     }

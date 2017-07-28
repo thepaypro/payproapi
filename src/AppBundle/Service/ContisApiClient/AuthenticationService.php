@@ -58,7 +58,7 @@ class AuthenticationService
         $expiryDate = $this->session->get(self::TOKEN_EXPIRY_DATE_KEY);
         $now = strtotime('now');
 
-        if ($expiryDate-$now < 60*30) {
+        if ($expiryDate-$now < 30*60) {
             return $this->authenticate();
         }
 
@@ -80,7 +80,7 @@ class AuthenticationService
 
         $token = $response['LoginResult']['Token'];
         $securityKey = $response['LoginResult']['SecurityKey'];
-        $expiryDate = trim($response['LoginResult']['SessionExpiryDateTime'], '/Date()')/1000;
+        $expiryDate = (trim($response['LoginResult']['SessionExpiryDateTime'], '/Date()')/1000);
 
         $this->session->set(self::CONTIS_TOKEN_KEY, $token);
         $this->session->set(self::CONTIS_SECURITY_KEY, $securityKey);
