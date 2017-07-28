@@ -133,7 +133,7 @@ class Card
      * @param  Card $card
      * @return true
      */
-    public function update(CardEntity $card) : array
+    public function update(CardEntity $card) : bool
     {
         $params = [
             'CardHolderID' => $card->getAccount()->getCardHolderId(),
@@ -156,7 +156,7 @@ class Card
         $response = $this->requestService->call('Card_ChangeStatus', $params, $requestParams);
 
         if ($response['Card_ChangeStatusResult']['Description'] == 'Success ') {
-            return $response['Card_ChangeStatusResult']['ResultObject'];
+            return true;
         }
         dump($response);die();
     }
