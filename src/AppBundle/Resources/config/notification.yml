@@ -17,5 +17,6 @@ services:
     class: AppBundle\Service\Notification\SendNotificationService
     arguments:
       - "@=service('rms_push_notifications')"
+      - "@=service('rms_push_notifications.ios.feedback')"
       - "@=service('payproapi.update_notification_service')"
       - "@event_dispatcher"

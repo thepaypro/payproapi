@@ -4,6 +4,7 @@ namespace AppBundle\Service\Notification;
 
 use AppBundle\Entity\Notification;
 use RMS\PushNotificationsBundle\Message\iOSMessage;
+use RMS\PushNotificationsBundle\Service\iOSFeedback;
 use RMS\PushNotificationsBundle\Service\Notifications as PushNotifications;
 
 /**
@@ -12,18 +13,22 @@ use RMS\PushNotificationsBundle\Service\Notifications as PushNotifications;
 class SendNotificationService
 {
     protected $pushNotifications;
+    protected $feedbackNotifications;
     protected $updateNotificationService;
 
     /**
      * SendNotificationService constructor.
      * @param PushNotifications $pushNotifications
+     * @param iOSFeedback $feedbackNotifications
      * @param UpdateNotificationService $updateNotificationService
      */
     public function __construct(
         PushNotifications $pushNotifications,
+        iOSFeedback $feedbackNotifications,
         UpdateNotificationService $updateNotificationService)
     {
         $this->pushNotifications = $pushNotifications;
+        $this->feedbackNotifications = $feedbackNotifications;
         $this->updateNotificationService = $updateNotificationService;
     }
 
@@ -42,6 +47,7 @@ class SendNotificationService
         $pushNotification->setDeviceIdentifier($notification->getDeviceId());
 
         $this->pushNotifications->send($pushNotification);
+        $this->feedbackNotifications->getDeviceUUIDs();
 
         $this->updateNotificationService->execute(
             $notification->getId(),

@@ -40,12 +40,12 @@ class UpdateNotificationService
      */
     public function execute(
         int $notificationId,
-        boolean $isSent,
+        bool $isSent,
         int $accountId,
         string $deviceId
     ): Notification
     {
-        $notification = $this->notificationRepository->findOne($notificationId);
+        $notification = $this->notificationRepository->findOneById($notificationId);
 
         if ($accountId) {
             $account = $this->accountRepository->findOneById($accountId);
