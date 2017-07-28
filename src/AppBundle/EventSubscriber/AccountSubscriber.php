@@ -11,7 +11,8 @@ class AccountSubscriber implements EventSubscriberInterface
 {
     protected $createNotificationService;
 
-    public function __construct(CreateNotificationService $createNotificationService)
+    public function __construct(
+        CreateNotificationService $createNotificationService)
     {
         $this->createNotificationService = $createNotificationService;
     }
@@ -25,6 +26,11 @@ class AccountSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * Calls the AppBundle\Service\Notification\CreateNotificationService whenever an
+     * account is in order to create a pending iOS push notification for it.
+     * @param AccountEvent $event
+     */
     public function createNotification(AccountEvent $event)
     {
         $accountId = $event->getAccount()->getId();

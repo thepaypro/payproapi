@@ -28,6 +28,16 @@ class UpdateNotificationService
         $this->validationService = $validationService;
     }
 
+    /**
+     * Receives the required parameters of a notification, finds it in the repository
+     * and updates it
+     * @param int $notificationId
+     * @param bool $isSent
+     * @param int $accountId
+     * @param string $deviceId
+     * @return Notification
+     * @throws PayProException
+     */
     public function execute(
         int $notificationId,
         boolean $isSent,

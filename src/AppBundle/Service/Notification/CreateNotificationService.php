@@ -28,6 +28,13 @@ class CreateNotificationService
         $this->validationService = $validationService;
     }
 
+    /**
+     * Receives an accountId and a deviceId and creates a notification with that information.
+     * @param int $accountId
+     * @param string $deviceId
+     * @return Notification
+     * @throws PayProException
+     */
     public function execute(
         int $accountId,
         string $deviceId

@@ -26,6 +26,11 @@ class CardHolderVerificationSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * Receives a CardHolderVerificationEvent and calls the SendNotificationService
+     * in order to send an iOS notification with said event.
+     * @param CardHolderVerificationEvent $event
+     */
     public function sendNotification(CardHolderVerificationEvent $event)
     {
         $message = $event->getMessage();

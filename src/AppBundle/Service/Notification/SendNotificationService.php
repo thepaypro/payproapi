@@ -28,6 +28,8 @@ class SendNotificationService
     }
 
     /**
+     * Receives a notification and a message, creates an iOS push notification
+     * and if its successfully sent updates the notification to reflect the fact.
      * @param string $message
      * @param Notification $notification
      */

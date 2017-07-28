@@ -55,8 +55,6 @@ class Notification
      * @param $account
      * @param $isSent
      * @param $deviceId
-     * @param DateTime $createdAt
-     * @param DateTime $updatedAt
      */
     public function __construct(
         $account,
@@ -173,7 +171,7 @@ class Notification
     public function onPrePersist()
     {
         $this->createdAt = new \DateTime("now");
-        $this->updatedAt = new \DateTime("now");
+        $this->updatedAt = $this->createdAt;
     }
 
     /**
