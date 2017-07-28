@@ -264,8 +264,8 @@ class Transaction implements \JsonSerializable
      */
     public function onPrePersist()
     {
-        $this->createdAt = new \DateTime("now");
-        $this->updatedAt = new \DateTime("now");
+        $this->createdAt = $this->createdAt ? $this->createdAt : new \DateTime("now");
+        $this->updatedAt = $this->createdAt;
     }
 
     /**
