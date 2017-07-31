@@ -87,7 +87,6 @@ class Card
         $requestParams = $this->hashingService->generateHashDataStringAndHash($requestParams);
 
         $response = $this->requestService->call('Card_GetActivationCode', $params, $requestParams);
-        dump($response);die();
 
         if ($response['Card_GetActivationCodeResult']['Description'] == 'Success ') {
             return $response['Card_GetActivationCodeResult']['ResultObject'];
@@ -100,7 +99,7 @@ class Card
      * @param  Card $card
      * @return true
      */
-    public function activate(CardEntity $card) : array
+    public function activate(CardEntity $card) : bool
     {
         $params = [
             'CardHolderID' => $card->getAccount()->getCardHolderId(),
@@ -121,9 +120,8 @@ class Card
 
         $response = $this->requestService->call('Card_Activate', $params, $requestParams);
 
-        dump($response);die();
         if ($response['Card_ActivateResult']['Description'] == 'Success ') {
-            return $response['Card_ActivateResult']['ResultObject'];
+            return true;
         }
         dump($response);die();
     }
