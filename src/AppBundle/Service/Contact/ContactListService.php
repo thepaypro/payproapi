@@ -77,7 +77,8 @@ class ContactListService
             $contactsList[$phoneNumber] = [
                 'phoneNumber' => $actualPhoneNumber,
                 'isUser' => true,
-                'fullName' => $user->getAccount()->getForename().' '.$user->getAccount()->getLastname()
+                'fullName' => $user->getAccount()->getForename().' '.$user->getAccount()->getLastname(),
+                'id' => $user->getAccount()->getId()
             ];
         }
         return $contactsList;
