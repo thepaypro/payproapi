@@ -78,7 +78,7 @@ class Transaction implements \JsonSerializable
         Account $beneficiary = null,
         float $amount,
         string $subject,
-        DateTime $creationDate
+        DateTime $creationDate = null
     )
     {
         $this->payer = $payer;
@@ -264,8 +264,8 @@ class Transaction implements \JsonSerializable
      */
     public function onPrePersist()
     {
-        $this->createdAt = new \DateTime("now");
-        $this->updatedAt = new \DateTime("now");
+        $this->createdAt = $this->createdAt ? $this->createdAt : new \DateTime("now");
+        $this->updatedAt = $this->createdAt;
     }
 
     /**

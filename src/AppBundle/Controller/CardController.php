@@ -71,12 +71,12 @@ class CardController extends Controller
      */
     public function updateAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $enable = $request->request->get('enable');
+        $enabled = $request->request->get('enabled');
 
         try {
             $card = $this->get('payproapi.update_card_service')->execute(
                 $user->getId(),
-                $enable
+                $enabled
             );
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());

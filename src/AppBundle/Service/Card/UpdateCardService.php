@@ -42,10 +42,11 @@ class UpdateCardService
     /**
      * This method disable/enable the card in Contis and PayPro.
      * 
-     * @param  int $userId
-     * @return Array
+     * @param  int  $userId
+     * @param  bool $isEnabled
+     * @return Card
      */
-    public function execute(int $userId, bool $isEnabled)
+    public function execute(int $userId, bool $isEnabled) : Card
     {
         $user = $this->userRepository->findOneById($userId);
 
@@ -55,8 +56,11 @@ class UpdateCardService
         if (!$card = $account->getCard()) {
             throw new PayProException('You must request a card to update it', 400);
         }
-        if (!$card->isActive()) {
+        if (!$card->getIsActive()) {
             throw new PayProException('You must activate the card to update it', 400);
+        }
+        if ($card->getIsEnabled() == $isEnabled) {
+            throw new PayProException('Card is already in this status', 400);
         }
 
         $card->setIsEnabled($isEnabled);

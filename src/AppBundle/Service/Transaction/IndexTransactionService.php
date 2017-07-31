@@ -69,12 +69,19 @@ class IndexTransactionService
         $contisTransactions = $this->contisTransactionApiClient->getAll($account, $fromDate, $toDate);
         foreach ($contisTransactions as $contisTransaction) {
             $transaction = $this->transactionRepository->findOneByContisTransactionId($contisTransaction['TransactionID']);
-            if ($transaction) {
+            if ($transaction && $transaction->getId() == 19) {
+                dump($transaction->getId());
+                dump($transaction->getCreatedAt());
+                $time = intval(trim($contisTransaction['SettlementDate'], '/Date()')/1000);
+                $creationDateTime = (new DateTime())->setTimestamp($time);
+                dump($creationDateTime);
+                die();
                 continue;
             }
 
-            $time = intval(trim($contisTransaction['SettlementDate'], '/Date()')/1000);
+            $time = intval(trim($contisTransaction['SettlementDate'], '/Date()')/1000) - 2*60*60;
             $creationDateTime = (new DateTime())->setTimestamp($time);
+
             $transaction = new Transaction(
                 null,
                 null,
