@@ -77,8 +77,8 @@ class UpdateAccountService
         String $buildingNumber = null,
         String $postcode = null,
         String $city = null,
-        int $countryIso2 = null
-    )
+        string $countryIso2 = null
+    ) : Account
     {
         $account = $this->accountRepository->findOneById($accountId);
         $user = $this->userRepository->findOneById($userId);
@@ -117,7 +117,7 @@ class UpdateAccountService
             }
         }
 
-        $response = $this->contisAccountApiClient->update($account);
+        $this->contisAccountApiClient->update($account);
 
         $this->accountRepository->save($account);
 

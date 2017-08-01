@@ -36,7 +36,7 @@ class UpdateProfileService
      * @return Profile
      * @throws PayProException
      */
-    public function execute(int $profileId, String $picture) : Profile
+    public function execute(int $profileId, string $picture) : Profile
     {
         $profile = $this->profileRepository->findOneById($profileId);
 

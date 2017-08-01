@@ -27,10 +27,10 @@ class UserValidatorService
     /**
      * Validates that a user with the given phone number and validation code can be created.
      * 
-     * @param  String $phoneNumber
-     * @param  String $verificationCode
+     * @param  string $phoneNumber
+     * @param  string $verificationCode
      */
-    public function validate(String $phoneNumber, String $verificationCode) : bool
+    public function validate(string $phoneNumber, string $verificationCode) : bool
     {
         if (!$this->phoneNumberValidator->isValid($phoneNumber)) {
             throw new PayProException('Invalid phone number', 400);

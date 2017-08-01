@@ -54,7 +54,7 @@ class CreateTransactionService
         int $userId,
         int $beneficiaryId,
         float $amount,
-        String $subject
+        string $subject
     ) : Transaction
     {
         $user = $this->userRepository->findOneById($userId);
