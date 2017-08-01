@@ -4,7 +4,7 @@ namespace AppBundle\Service\Notification;
 
 use AppBundle\Entity\Notification;
 use RMS\PushNotificationsBundle\Message\iOSMessage;
-use RMS\PushNotificationsBundle\Service\iOSFeedback;
+use Symfony\Component\Translation\TranslatorInterface;
 use RMS\PushNotificationsBundle\Service\Notifications as PushNotifications;
 
 /**
@@ -14,18 +14,22 @@ class SendNotificationService
 {
     protected $pushNotifications;
     protected $updateNotificationService;
+    protected $translator;
 
     /**
      * SendNotificationService constructor.
      * @param PushNotifications $pushNotifications
      * @param UpdateNotificationService $updateNotificationService
+     * @param TranslatorInterface $translator
      */
     public function __construct(
         PushNotifications $pushNotifications,
-        UpdateNotificationService $updateNotificationService)
+        UpdateNotificationService $updateNotificationService,
+        TranslatorInterface $translator)
     {
         $this->pushNotifications = $pushNotifications;
         $this->updateNotificationService = $updateNotificationService;
+        $this->translator = $translator;
     }
 
     /**
@@ -55,16 +59,9 @@ class SendNotificationService
         string $statusCode,
         Notification $notification)
     {
-        if ($statusCode == '01') {
-            $message = 'Your account application has been approved. You can now fund it and order your Visa Card.';
-        }
-        if ($statusCode == '09') {
-            $message = 'Your account aplication needs further information, please contact us on Support.';
-        }
-        if ($statusCode == '07') {
-            $message = 'We are sorry to inform that your account application has not been approved.';
-        }
 
+        $message = $this->translator->trans('account_created_notifications.'.$statusCode, [], 'notifications', 'en');
+        dump($message);die();
         $this->execute($message, $notification);
     }
 }

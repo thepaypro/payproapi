@@ -86,7 +86,7 @@ class Notification
     /**
      * @return boolean
      */
-    public function getisSent()
+    public function getIsSent()
     {
         return $this->isSent;
     }
