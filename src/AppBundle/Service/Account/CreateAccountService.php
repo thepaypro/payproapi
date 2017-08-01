@@ -81,7 +81,7 @@ class CreateAccountService
         string $birthDate,
         string $documentType,
         string $documentNumber,
-        Int $agreementId,
+        int $agreementId,
         string $street,
         string $buildingNumber,
         string $postcode,

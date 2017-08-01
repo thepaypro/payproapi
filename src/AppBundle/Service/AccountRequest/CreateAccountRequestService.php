@@ -13,6 +13,7 @@ use AppBundle\Repository\AccountRepository;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Exception\PayProException;
 use AppBundle\Service\MailingService;
+
 /**
  * Class CreateAccountRequestService
  */
@@ -26,7 +27,13 @@ class CreateAccountRequestService
     protected $mailingService;
 
     /**
-     * @param EntityManager $em
+     * CreateAccountRequestService constructor.
+     * @param AccountRepository $accountRepository
+     * @param AgreementRepository $agreementRepository
+     * @param CountryRepository $countryRepository
+     * @param UserRepository $userRepository
+     * @param ValidatorInterface $validationService
+     * @param MailingService $mailingService
      */
     public function __construct(
         AccountRepository $accountRepository,
@@ -35,7 +42,8 @@ class CreateAccountRequestService
         UserRepository $userRepository,
         ValidatorInterface $validationService,
         MailingService $mailingService
-    ) {
+    )
+    {
         $this->accountRepository = $accountRepository;
         $this->agreementRepository = $agreementRepository;
         $this->countryRepository = $countryRepository;
@@ -48,19 +56,21 @@ class CreateAccountRequestService
     /**
      * This method will create the cardHolder on Contis system and will persist the new account of the user.
      *
-     * @param  int      $userId
-     * @param  string   $forename
-     * @param  string   $lastname
-     * @param  string   $birthDate
-     * @param  string   $documentType
-     * @param  string   $documentNumber
-     * @param  Int      $agreementId
-     * @param  string   $street
-     * @param  string   $buildingNumber
-     * @param  string   $postcode
-     * @param  string   $city
-     * @param  string   $countryIso2
-     * @return Account  $account
+     * @param int $userId
+     * @param string $forename
+     * @param string $lastname
+     * @param string $birthDate
+     * @param string $documentType
+     * @param string $base64DocumentPicture1
+     * @param string $base64DocumentPicture2
+     * @param Int $agreementId
+     * @param string $street
+     * @param string $buildingNumber
+     * @param string $postcode
+     * @param string $city
+     * @param string $countryIso2
+     * @return bool
+     * @throws PayProException
      */
     public function execute(
         int $userId,
@@ -75,8 +85,9 @@ class CreateAccountRequestService
         string $buildingNumber,
         string $postcode,
         string $city,
-        string $countryIso2
-    ) : bool
+        string $countryIso2,
+        string $deviceToken
+    ): bool
     {
         $agreement = $this->agreementRepository->findOneById($agreementId);
         $country = $this->countryRepository->findOneByIso2($countryIso2);
@@ -111,10 +122,17 @@ class CreateAccountRequestService
 
         if (count($errors) > 0) {
             foreach ($errors as $key => $error) {
-                throw new PayProException($error->getPropertyPath().': '.$error->getMessage(), 400);
+                throw new PayProException($error->getPropertyPath() . ': ' . $error->getMessage(), 400);
             }
         }
 
-        return $this->mailingService->sendAccountRequest($account, [$base64DocumentPicture1, $base64DocumentPicture2]);
+        return $this->mailingService->sendAccountRequest(
+            $account,
+            [
+                $base64DocumentPicture1,
+                $base64DocumentPicture2
+            ],
+            $deviceToken
+        );
     }
 }

@@ -7,14 +7,20 @@ use \Swift_Attachment;
 use AppBundle\Entity\Account;
 
 /**
-* class MailingService
-*/
+ * class MailingService
+ */
 class MailingService
 {
     private $sender;
     private $userAdministratorEmail;
     private $mailer;
 
+    /**
+     * MailingService constructor.
+     * @param string $from
+     * @param string $userAdministratorEmail
+     * @param Swift_Mailer $mailer
+     */
     function __construct(string $from, string $userAdministratorEmail, Swift_Mailer $mailer)
     {
         $this->sender = $from;
@@ -22,11 +28,18 @@ class MailingService
         $this->mailer = $mailer;
     }
 
+    /**
+     * @param string $from
+     * @param string $to
+     * @param array $pictures
+     * @param array $data
+     * @return bool
+     */
     private function sendMail(string $from, string $to, array $pictures, array $data)
     {
         $message = (new \Swift_Message())
-        ->setFrom($from)
-        ->setTo($to);
+            ->setFrom($from)
+            ->setTo($to);
 
         $message = $message->setBody(json_encode($data, JSON_UNESCAPED_SLASHES));
 
@@ -34,7 +47,7 @@ class MailingService
             $message = $message->attach(
                 Swift_Attachment::newInstance(
                     base64_decode($picture),
-                    'picture'.$key.'.jpeg'
+                    'picture' . $key . '.jpeg'
                 )->setContentType('image/jpeg')
             );
         }
@@ -42,7 +55,17 @@ class MailingService
         return true;
     }
 
-    public function sendAccountRequest(Account $account, array $pictures)
+    /**
+     * @param Account $account
+     * @param array $pictures
+     * @param string $deviceToken
+     * @return bool
+     */
+    public function sendAccountRequest(
+        Account $account,
+        array $pictures,
+        string $deviceToken
+    ): bool
     {
         return $this->sendMail(
             $this->sender,
@@ -60,7 +83,8 @@ class MailingService
                 'buildingNumber' => $account->getBuildingNumber(),
                 'postcode' => $account->getPostcode(),
                 'city' => $account->getCity(),
-                'country' => $account->getCountry()->getId()
+                'country' => $account->getCountry()->getId(),
+                'deviceToken' => $deviceToken
             ]
         );
     }

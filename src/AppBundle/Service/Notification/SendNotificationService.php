@@ -13,22 +13,18 @@ use RMS\PushNotificationsBundle\Service\Notifications as PushNotifications;
 class SendNotificationService
 {
     protected $pushNotifications;
-    protected $feedbackNotifications;
     protected $updateNotificationService;
 
     /**
      * SendNotificationService constructor.
      * @param PushNotifications $pushNotifications
-     * @param iOSFeedback $feedbackNotifications
      * @param UpdateNotificationService $updateNotificationService
      */
     public function __construct(
         PushNotifications $pushNotifications,
-        iOSFeedback $feedbackNotifications,
         UpdateNotificationService $updateNotificationService)
     {
         $this->pushNotifications = $pushNotifications;
-        $this->feedbackNotifications = $feedbackNotifications;
         $this->updateNotificationService = $updateNotificationService;
     }
 
@@ -47,12 +43,28 @@ class SendNotificationService
         $pushNotification->setDeviceIdentifier($notification->getDeviceId());
 
         $this->pushNotifications->send($pushNotification);
-        $this->feedbackNotifications->getDeviceUUIDs();
 
         $this->updateNotificationService->execute(
             $notification->getId(),
             true,
             $notification->getAccount()->getId(),
             $notification->getDeviceId());
+    }
+
+    public function sendCardHolderVerifiedNotification(
+        string $statusCode,
+        Notification $notification)
+    {
+        if ($statusCode == '01') {
+            $message = 'Your account application has been approved. You can now fund it and order your Visa Card.';
+        }
+        if ($statusCode == '09') {
+            $message = 'Your account aplication needs further information, please contact us on Support.';
+        }
+        if ($statusCode == '07') {
+            $message = 'We are sorry to inform that your account application has not been approved.';
+        }
+
+        $this->execute($message, $notification);
     }
 }
