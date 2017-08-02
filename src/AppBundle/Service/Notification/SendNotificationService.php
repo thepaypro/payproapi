@@ -45,7 +45,6 @@ class SendNotificationService
         $pushNotification = new iOSMessage();
         $pushNotification->setMessage($message);
         $pushNotification->setDeviceIdentifier($notification->getDeviceId());
-
         $this->pushNotifications->send($pushNotification);
 
         $this->updateNotificationService->execute(
@@ -63,7 +62,7 @@ class SendNotificationService
         string $status,
         Notification $notification)
     {
-        $message = $this->translator->trans('account_created_notifications.'.$status, [], 'notifications');
+        $message = $this->translator->trans('account_created_notifications.' . $status, [], 'notifications');
         $this->execute($message, $notification);
     }
 }
