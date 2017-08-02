@@ -66,7 +66,7 @@ class UpdateAccountService
      * @param string|null $postcode
      * @param string|null $city
      * @param string|null $countryIso2
-     * @return mixed
+     * @return Account
      * @throws PayProException
      */
     public function execute(
