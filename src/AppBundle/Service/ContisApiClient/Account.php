@@ -15,6 +15,16 @@ class Account
     protected $hashingService;
     protected $authenticationService;
 
+    const STATUS_ACTIVATED = "01";
+    const STATUS_INCOMPLETED = "09";
+    const STATUS_DENIED = "07";
+
+    private $accountCardHolderStatusMapping = [
+      self::STATUS_ACTIVATED => AccountEntity::STATUS_ACTIVATED,
+      self::STATUS_INCOMPLETED => AccountEntity::STATUS_INCOMPLETED,
+      self::STATUS_DENIED => AccountEntity::STATUS_DENIED
+    ];
+
     /**
      * @param RequestService $requestService
      * @param HashingService $hashingService
@@ -147,5 +157,36 @@ class Account
             return $response['CardHolder_Lookup_GetInfoResult']['ResultObject'][0];
         }
         dump($response);die();
+    }
+
+    /**
+     * @return array
+     */
+    public static function getConstants() : array
+    {
+        $clientClass = new \ReflectionClass(__CLASS__);
+        return $clientClass->getConstants();
+    }
+
+    /**
+     * @return array
+     */
+    public function getContisStatuses(): array
+    {
+        $constants = self::getConstants();
+        $key_types = array_filter(array_flip($constants), function ($k) {
+            return (bool)preg_match('/STATUS_/', $k);
+        });
+
+        $statuses = array_intersect_key($constants, array_flip($key_types));
+        return $statuses;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountStatusFromContisStatus(string $contisStatus): string
+    {
+        return $this->accountCardHolderStatusMapping[$contisStatus];
     }
 }

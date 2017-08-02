@@ -3,33 +3,22 @@
 namespace AppBundle\Event;
 
 use AppBundle\Entity\Account;
-use AppBundle\Entity\Notification;
 use Symfony\Component\EventDispatcher\Event;
 
 class CardHolderVerificationEvent extends Event
 {
-    protected $message;
-    protected $notification;
+    protected $account;
 
-    public function __construct(string $message, Notification $notification)
+    public function __construct(Account $account)
     {
-        $this->message = $message;
-        $this->notification = $notification;
+        $this->account = $account;
     }
 
     /**
-     * @return string
+     * @return Account
      */
-    public function getMessage(): string
+    public function getAccount(): Account
     {
-        return $this->message;
-    }
-
-    /**
-     * @return Notification
-     */
-    public function getNotification(): Notification
-    {
-        return $this->notification;
+        return $this->account;
     }
 }

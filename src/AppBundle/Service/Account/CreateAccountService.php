@@ -118,7 +118,8 @@ class CreateAccountService
             $buildingNumber,
             $postcode,
             $city,
-            $country
+            $country,
+            Account::STATUS_PENDING
         );
 
         $errors = $this->validationService->validate($account);

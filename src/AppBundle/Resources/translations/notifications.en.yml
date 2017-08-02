@@ -1,3 +1,4 @@
-account_created_notifications.01: Your account application has been approved. You can now fund it and order your Visa Card.
-account_created_notifications.09: Your account aplication needs further information, please contact us on Support.
-account_created_notifications.07: We are sorry to inform that your account application has not been approved.
+account_created_notifications:
+  ACTIVATED: Your account application has been approved. You can now fund it and order your Visa Card.
+  INCOMPLETED: Your account aplication needs further information, please contact us on Support.
+  DENIED: We are sorry to inform that your account application has not been approved.

@@ -22,6 +22,11 @@ class Account implements \JsonSerializable
     const DOCUMENT_TYPE_PASSPORT = "PASSPORT";
     const DOCUMENT_TYPE_DRIVING_LICENSE = "DRIVING_LICENSE";
 
+    const STATUS_PENDING = "PENDING";
+    const STATUS_ACTIVATED = "ACTIVATED";
+    const STATUS_INCOMPLETED = "INCOMPLETED";
+    const STATUS_DENIED = "DENIED";
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -147,6 +152,12 @@ class Account implements \JsonSerializable
     protected $email;
 
     /**
+     * @ORM\Column(type="string", nullable=false)
+     * @Assert\Choice(callback = "getValidStatuses")
+     */
+    protected $status;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
@@ -174,7 +185,8 @@ class Account implements \JsonSerializable
         string $buildingNumber,
         string $postcode,
         string $city,
-        Country $country
+        Country $country,
+        string $status
     )
     {
         $this->sentTransactions = new ArrayCollection();
@@ -193,11 +205,12 @@ class Account implements \JsonSerializable
         $this->postcode = $postcode;
         $this->city = $city;
         $this->country = $country;
+        $this->status = $status;
     }
 
     public function jsonSerialize()
     {
-        $publicProperties['users'] = $this->users->map(function ($user) {
+        $publicProperties['users'] = $this->users->map(function (User $user) {
             $user->getId();
         });
         $publicProperties['id'] = $this->id;
@@ -217,10 +230,10 @@ class Account implements \JsonSerializable
         $publicProperties['postcode'] = $this->postcode;
         $publicProperties['city'] = $this->city;
         $publicProperties['country'] = $this->country;
-        $publicProperties['sentTransactions'] = $this->sentTransactions->map(function ($transaction) {
+        $publicProperties['sentTransactions'] = $this->sentTransactions->map(function (Transaction $transaction) {
             $transaction->getId();
         });
-        $publicProperties['receivedTransactions'] = $this->receivedTransactions->map(function ($transaction) {
+        $publicProperties['receivedTransactions'] = $this->receivedTransactions->map(function (Transaction $transaction) {
             $transaction->getId();
         });
         $publicProperties['createdAt'] = $this->createdAt;
@@ -619,7 +632,7 @@ class Account implements \JsonSerializable
         return $this->country;
     }
 
-   /**
+    /**
      * Gets triggered only on insert
      *
      * @ORM\PrePersist
@@ -663,15 +676,29 @@ class Account implements \JsonSerializable
     /**
      * @return array
      */
-    public function getValidDocumentTypes() : array
+    public function getValidDocumentTypes(): array
     {
         $constants = self::getConstants();
-        $key_types =  array_filter(array_flip($constants), function ($k) {
+        $key_types = array_filter(array_flip($constants), function ($k) {
             return (bool)preg_match('/DOCUMENT_TYPE/', $k);
         });
 
         $document_types = array_intersect_key($constants, array_flip($key_types));
         return $document_types;
+    }
+
+    /**
+     * @return array
+     */
+    public function getValidStatuses(): array
+    {
+        $constants = self::getConstants();
+        $key_types = array_filter(array_flip($constants), function ($k) {
+            return (bool)preg_match('/STATUS_/', $k);
+        });
+
+        $statuses = array_intersect_key($constants, array_flip($key_types));
+        return $statuses;
     }
 
     public static function getConstants()
@@ -715,7 +742,7 @@ class Account implements \JsonSerializable
      *
      * @return Account
      */
-    public function addUser(\AppBundle\Entity\User $user)
+    public function addUser(User $user)
     {
         $this->users[] = $user;
 
@@ -727,7 +754,7 @@ class Account implements \JsonSerializable
      *
      * @param \AppBundle\Entity\User $user
      */
-    public function removeUser(\AppBundle\Entity\User $user)
+    public function removeUser(User $user)
     {
         $this->users->removeElement($user);
     }
@@ -739,7 +766,7 @@ class Account implements \JsonSerializable
      *
      * @return Account
      */
-    public function addSentTransaction(\AppBundle\Entity\Transaction $sentTransaction)
+    public function addSentTransaction(Transaction $sentTransaction)
     {
         $this->sentTransactions[] = $sentTransaction;
 
@@ -751,7 +778,7 @@ class Account implements \JsonSerializable
      *
      * @param \AppBundle\Entity\Transaction $sentTransaction
      */
-    public function removeSentTransaction(\AppBundle\Entity\Transaction $sentTransaction)
+    public function removeSentTransaction(Transaction $sentTransaction)
     {
         $this->sentTransactions->removeElement($sentTransaction);
     }
@@ -773,7 +800,7 @@ class Account implements \JsonSerializable
      *
      * @return Account
      */
-    public function addReceivedTransaction(\AppBundle\Entity\Transaction $receivedTransaction)
+    public function addReceivedTransaction(Transaction $receivedTransaction)
     {
         $this->receivedTransactions[] = $receivedTransaction;
 
@@ -785,7 +812,7 @@ class Account implements \JsonSerializable
      *
      * @param \AppBundle\Entity\Transaction $receivedTransaction
      */
-    public function removeReceivedTransaction(\AppBundle\Entity\Transaction $receivedTransaction)
+    public function removeReceivedTransaction(Transaction $receivedTransaction)
     {
         $this->receivedTransactions->removeElement($receivedTransaction);
     }
@@ -831,7 +858,7 @@ class Account implements \JsonSerializable
      *
      * @return Account
      */
-    public function setCard(\AppBundle\Entity\Card $card = null)
+    public function setCard(Card $card = null)
     {
         $this->card = $card;
 
@@ -846,5 +873,29 @@ class Account implements \JsonSerializable
     public function getCard()
     {
         return $this->card;
+    }
+
+    /**
+     * Set status
+     *
+     * @param $status
+     *
+     * @return Account
+     */
+    public function setStatus($status = null)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return $status
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

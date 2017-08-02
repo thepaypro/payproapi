@@ -2,6 +2,7 @@
 
 namespace AppBundle\Service\CardHolder;
 
+use AppBundle\Entity\Account;
 use AppBundle\Event\CardHolderVerificationEvent;
 use AppBundle\Event\CardHolderVerificationEvents;
 use AppBundle\Service\ContisApiClient\Account as ContisAccountApiClient;
@@ -35,17 +36,18 @@ class CardHolderVerificationService
     public function execute(
         array $accounts)
     {
-        $allowedStatuses = ['01', '07', '09'];
-
         foreach ($accounts as $key => $account) {
 
             $cardHolder = $this->contisAccountApiClient->getOne($account->getCardHolderId());
-            $notification = $account->getNotification();
 
-            if (in_array($cardHolder['Status'], $allowedStatuses)) {
+            if (in_array($cardHolder['Status'], $this->contisAccountApiClient->getContisStatuses())) {
+                $account->setStatus(
+                    $this->contisAccountApiClient->getAccountStatusFromContisStatus($cardHolder['Status'])
+                );
+
                 $this->dispatcher->dispatch(
                     CardHolderVerificationEvents::CARD_HOLDER_VERIFICATION_COMPLETED,
-                    new CardHolderVerificationEvent($cardHolder['Status'], $notification)
+                    new CardHolderVerificationEvent($account)
                 );
             }
         }

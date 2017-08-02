@@ -33,9 +33,9 @@ class CardHolderVerificationSubscriber implements EventSubscriberInterface
      */
     public function sendNotification(CardHolderVerificationEvent $event)
     {
-        $message = $event->getMessage();
-        $notification = $event->getNotification();
+        $status = $event->getAccount()->getStatus();
+        $notification = $event->getAccount()->getNotification();
 
-        $this->sendNotificationService->sendCardHolderVerifiedNotification($message, $notification);
+        $this->sendNotificationService->sendCardHolderVerifiedNotification($status, $notification);
     }
 }

@@ -38,7 +38,7 @@ class SendNotificationService
      * @param string $message
      * @param Notification $notification
      */
-    public function execute(
+    private function execute(
         string $message,
         Notification $notification)
     {
@@ -55,13 +55,15 @@ class SendNotificationService
             $notification->getDeviceId());
     }
 
+    /**
+     * @param string $status
+     * @param Notification $notification
+     */
     public function sendCardHolderVerifiedNotification(
-        string $statusCode,
+        string $status,
         Notification $notification)
     {
-
-        $message = $this->translator->trans('account_created_notifications.'.$statusCode, [], 'notifications', 'en');
-        dump($message);die();
+        $message = $this->translator->trans('account_created_notifications.'.$status, [], 'notifications');
         $this->execute($message, $notification);
     }
 }
