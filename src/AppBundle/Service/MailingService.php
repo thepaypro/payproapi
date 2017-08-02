@@ -83,7 +83,7 @@ class MailingService
                 'buildingNumber' => $account->getBuildingNumber(),
                 'postcode' => $account->getPostcode(),
                 'city' => $account->getCity(),
-                'country' => $account->getCountry()->getId(),
+                'country' => $account->getCountry()->getIso2(),
                 'deviceToken' => $deviceToken
             ]
         );
