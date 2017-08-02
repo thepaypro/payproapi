@@ -19,6 +19,7 @@ use AppBundle\Service\PhoneNumberValidatorService;
 class ContactListService
 {
     protected $userRepository;
+    protected $phoneUtil;
     protected $phoneNumberValidator;
 
     /**

@@ -65,7 +65,7 @@ class UpdateAccountService
      * @param string|null $buildingNumber
      * @param string|null $postcode
      * @param string|null $city
-     * @param int|null $countryIso2
+     * @param string|null $countryIso2
      * @return mixed
      * @throws PayProException
      */
@@ -83,8 +83,8 @@ class UpdateAccountService
         string $buildingNumber = null,
         string $postcode = null,
         string $city = null,
-        int $countryIso2 = null
-    )
+        string $countryIso2 = null
+    ) : Account
     {
         $account = $this->accountRepository->findOneById($accountId);
         $user = $this->userRepository->findOneById($userId);
@@ -123,7 +123,7 @@ class UpdateAccountService
             }
         }
 
-        $response = $this->contisAccountApiClient->update($account);
+        $this->contisAccountApiClient->update($account);
 
         $this->accountRepository->save($account);
 

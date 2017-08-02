@@ -21,10 +21,10 @@ class UpdateCardService
     protected $validationService;
 
     /**
-     * @param UserRepository        $userRepository
-     * @param CardRepository        $cardRepository
-     * @param ContisCardApiClient   $contisCardApiClient
-     * @param ValidatorInterface    $validationService
+     * @param ObjectRepositoryInterface $userRepository
+     * @param ObjectRepositoryInterface $cardRepository
+     * @param ContisCardApiClient       $contisCardApiClient
+     * @param ValidatorInterface        $validationService
      */
     public function __construct(
         ObjectRepositoryInterface $userRepository,
@@ -42,10 +42,12 @@ class UpdateCardService
     /**
      * This method disable/enable the card in Contis and PayPro.
      * 
-     * @param  int $userId
-     * @return array
+     * @param  int  $userId
+     * @param  bool $isEnabled
+     * @return Card
+     * @throws PayProException
      */
-    public function execute(int $userId, bool $isEnabled)
+    public function execute(int $userId, bool $isEnabled) : Card
     {
         $user = $this->userRepository->findOneById($userId);
 
@@ -55,8 +57,11 @@ class UpdateCardService
         if (!$card = $account->getCard()) {
             throw new PayProException('You must request a card to update it', 400);
         }
-        if (!$card->isActive()) {
+        if (!$card->getIsActive()) {
             throw new PayProException('You must activate the card to update it', 400);
+        }
+        if ($card->getIsEnabled() == $isEnabled) {
+            throw new PayProException('Card is already in this status', 400);
         }
 
         $card->setIsEnabled($isEnabled);
@@ -69,7 +74,7 @@ class UpdateCardService
             }
         }
 
-        $response = $this->contisCardApiClient->update($card);
+        $this->contisCardApiClient->update($card);
 
         $this->cardRepository->save($card);
 

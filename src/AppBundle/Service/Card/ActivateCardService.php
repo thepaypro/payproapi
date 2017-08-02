@@ -34,6 +34,7 @@ class ActivateCardService
     )
     {
         $this->userRepository = $userRepository;
+        $this->cardRepository = $cardRepository;
         $this->contisCardApiClient = $contisCardApiClient;
         $this->validationService = $validationService;
     }
