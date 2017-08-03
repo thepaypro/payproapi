@@ -31,11 +31,11 @@ class GetBalanceService
     /**
      * Retrieve the balance of the user's account from Contis.
      *
-     * @param int $userId
-     * @return int
+     * @param  int $userId
+     * @return float
      * @throws PayProException
      */
-    public function execute(int $userId): int
+    public function execute(int $userId): float
     {
         $user = $this->userRepository->findOneById($userId);
 
