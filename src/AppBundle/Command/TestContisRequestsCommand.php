@@ -149,4 +149,12 @@ class TestContisRequestsCommand extends ContainerAwareCommand
 
         dump($response);die();
     }
+
+    public function getBalance() {
+        $accountRepository = $this->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Account');
+
+        $account = $accountRepository->findOneById('1');
+
+        $this->getContainer()->get('contis_api_client.balance_service')->get($account);
+    }
 }
