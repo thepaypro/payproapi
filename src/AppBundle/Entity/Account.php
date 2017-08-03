@@ -230,6 +230,7 @@ class Account implements \JsonSerializable
         $publicProperties['postcode'] = $this->postcode;
         $publicProperties['city'] = $this->city;
         $publicProperties['country'] = $this->country;
+        $publicProperties['status'] = $this->status;
         $publicProperties['sentTransactions'] = $this->sentTransactions->map(function (Transaction $transaction) {
             return $transaction->getId();
         })->toArray();
