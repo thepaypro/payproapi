@@ -2,6 +2,7 @@
 
 namespace AppBundle\Service\AccountRequest;
 
+use AppBundle\Entity\Account;
 use AppBundle\Exception\PayProException;
 use AppBundle\Repository\AccountRepository;
 use AppBundle\Repository\AgreementRepository;
@@ -78,7 +79,7 @@ class UpdateAccountRequestService
         if (!imagecreatefromstring(base64_decode($base64DocumentPicture1))) {
             throw new PayProException('Invalid image', 400);
         }
-        if (!$base64DocumentPicture2 == "" && !$documentType == "PASSPORT") {
+        if (!$base64DocumentPicture2 == "" && !$documentType == Account::DOCUMENT_TYPE_PASSPORT) {
             if (!imagecreatefromstring(base64_decode($base64DocumentPicture2))) {
                 throw new PayProException('Invalid image', 400);
             }
