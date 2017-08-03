@@ -140,7 +140,7 @@ class Transaction implements \JsonSerializable
     /**
      * Set amount
      *
-     * @param bigint $amount
+     * @param int $amount
      *
      * @return Transaction
      */
@@ -154,7 +154,7 @@ class Transaction implements \JsonSerializable
     /**
      * Get amount
      *
-     * @return bigint
+     * @return int
      */
     public function getAmount()
     {
