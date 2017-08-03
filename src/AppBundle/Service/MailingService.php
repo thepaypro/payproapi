@@ -33,15 +33,16 @@ class MailingService
      * @param string $to
      * @param array $pictures
      * @param array $data
+     * @param string|null $textBody
      * @return bool
      */
-    private function sendMail(string $from, string $to, array $pictures, array $data)
+    private function sendMail(string $from, string $to, array $pictures, array $data, string $textBody = null)
     {
         $message = (new \Swift_Message())
             ->setFrom($from)
             ->setTo($to);
 
-        $message = $message->setBody(json_encode($data, JSON_UNESCAPED_SLASHES));
+        $message = $message->setBody($textBody. "\n" .json_encode($data, JSON_UNESCAPED_SLASHES));
 
         foreach ($pictures as $key => $picture) {
             $message = $message->attach(
@@ -61,7 +62,7 @@ class MailingService
      * @param string $deviceToken
      * @return bool
      */
-    public function sendAccountRequest(
+    public function sendCreateAccountRequest(
         Account $account,
         array $pictures,
         string $deviceToken
@@ -86,6 +87,29 @@ class MailingService
                 'country' => $account->getCountry()->getIso2(),
                 'deviceToken' => $deviceToken
             ]
+        );
+    }
+
+    /**
+     * @param Account $account
+     * @param array $pictures
+     * @return bool
+     */
+    public function sendUpdateAccountRequest(
+        Account $account,
+        array $pictures
+    ): bool
+    {
+        return $this->sendMail(
+            $this->sender,
+            $this->userAdministratorEmail,
+            $pictures,
+            [
+                'userId' => $account->getUsers()->first()->getId(),
+                'documentType' => $account->getDocumentType(),
+                'documentNumber' => 'Number in picture',
+            ],
+            'AccountId: '.$account->getId()
         );
     }
 }

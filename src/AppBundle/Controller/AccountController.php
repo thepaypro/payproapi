@@ -84,13 +84,14 @@ class AccountController extends Controller
      */
     public function updateAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $accountId = $request->attributes->get('accountId');
+
         $requestData = $request->request->all();
+        $accountId = $request->attributes->get('accountId');
 
         try {
             $account = $this->get('payproapi.update_account_service')->execute(
                 $accountId,
-                $user->getId(),
+                in_array('ROLE_ADMIN', $user->getRoles()) ? $requestData['userId'] : $user->getId(),
                 isset($requestData['forename']) ? $requestData['forename'] : null,
                 isset($requestData['lastname']) ? $requestData['lastname'] : null,
                 isset($requestData['email']) ? $requestData['email'] : null,

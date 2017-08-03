@@ -211,7 +211,7 @@ class Account implements \JsonSerializable
     public function jsonSerialize()
     {
         $publicProperties['users'] = $this->users->map(function (User $user) {
-            $user->getId();
+            return $user->getId();
         })->toArray();
         $publicProperties['id'] = $this->id;
         $publicProperties['forename'] = $this->forename;
