@@ -14,4 +14,5 @@ services:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Account')"
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
       - "@validator"
+      - "@payproapi.get_balance_service"
       - "@contis_api_client.transaction_service"
