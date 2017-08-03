@@ -58,4 +58,32 @@ class AccountRequestController extends Controller
 
         return $this->JWTResponse($user, ['emailSended' => $response]);
     }
+
+    /**
+     * Update an account request
+     * @param  UserInterface $user
+     * @param  Request $request
+     * @return JsonResponse
+     *
+     * @Route("", name="account_requests_update")
+     * @Method("PUT")
+     */
+    public function UpdateAction(UserInterface $user, Request $request): JsonResponse
+    {
+        $requestData = $request->request->all();
+
+        try {
+            $response = $this->get('payproapi.update_account_request_service')->execute(
+                $user->getId(),
+                $requestData['documentType'],
+                $requestData['documentPicture1'],
+                $requestData['documentPicture2']
+            );
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
+        }
+
+        return $this->JWTResponse($user, ['emailSended' => $response]);
+    }
 }
+
