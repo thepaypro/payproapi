@@ -41,7 +41,7 @@ class Transaction implements \JsonSerializable
     protected $contisTransactionId;
 
     /**
-     * @ORM\Column(type="long", nullable=false)
+     * @ORM\Column(type="bigint", nullable=false)
      * @Assert\NotBlank()
      */
     protected $amount;
@@ -140,7 +140,7 @@ class Transaction implements \JsonSerializable
     /**
      * Set amount
      *
-     * @param long $amount
+     * @param bigint $amount
      *
      * @return Transaction
      */
@@ -154,7 +154,7 @@ class Transaction implements \JsonSerializable
     /**
      * Get amount
      *
-     * @return long
+     * @return bigint
      */
     public function getAmount()
     {
