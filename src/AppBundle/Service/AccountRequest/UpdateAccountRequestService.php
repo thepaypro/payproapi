@@ -69,18 +69,26 @@ class UpdateAccountRequestService
     {
         $user = $this->userRepository->findOneById($userId);
         $account = $user->getAccount();
+        $pictures = [];
 
         if (!$user) {
             throw new PayProException("User not found", 400);
         }
+
         if (!$account) {
             throw new PayProException("Account not found", 400);
         }
-        if (!imagecreatefromstring(base64_decode($base64DocumentPicture1))) {
+
+        if (imagecreatefromstring(base64_decode($base64DocumentPicture1))) {
+            $pictures[] = $base64DocumentPicture1;
+        } else {
             throw new PayProException('Invalid image', 400);
         }
+
         if (!$base64DocumentPicture2 == "" && !$documentType == Account::DOCUMENT_TYPE_PASSPORT) {
-            if (!imagecreatefromstring(base64_decode($base64DocumentPicture2))) {
+            if (imagecreatefromstring(base64_decode($base64DocumentPicture2))) {
+                $pictures[] = $base64DocumentPicture2;
+            } else {
                 throw new PayProException('Invalid image', 400);
             }
         }
@@ -97,10 +105,7 @@ class UpdateAccountRequestService
 
         return $this->mailingService->sendUpdateAccountRequest(
             $account,
-            [
-                $base64DocumentPicture1,
-                $base64DocumentPicture2
-            ]
+            $pictures
         );
     }
 }
