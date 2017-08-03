@@ -115,7 +115,7 @@ class CreateAccountRequestService
             $buildingNumber,
             $postcode,
             $city,
-            $country
+            $country,
             Account::STATUS_PENDING
         );
 
