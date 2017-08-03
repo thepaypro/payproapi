@@ -69,6 +69,7 @@ class CreateAccountRequestService
      * @param string $postcode
      * @param string $city
      * @param string $countryIso2
+     * @param string $deviceToken
      * @return bool
      * @throws PayProException
      */
