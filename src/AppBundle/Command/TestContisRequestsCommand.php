@@ -19,7 +19,8 @@ class TestContisRequestsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // $this->getCardHolder();
-        $this->getCard();
+        $this->getBalance();
+//        $this->getCard();
         // $this->getCardActivationCode();
         // $this->updateCardStatus();
     }

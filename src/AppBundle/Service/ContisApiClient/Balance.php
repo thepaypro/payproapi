@@ -52,10 +52,8 @@ class Balance
 
         $response = $this->requestService->call($endpoint, $params, $requestParams);
 
-        dump($response);die();
-
-        if ($response['CardHolder_Lookup_GetInfoResult']['Description'] == 'Success ') {
-            return $response['CardHolder_Lookup_GetInfoResult']['ResultObject'][0];
+        if ($response['Account_GetBalanceResult']['Description'] == 'Success ') {
+            return $response['Account_GetBalanceResult']['ResultObject']['AvailableBalance'];
         }
         dump($response);
         die();
