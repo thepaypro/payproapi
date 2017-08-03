@@ -78,7 +78,6 @@ class UpdateAccountRequestService
         if (!imagecreatefromstring(base64_decode($base64DocumentPicture1))) {
             throw new PayProException('Invalid image', 400);
         }
-
         if (!$base64DocumentPicture2 == "" && !$documentType == "PASSPORT") {
             if (!imagecreatefromstring(base64_decode($base64DocumentPicture2))) {
                 throw new PayProException('Invalid image', 400);
