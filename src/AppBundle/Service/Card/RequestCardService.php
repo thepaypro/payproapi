@@ -58,8 +58,6 @@ class RequestCardService
         if (!$account = $user->getAccount()) {
             throw new PayProException('You must have an account to request a card', 400);
         }
-    dump($account->getAgreement()->getNewCardCharge());
-    dump($this->getBalanceService->execute($user->getId()));
         if ($account->getAgreement()->getNewCardCharge() > $this->getBalanceService->execute($user->getId())) {
             throw new PayProException('Insufficient funds', 400);
         }
