@@ -21,7 +21,8 @@ class Transaction
     /**
      * @param RequestService $requestService
      * @param HashingService $hashingService
-     * @param AuthorizationService $authorizationService
+     * @param AuthenticationService $authenticationService
+     * @internal param AuthorizationService $authorizationService
      */
     public function __construct(
         RequestService $requestService,
@@ -71,13 +72,22 @@ class Transaction
      */
     public function getAll(Account $account, DateTime $fromDate, DateTime $toDate) : array
     {
+//        $params = [
+//            'CardHolderId' => $account->getCardHolderId(),
+//            'AccountNumber' => $account->getAccountNumber(),
+//            'SortCode' => $account->getSortCode(),
+//            'FromDate' => '/Date('.(intval($fromDate->getTimeStamp()*1000)).')/',
+//            'ToDate' => '/Date('.(intval($toDate->getTimeStamp()*1000)).')/'
+//        ];
+
         $params = [
             'CardHolderId' => $account->getCardHolderId(),
             'AccountNumber' => $account->getAccountNumber(),
             'SortCode' => $account->getSortCode(),
-            'FromDate' => '/Date('.(intval($fromDate->getTimeStamp()*1000)).')/',
-            'ToDate' => '/Date('.(intval($toDate->getTimeStamp()*1000)).')/' 
+            'LastNTransactions' => 2
         ];
+
+
 
         $params['Token'] = $this->authenticationService->getAuthenticationToken();
 
