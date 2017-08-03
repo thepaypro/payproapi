@@ -24,7 +24,7 @@ class RegistrationSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents(): Array
+    public static function getSubscribedEvents(): array
     {
         return [
             FOSUserEvents::REGISTRATION_INITIALIZE => [
@@ -39,6 +39,7 @@ class RegistrationSubscriber implements EventSubscriberInterface
     /**
      * Listener to check that user phoneNumber is valid and user validationCode is correct.
      * @param  GetResponseUserEvent $event
+     * @throws PayProException
      */
     public function onRegistrationInitialize(GetResponseUserEvent $event)
     {

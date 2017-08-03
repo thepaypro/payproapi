@@ -1,0 +1,4 @@
+account_created_notifications:
+  ACTIVATED: Your account application has been approved. You can now fund it and order your Visa Card.
+  INCOMPLETED: Your account aplication needs further information, please contact us on Support.
+  DENIED: We are sorry to inform that your account application has not been approved.

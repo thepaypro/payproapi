@@ -59,9 +59,9 @@ class TransactionInvite
     }
 
     /**
-     * @return Array
+     * @return array
      */
-    public function getValidStatuses() : Array
+    public function getValidStatuses() : array
     {
         $constants = self::getConstants();
         $key_types =  array_filter(array_flip($constants), function ($k) {

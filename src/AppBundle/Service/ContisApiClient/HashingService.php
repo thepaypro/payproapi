@@ -25,8 +25,8 @@ class HashingService
 
     /**
      * Generates the HashDataString and Hash for the specified array.
-     * @param  Array  $params
-     * @return Array
+     * @param  array  $params
+     * @return array
      */
     public function generateHashDataStringAndHash(Array $params)
     {

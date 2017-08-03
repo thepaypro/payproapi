@@ -32,7 +32,7 @@ class UpdateProfileService
      * Create the profile
      * 
      * @param  int      $profileId
-     * @param  String   $picture
+     * @param  string   $picture
      * @return Profile
      * @throws PayProException
      */

@@ -28,7 +28,7 @@ class MobileVerificationCode
      */
     protected $phoneNumber;
 
-    public function __construct(String $phoneNumber)
+    public function __construct(string $phoneNumber)
     {
         $this->phoneNumber = $phoneNumber;
         $this->code = rand(1000, 9999);

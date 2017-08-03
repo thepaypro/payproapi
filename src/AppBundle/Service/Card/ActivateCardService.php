@@ -43,7 +43,7 @@ class ActivateCardService
      * This method activate the card in Contis and update the card in PayPro.
      * 
      * @param  int $userId
-     * @return Array
+     * @return array
      * @throws PayProException
      */
     public function execute(int $userId)

@@ -236,11 +236,11 @@ class Transaction implements \JsonSerializable
     /**
      * Set subject
      *
-     * @param String $subject
+     * @param string $subject
      *
      * @return Transaction
      */
-    public function setSubject(String $subject = null)
+    public function setSubject(string $subject = null)
     {
         $this->subject = $subject;
 
@@ -250,7 +250,7 @@ class Transaction implements \JsonSerializable
     /**
      * Get subject
      *
-     * @return String
+     * @return string
      */
     public function getSubject()
     {

@@ -25,12 +25,14 @@ services:
 
 imports:
   - { resource: account.yml }
-  - { resource: mobileVerificationCode.yml }
-  - { resource: contact.yml }
   - { resource: accountRequest.yml }
-  - { resource: user.yml }
   - { resource: card.yml }
-  - { resource: profile.yml }
-  - { resource: transaction.yml }
-  - { resource: subscribers.yml }
+  - { resource: cardHolder.yml }
+  - { resource: contact.yml }
   - { resource: contis.yml }
+  - { resource: mobileVerificationCode.yml }
+  - { resource: notification.yml }
+  - { resource: profile.yml }
+  - { resource: subscribers.yml }
+  - { resource: transaction.yml }
+  - { resource: user.yml }

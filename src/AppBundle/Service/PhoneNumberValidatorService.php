@@ -20,10 +20,10 @@ class PhoneNumberValidatorService
 
     /**
      * Validates the specified phone number.
-     * @param  String  $phoneNumber
+     * @param  string  $phoneNumber
      * @return boolean
      */
-    public function isValid(String $phoneNumber) : bool
+    public function isValid(string $phoneNumber) : bool
     {
         try {
             $phoneNumberObject = $this->phoneUtil->parse($phoneNumber, null);

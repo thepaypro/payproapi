@@ -63,7 +63,8 @@ class AccountController extends Controller
                 $requestData['buildingNumber'],
                 $requestData['postcode'],
                 $requestData['city'],
-                $requestData['country']
+                $requestData['country'],
+                $requestData['deviceToken']
             );
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());

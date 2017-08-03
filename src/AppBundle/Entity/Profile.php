@@ -29,7 +29,7 @@ class Profile implements \JsonSerializable
      */
     protected $account;
 
-    public function __construct(String $base64Picture, Account $account)
+    public function __construct(string $base64Picture, Account $account)
     {
         $this->account = $account;
         $this->picture = $base64Picture;
