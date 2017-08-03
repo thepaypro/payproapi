@@ -21,7 +21,7 @@ class Transaction
     /**
      * @param RequestService $requestService
      * @param HashingService $hashingService
-     * @param AuthorizationService $authorizationService
+     * @param AuthenticationService $authenticationService
      */
     public function __construct(
         RequestService $requestService,
@@ -38,7 +38,7 @@ class Transaction
         $params = [
             'FromAccountNumber' => $transaction->getPayer()->getAccountNumber(),
             'ToAccountNumber' => $transaction->getBeneficiary()->getAccountNumber(),
-            'Amount' => $transaction->getAmount()*100,
+            'Amount' => $transaction->getAmount(),
             'CurrencyCode' => '826',
             'Description' => $transaction->getSubject()
         ];

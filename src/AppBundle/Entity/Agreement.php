@@ -29,82 +29,82 @@ class Agreement implements \JsonSerializable
     protected $currencyCode;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $newCardCharge;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $cardReissueCharge;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $localATMwithdrawCharge;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $abroadATMwithdrawCharge;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $maxBalance;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $cardLimit;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $monthlyAccountFee;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $dailySpendLimit;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $monthlySpendLimit;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $maxNoOfAdditionalCards;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $ATMWeeklySpendLimit;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $ATMMonthlySpendLimit;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $cashBackDailyLimit;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $cashBackWeeklyLimit;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $cashBackMonthlyLimit;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      */
     protected $cashBackYearlyLimit;
 
@@ -224,7 +224,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set newCardCharge
      *
-     * @param integer $newCardCharge
+     * @param long $newCardCharge
      *
      * @return Agreement
      */
@@ -238,7 +238,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get newCardCharge
      *
-     * @return integer
+     * @return long
      */
     public function getNewCardCharge()
     {
@@ -248,7 +248,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set cardReissueCharge
      *
-     * @param integer $cardReissueCharge
+     * @param long $cardReissueCharge
      *
      * @return Agreement
      */
@@ -262,7 +262,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get cardReissueCharge
      *
-     * @return integer
+     * @return long
      */
     public function getCardReissueCharge()
     {
@@ -272,7 +272,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set localATMwithdrawCharge
      *
-     * @param integer $localATMwithdrawCharge
+     * @param long $localATMwithdrawCharge
      *
      * @return Agreement
      */
@@ -286,7 +286,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get localATMwithdrawCharge
      *
-     * @return integer
+     * @return long
      */
     public function getLocalATMwithdrawCharge()
     {
@@ -296,7 +296,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set abroadATMwithdrawCharge
      *
-     * @param integer $abroadATMwithdrawCharge
+     * @param long $abroadATMwithdrawCharge
      *
      * @return Agreement
      */
@@ -310,7 +310,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get abroadATMwithdrawCharge
      *
-     * @return integer
+     * @return long
      */
     public function getAbroadATMwithdrawCharge()
     {
@@ -320,7 +320,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set maxBalance
      *
-     * @param integer $maxBalance
+     * @param long $maxBalance
      *
      * @return Agreement
      */
@@ -334,7 +334,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get maxBalance
      *
-     * @return integer
+     * @return long
      */
     public function getMaxBalance()
     {
@@ -344,7 +344,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set cardLimit
      *
-     * @param integer $cardLimit
+     * @param long $cardLimit
      *
      * @return Agreement
      */
@@ -358,7 +358,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get cardLimit
      *
-     * @return integer
+     * @return long
      */
     public function getCardLimit()
     {
@@ -368,7 +368,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set monthlyAccountFee
      *
-     * @param integer $monthlyAccountFee
+     * @param long $monthlyAccountFee
      *
      * @return Agreement
      */
@@ -382,7 +382,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get monthlyAccountFee
      *
-     * @return integer
+     * @return long
      */
     public function getMonthlyAccountFee()
     {
@@ -392,7 +392,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set dailySpendLimit
      *
-     * @param integer $dailySpendLimit
+     * @param long $dailySpendLimit
      *
      * @return Agreement
      */
@@ -406,7 +406,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get dailySpendLimit
      *
-     * @return integer
+     * @return long
      */
     public function getDailySpendLimit()
     {
@@ -416,7 +416,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set monthlySpendLimit
      *
-     * @param integer $monthlySpendLimit
+     * @param long $monthlySpendLimit
      *
      * @return Agreement
      */
@@ -430,7 +430,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get monthlySpendLimit
      *
-     * @return integer
+     * @return long
      */
     public function getMonthlySpendLimit()
     {
@@ -440,7 +440,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set maxNoOfAdditionalCards
      *
-     * @param integer $maxNoOfAdditionalCards
+     * @param long $maxNoOfAdditionalCards
      *
      * @return Agreement
      */
@@ -454,7 +454,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get maxNoOfAdditionalCards
      *
-     * @return integer
+     * @return long
      */
     public function getMaxNoOfAdditionalCards()
     {
@@ -464,7 +464,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set aTMWeeklySpendLimit
      *
-     * @param integer $aTMWeeklySpendLimit
+     * @param long $aTMWeeklySpendLimit
      *
      * @return Agreement
      */
@@ -478,7 +478,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get aTMWeeklySpendLimit
      *
-     * @return integer
+     * @return long
      */
     public function getATMWeeklySpendLimit()
     {
@@ -488,7 +488,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set aTMMonthlySpendLimit
      *
-     * @param integer $aTMMonthlySpendLimit
+     * @param long $aTMMonthlySpendLimit
      *
      * @return Agreement
      */
@@ -502,7 +502,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get aTMMonthlySpendLimit
      *
-     * @return integer
+     * @return long
      */
     public function getATMMonthlySpendLimit()
     {
@@ -512,7 +512,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set cashBackDailyLimit
      *
-     * @param integer $cashBackDailyLimit
+     * @param long $cashBackDailyLimit
      *
      * @return Agreement
      */
@@ -526,7 +526,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get cashBackDailyLimit
      *
-     * @return integer
+     * @return long
      */
     public function getCashBackDailyLimit()
     {
@@ -536,7 +536,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set cashBackWeeklyLimit
      *
-     * @param integer $cashBackWeeklyLimit
+     * @param long $cashBackWeeklyLimit
      *
      * @return Agreement
      */
@@ -550,7 +550,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get cashBackWeeklyLimit
      *
-     * @return integer
+     * @return long
      */
     public function getCashBackWeeklyLimit()
     {
@@ -560,7 +560,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set cashBackMonthlyLimit
      *
-     * @param integer $cashBackMonthlyLimit
+     * @param long $cashBackMonthlyLimit
      *
      * @return Agreement
      */
@@ -574,7 +574,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get cashBackMonthlyLimit
      *
-     * @return integer
+     * @return long
      */
     public function getCashBackMonthlyLimit()
     {
@@ -584,7 +584,7 @@ class Agreement implements \JsonSerializable
     /**
      * Set cashBackYearlyLimit
      *
-     * @param integer $cashBackYearlyLimit
+     * @param long $cashBackYearlyLimit
      *
      * @return Agreement
      */
@@ -598,7 +598,7 @@ class Agreement implements \JsonSerializable
     /**
      * Get cashBackYearlyLimit
      *
-     * @return integer
+     * @return long
      */
     public function getCashBackYearlyLimit()
     {

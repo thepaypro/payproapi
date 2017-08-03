@@ -53,7 +53,7 @@ class Balance
         $response = $this->requestService->call($endpoint, $params, $requestParams);
 
         if ($response['Account_GetBalanceResult']['Description'] == 'Success ') {
-            return $response['Account_GetBalanceResult']['ResultObject']['AvailableBalance']/100;
+            return $response['Account_GetBalanceResult']['ResultObject']['AvailableBalance'];
         }
         dump($response);
         die();

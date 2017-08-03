@@ -41,7 +41,7 @@ class Transaction implements \JsonSerializable
     protected $contisTransactionId;
 
     /**
-     * @ORM\Column(type="float", nullable=false)
+     * @ORM\Column(type="long", nullable=false)
      * @Assert\NotBlank()
      */
     protected $amount;
@@ -76,7 +76,7 @@ class Transaction implements \JsonSerializable
     public function __construct(
         Account $payer = null,
         Account $beneficiary = null,
-        float $amount,
+        int $amount,
         string $subject,
         DateTime $creationDate = null
     )
@@ -140,7 +140,7 @@ class Transaction implements \JsonSerializable
     /**
      * Set amount
      *
-     * @param float $amount
+     * @param long $amount
      *
      * @return Transaction
      */
@@ -154,7 +154,7 @@ class Transaction implements \JsonSerializable
     /**
      * Get amount
      *
-     * @return float
+     * @return long
      */
     public function getAmount()
     {

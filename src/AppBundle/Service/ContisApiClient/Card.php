@@ -33,8 +33,8 @@ class Card
 
     /**
      * Request a card.
-     * @param  Card $card
-     * @return true
+     * @param CardEntity $card
+     * @return bool
      */
     public function request(CardEntity $card) : bool
     {
@@ -64,8 +64,8 @@ class Card
 
     /**
      * Activate a card.
-     * @param  Card $card
-     * @return true
+     * @param CardEntity $card
+     * @return array
      */
     public function getActivationCode(CardEntity $card) : array
     {
@@ -96,8 +96,8 @@ class Card
 
     /**
      * Activate a card.
-     * @param  Card $card
-     * @return true
+     * @param CardEntity $card
+     * @return bool
      */
     public function activate(CardEntity $card) : bool
     {
@@ -128,8 +128,8 @@ class Card
 
     /**
      * Change the status of a card.
-     * @param  Card $card
-     * @return true
+     * @param CardEntity $card
+     * @return bool
      */
     public function update(CardEntity $card) : bool
     {
