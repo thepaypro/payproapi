@@ -116,6 +116,7 @@ class CreateAccountRequestService
             $postcode,
             $city,
             $country
+            Account::STATUS_PENDING
         );
 
         $errors = $this->validationService->validate($account);
