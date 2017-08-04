@@ -92,18 +92,26 @@ class CreateAccountRequestService
         $country = $this->countryRepository->findOneByIso2($countryIso2);
         $user = $this->userRepository->findOneById($userId);
         $documentNumber = 'isInPicture';
+        $pictures = [];
 
         if (!$user) {
             throw new PayProException("User not found", 400);
         }
+
         if ($user->getAccount()) {
             throw new PayProException("You already have an account", 400);
         }
-        if (!imagecreatefromstring(base64_decode($base64DocumentPicture1))) {
+
+        if (imagecreatefromstring(base64_decode($base64DocumentPicture1))) {
+            $pictures[] = $base64DocumentPicture1;
+        } else {
             throw new PayProException('Invalid image', 400);
         }
-        if (!$base64DocumentPicture2 == "" && !$documentType == "PASSPORT") {
-            if (!imagecreatefromstring(base64_decode($base64DocumentPicture2))) {
+
+        if ($documentType != Account::DOCUMENT_TYPE_PASSPORT) {
+            if (imagecreatefromstring(base64_decode($base64DocumentPicture2))) {
+                $pictures[] = $base64DocumentPicture2;
+            } else {
                 throw new PayProException('Invalid image', 400);
             }
         }
@@ -136,10 +144,7 @@ class CreateAccountRequestService
 
         return $this->mailingService->sendCreateAccountRequest(
             $account,
-            [
-                $base64DocumentPicture1,
-                $base64DocumentPicture2
-            ],
+            $pictures,
             $deviceToken
         );
     }
