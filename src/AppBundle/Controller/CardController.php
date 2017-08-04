@@ -2,15 +2,12 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Exception\PayProException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
+use AppBundle\Exception\PayProException;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Card controller.
@@ -25,13 +22,13 @@ class CardController extends Controller
     /**
      * Request the card for an account
      * @param  UserInterface $user
-     * @param  Request       $request
+     * @param  Request $request
      * @return JsonResponse
-     * 
+     *
      * @Route("/request", name="card_request")
      * @Method("POST")
      */
-    public function requestAction(UserInterface $user, Request $request) : JsonResponse
+    public function requestAction(UserInterface $user, Request $request): JsonResponse
     {
         try {
             $card = $this->get('payproapi.request_card_service')->execute($user->getId());
@@ -45,34 +42,39 @@ class CardController extends Controller
     /**
      * Activate the card for an account
      * @param  UserInterface $user
-     * @param  Request       $request
+     * @param  Request $request
      * @return JsonResponse
-     * 
+     *
      * @Route("/activation", name="card_activation")
      * @Method("POST")
      */
-    public function activationAction(UserInterface $user, Request $request) : JsonResponse
+    public function activationAction(UserInterface $user, Request $request): JsonResponse
     {
         try {
             $card = $this->get('payproapi.activate_card_service')->execute($user->getId());
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
+
         return $this->JWTResponse($user, ['card' => $card]);
     }
 
     /**
      * Update the card
      * @param  UserInterface $user
-     * @param  Request       $request
+     * @param  Request $request
      * @return JsonResponse
-     * 
+     * @throws PayProException
      * @Route("/{id}", name="card_update")
      * @Method("PUT")
      */
-    public function updateAction(UserInterface $user, Request $request) : JsonResponse
+    public function updateAction(UserInterface $user, Request $request): JsonResponse
     {
         $enabled = $request->request->get('enabled');
+
+        if (!is_bool($enabled)) {
+            throw new PayProException("enabled must be boolean");
+        }
 
         try {
             $card = $this->get('payproapi.update_card_service')->execute(
