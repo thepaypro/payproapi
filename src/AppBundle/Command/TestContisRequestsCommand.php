@@ -19,6 +19,7 @@ class TestContisRequestsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // $this->getCardHolder();
+        $this->getBalance();
 //        $this->getCard();
         // $this->getCardActivationCode();
         // $this->updateCardStatus();
@@ -148,5 +149,13 @@ class TestContisRequestsCommand extends ContainerAwareCommand
         $response = $this->getContainer()->get('contis_api_client.request_service')->call($endpoint, $params, $requestParams);
 
         dump($response);die();
+    }
+
+    public function getBalance() {
+        $accountRepository = $this->getContainer()->get('doctrine.orm.entity_manager')->getRepository('AppBundle:Account');
+
+        $account = $accountRepository->findOneById('1');
+
+        $this->getContainer()->get('contis_api_client.balance_service')->get($account);
     }
 }

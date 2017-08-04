@@ -67,23 +67,15 @@ class TransactionController extends Controller
     /**
      * Returns a list of transactions
      * @param  UserInterface $user
-     * @param  Request       $request
+     * @param  Request $request
      * @return JsonResponse
-     * 
+     * @throws PayProException
      * @Route("", name="transactions_list")
      * @Method("GET")
      */
     public function indexAction(UserInterface $user, Request $request) : JsonResponse
     {
         $filters = $request->query->all();
-
-        if (!is_int($filters['page'])) {
-            throw new PayProException("Invalid page format.", 400);
-        }
-
-        if (!is_int($filters['size'])) {
-            throw new PayProException("Invalid size format.", 400);
-        }
 
         try {
             $transactions = $this->get('payproapi.index_transaction_service')->execute(

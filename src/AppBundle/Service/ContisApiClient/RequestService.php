@@ -22,8 +22,8 @@ class RequestService
     protected $session;
 
     /**
-     * @param string $contisSecretKey
      * @param string $contisApiHost
+     * @internal param string $contisSecretKey
      */
     public function __construct(string $contisApiHost) {
         $this->contisApiHost = $contisApiHost;
@@ -38,14 +38,14 @@ class RequestService
      * @param string $jsonParametersKey
      * @return array
      */
-    public function call(string $endpoint, array $params, array $requestParams = [], string $jsonParamtersKey = 'objInfo') : array
+    public function call(string $endpoint, array $params, array $requestParams = [], string $jsonParametersKey = 'objInfo') : array
     {
         $payload['objReqInfo'] = $requestParams;
-        $payload[$jsonParamtersKey] = $params;
+        $payload[$jsonParametersKey] = $params;
 
-        $payload = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $payload = json_encode($payload, JSON_UNESCAPED_SLASHES);
         if ($endpoint != 'Login') {
-            // dump($payload);die();
+//            dump($payload);die();
         }
         try {
             $response = $this->httpClient->request(

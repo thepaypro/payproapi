@@ -3,6 +3,7 @@
 namespace AppBundle\Service\Transaction;
 
 use AppBundle\Entity\Transaction;
+use AppBundle\Exception\PayProException;
 use AppBundle\Repository\AccountRepository;
 use AppBundle\Repository\TransactionRepository;
 use AppBundle\Repository\UserRepository;
@@ -42,11 +43,12 @@ class IndexTransactionService
      * This method will retrieve all the transactions from the database and from Contis and will merge them.
      *
      * @param  int $userId
-     * @param  string $fromDate
-     * @param  string $toDate
      * @param int $page
      * @param int $size
+     * @param  string $fromDate
+     * @param  string $toDate
      * @return array $transactions
+     * @throws PayProException
      * @internal param int $payerId
      * @internal param int $beneficiaryId
      */
@@ -60,6 +62,14 @@ class IndexTransactionService
     {
         $user = $this->userRepository->findOneById($userId);
         $account = $user->getAccount();
+
+        if (!is_int($page)) {
+            throw new PayProException("Invalid page format.", 400);
+        }
+
+        if (!is_int($size)) {
+            throw new PayProException("Invalid size format.", 400);
+        }
 
         if (!$fromDate) {
             $fromDate = $account->getCreatedAt();

@@ -12,13 +12,13 @@ Steps to set up the project:
 2.- Clone ansible project for paypro in the same folder
 
 
-3.- cp payproapi/Vagrantfile.dist payproapi/Vagrantfile (modify the path to ansible folder)
+3.- cp PayProApi/Vagrantfile.dist PayProApi/Vagrantfile (modify the path to ansible folder)
 
 
-4.- cp payproapi/app/config/parameters.yml.dist payproapi/app/config/parameters.yml (fill properly the blank parameters)
+4.- cp PayProApi/app/config/parameters.yml.dist PayProApi/app/config/parameters.yml (fill properly the blank parameters)
 
 
-5.- cp ansible/group_vars/PayProApi/dev.yml.dist ansible/group_vars/PayProApi/dev.yml (fill properly the blank parameters)
+5.- cp PayProAnsible/group_vars/PayProApi/dev.yml.dist PayProAnsible/group_vars/PayProApi/dev.yml (fill properly the blank parameters)
 
 important parameters in dev.yml:
 
@@ -37,4 +37,8 @@ git:
   username: (git username)
 
 
-6.- vagrant up
+6.- download and install LTS versions for Vagrant, VirtualBox, and Ansible
+
+7.- in the PayProApi vagrant file set the $ansible_path to the actual PayProAnsible project
+
+8.- vagrant up

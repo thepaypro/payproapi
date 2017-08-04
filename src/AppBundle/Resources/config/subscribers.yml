@@ -34,5 +34,6 @@ services:
     class: AppBundle\EventSubscriber\CardHolderVerificationSubscriber
     arguments:
       - '@payproapi.send_notification_service'
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Account')"
     tags:
       - { name: kernel.event_subscriber }
