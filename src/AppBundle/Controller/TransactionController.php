@@ -77,6 +77,14 @@ class TransactionController extends Controller
     {
         $filters = $request->query->all();
 
+        if (!is_int($filters['page'])) {
+            throw new PayProException("Invalid page format.", 400);
+        }
+
+        if (!is_int($filters['size'])) {
+            throw new PayProException("Invalid size format.", 400);
+        }
+
         try {
             $transactions = $this->get('payproapi.index_transaction_service')->execute(
                 $user->getId(), $filters['page'], $filters['size']);

@@ -23,9 +23,12 @@ class CreateTransactionService
     protected $contisTransactionApiClient;
 
     /**
-     * @param TransactionRepository      $transactionRepository
-     * @param ValidatorInterface         $validationService
-     * @param ContisTransactionApiClient $contisAccountApiClient
+     * @param TransactionRepository $transactionRepository
+     * @param AccountRepository $accountRepository
+     * @param UserRepository $userRepository
+     * @param ValidatorInterface $validationService
+     * @param ContisTransactionApiClient $contisTransactionApiClient
+     * @internal param ContisTransactionApiClient $contisAccountApiClient
      */
     public function __construct(
         TransactionRepository $transactionRepository,
@@ -44,11 +47,12 @@ class CreateTransactionService
     /**
      * This method will retrieve all the transactions from the database and from Contis and will merge them.
      *
-     * @param  int          $userId
-     * @param  int          $beneficiaryId
-     * @param  int          $amount
-     * @param  string       $subject
-     * @return Transaction  $transaction
+     * @param  int $userId
+     * @param  int $beneficiaryId
+     * @param float|int $amount
+     * @param  string $subject
+     * @return Transaction $transaction
+     * @throws PayProException
      */
     public function execute(
         int $userId,
