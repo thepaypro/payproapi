@@ -211,7 +211,7 @@ class Account implements \JsonSerializable
     public function jsonSerialize()
     {
         $publicProperties['users'] = $this->users->map(function (User $user) {
-            $user->getId();
+            return $user->getId();
         })->toArray();
         $publicProperties['id'] = $this->id;
         $publicProperties['forename'] = $this->forename;
@@ -230,6 +230,7 @@ class Account implements \JsonSerializable
         $publicProperties['postcode'] = $this->postcode;
         $publicProperties['city'] = $this->city;
         $publicProperties['country'] = $this->country;
+        $publicProperties['status'] = $this->status;
         $publicProperties['sentTransactions'] = $this->sentTransactions->map(function (Transaction $transaction) {
             return $transaction->getId();
         })->toArray();

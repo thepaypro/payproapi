@@ -5,6 +5,7 @@ services:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Card')"
       - "@contis_api_client.card_service"
+      - "@payproapi.get_balance_service"
       - "@validator"
 
   payproapi.activate_card_service:
