@@ -104,7 +104,7 @@ class CreateAccountService
             throw new PayProException("You already have an account", 400);
         }
 
-        $birthDate = new DateTime($birthDate);
+        $birthDate = DateTime::createFromFormat('d/m/Y', $birthDate);
 
         $account = new Account(
             $user,
