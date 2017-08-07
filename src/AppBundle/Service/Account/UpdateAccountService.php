@@ -115,7 +115,6 @@ class UpdateAccountService
             throw new PayProException("Account not found", 404);
         }
 
-
         $account->setForename($forename ? $forename : $account->getForename());
         $account->setLastname($lastname ? $lastname : $account->getLastname());
         $account->setEmail($email ? $email : $account->getEmail());
