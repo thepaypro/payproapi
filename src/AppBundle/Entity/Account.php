@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -116,7 +117,8 @@ class Account implements \JsonSerializable
     protected $receivedTransactions;
 
     /**
-     * @ORM\OneToOne(targetEntity="Transaction", inversedBy="id")
+     * @ORM\OneToOne(targetEntity="Transaction")
+     * @JoinColumn(name="last_synced_transaction_id", referencedColumnName="id")
      */
     protected $lastSyncedTransaction;
 
