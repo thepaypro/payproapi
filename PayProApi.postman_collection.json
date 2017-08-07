@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "PayProApi",
-		"_postman_id": "2b9e0858-1a09-8902-c13a-8cd104af9e68",
+		"_postman_id": "3ada7792-d126-5f10-2677-d533318838d3",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -413,7 +413,7 @@
 							"mode": "raw",
 							"raw": ""
 						},
-						"description": ""
+						"description": "Parameters:  \n* Page (required, int)  \n* Size (required, int)"
 					},
 					"response": []
 				},
@@ -613,7 +613,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
