@@ -89,6 +89,28 @@ class UpdateAccountService
         $account = $this->accountRepository->findOneById($accountId);
         $user = $this->userRepository->findOneById($userId);
 
+        if ($forename && (!is_string($forename) || strlen($forename) > 255)){
+            throw new PayProException("invalid forename format", 400);
+        }
+        if ($lastname && (!is_string($lastname) || strlen($lastname) > 255)){
+            throw new PayProException("invalid lastname format", 400);
+        }
+        if ($documentNumber && (!is_string($documentNumber) || strlen($documentNumber) > 255)){
+            throw new PayProException("invalid documentNumber format", 400);
+        }
+        if ($street && (!is_string($street) || strlen($street) > 255)){
+            throw new PayProException("invalid street format", 400);
+        }
+        if ($buildingNumber && (!is_string($buildingNumber) || strlen($buildingNumber) > 255)){
+            throw new PayProException("invalid buildingNumber format", 400);
+        }
+        if ($postcode && (!is_string($postcode) || strlen($postcode) > 255)){
+            throw new PayProException("invalid postcode format", 400);
+        }
+        if ($city && (!is_string($city) || strlen($city) > 255)){
+            throw new PayProException("invalid city format", 400);
+        }
+
         if (!$account || !$account->getUsers()->contains($user)) {
             throw new PayProException("Account not found", 404);
         }
@@ -102,6 +124,9 @@ class UpdateAccountService
 
         if ($agreementId) {
             $agreement = $this->agreementRepository->findOneById($agreementId);
+            if (!$agreement) {
+                throw new PayProException("Agreement not found", 400);
+            }
             $account->setAgreement($agreement);
         }
 
@@ -112,6 +137,9 @@ class UpdateAccountService
 
         if ($countryIso2) {
             $country = $this->countryRepository->findOneByIso2($countryIso2);
+            if (!$country) {
+                throw new PayProException("Country not found", 400);
+            }
             $account->setCountry($country);
         }
 
