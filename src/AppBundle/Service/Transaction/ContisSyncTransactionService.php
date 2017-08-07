@@ -39,10 +39,6 @@ class ContisSyncTransactionService
      *
      * @param Account $account
      * @return void
-     * @internal param int $userId
-     * @internal param int $beneficiaryId
-     * @internal param float|int $amount
-     * @internal param string $subject
      */
     public function execute(
         Account $account)

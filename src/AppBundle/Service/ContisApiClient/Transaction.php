@@ -22,7 +22,6 @@ class Transaction
      * @param RequestService $requestService
      * @param HashingService $hashingService
      * @param AuthenticationService $authenticationService
-     * @internal param AuthenticationService $authenticationService
      */
     public function __construct(
         RequestService $requestService,
