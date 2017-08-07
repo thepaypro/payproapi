@@ -66,24 +66,30 @@ class CreateTransactionService
         string $subject
     ): Transaction
     {
-        $user = $this->userRepository->findOneById($userId);
-        $payer = $user->getAccount();
-        $beneficiary = $this->accountRepository->findOneById($beneficiaryId);
-
+        // First we do the validations that don't require a database query
         if (!is_string($subject) || strlen($subject) > 100) {
             throw new PayProException('Subject must be a string shorter than 100 characters', 400);
         }
+
+        // We get the payer details in order to make the associated validations.
+        $user = $this->userRepository->findOneById($userId);
+        $payer = $user->getAccount();
+
         if (!$payer) {
             throw new PayProException('Account not found', 400);
         }
+        if ($amount > $this->getBalanceService->execute($userId)) {
+            throw new PayProException('Insufficient funds', 400);
+        }
+
+        // Finally we do the last required query and its validations.
+        $beneficiary = $this->accountRepository->findOneById($beneficiaryId);
+
         if ($payer == $beneficiary) {
             throw new PayProException('Beneficary account and destination account can not be the same', 400);
         }
         if (!$beneficiary) {
             throw new PayProException('Beneficiary not found', 400);
-        }
-        if ($amount > $this->getBalanceService->execute($userId)) {
-            throw new PayProException('Insufficient funds', 400);
         }
 
         $transaction = new Transaction(

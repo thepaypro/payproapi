@@ -91,7 +91,8 @@ class Transaction
 
         $response = $this->requestService->call('Account_GetStatement', $params, $requestParams);
 
-        if ($response['Account_GetStatementResult']['Description'] == 'Success ') {
+        if ($response['Account_GetStatementResult']['Description'] == 'Success ' &&
+            $response['Account_GetStatementResult']['ResultObject'] != null) {
             return $response['Account_GetStatementResult']['ResultObject'];
         }
         dump($response);die();

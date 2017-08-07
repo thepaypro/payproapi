@@ -116,6 +116,11 @@ class Account implements \JsonSerializable
     protected $receivedTransactions;
 
     /**
+     * @ORM\OneToOne(targetEntity="Transaction", inversedBy="id")
+     */
+    protected $lastSyncedTransaction;
+
+    /**
      * @ORM\Column(type="string", nullable=false)
      * @Assert\NotBlank()
      */
@@ -309,6 +314,14 @@ class Account implements \JsonSerializable
     public function setReceivedTransactions($receivedTransactions)
     {
         $this->receivedTransactions = $receivedTransactions;
+    }
+
+    /**
+     * @param mixed $lastSyncedTransaction
+     */
+    public function setLastSyncedTransaction($lastSyncedTransaction)
+    {
+        $this->lastSyncedTransaction = $lastSyncedTransaction;
     }
 
     /**
@@ -826,6 +839,14 @@ class Account implements \JsonSerializable
     public function getReceivedTransactions()
     {
         return $this->receivedTransactions;
+    }
+
+    /**
+     * @return Transaction
+     */
+    public function getLastSyncedTransaction()
+    {
+        return $this->lastSyncedTransaction;
     }
 
     /**

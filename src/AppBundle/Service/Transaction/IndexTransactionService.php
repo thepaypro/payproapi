@@ -2,12 +2,9 @@
 
 namespace AppBundle\Service\Transaction;
 
-use AppBundle\Entity\Transaction;
 use AppBundle\Exception\PayProException;
-use AppBundle\Repository\AccountRepository;
 use AppBundle\Repository\TransactionRepository;
 use AppBundle\Repository\UserRepository;
-use AppBundle\Service\ContisApiClient\Transaction as ContisTransactionApiClient;
 use DateTime;
 
 /**
@@ -16,27 +13,23 @@ use DateTime;
 class IndexTransactionService
 {
     protected $transactionRepository;
-    protected $accountRepository;
     protected $userRepository;
-    protected $contisTransactionApiClient;
+    protected $contisSyncTransactionService;
 
     /**
      * @param TransactionRepository $transactionRepository
-     * @param AccountRepository $accountRepository
      * @param UserRepository $userRepository
-     * @param ContisTransactionApiClient $contisTransactionApiClient
+     * @param ContisSyncTransactionService $contisSyncTransactionService
      */
     public function __construct(
         TransactionRepository $transactionRepository,
-        AccountRepository $accountRepository,
         UserRepository $userRepository,
-        ContisTransactionApiClient $contisTransactionApiClient
+        ContisSyncTransactionService $contisSyncTransactionService
     )
     {
         $this->transactionRepository = $transactionRepository;
-        $this->accountRepository = $accountRepository;
         $this->userRepository = $userRepository;
-        $this->contisTransactionApiClient = $contisTransactionApiClient;
+        $this->contisSyncTransactionService = $contisSyncTransactionService;
     }
 
     /**
@@ -71,6 +64,7 @@ class IndexTransactionService
             throw new PayProException("Invalid size format.", 400);
         }
 
+        // TODO: Decide what should we do with the timestamps filters of the index.
         if (!$fromDate) {
             $fromDate = $account->getCreatedAt();
         }
@@ -79,35 +73,7 @@ class IndexTransactionService
             $toDate = new DateTime();
         }
 
-//        //TODO: Decide what to do to sync our Transactions with the contis ones.
-//        $contisTransactions = $this->contisTransactionApiClient->getAll($account, $fromDate, $toDate);
-//
-//        foreach ($contisTransactions as $contisTransaction) {
-//            $transaction = $this->transactionRepository->findOneByContisTransactionId($contisTransaction['TransactionID']);
-//            if ($transaction) {
-//                continue;
-//            }
-//
-//            $time = intval(trim($contisTransaction['SettlementDate'], '/Date()') / 1000) - 2 * 60 * 60;
-//            $creationDateTime = (new DateTime())->setTimestamp($time);
-//
-//            $transaction = new Transaction(
-//                null,
-//                null,
-//                $contisTransaction['SettlementAmount'],
-//                $contisTransaction['Description'],
-//                $creationDateTime
-//            );
-//            $transaction->setContisTransactionId($contisTransaction['TransactionID']);
-//
-//            if ($account->getAccountNumber() == $contisTransaction['TranFromAccountNumber']) {
-//                $transaction->setPayer($account);
-//            }
-//            if ($account->getAccountNumber() == $contisTransaction['TranToAccountNumber']) {
-//                $transaction->setBeneficiary($account);
-//            }
-//            $this->transactionRepository->save($transaction);
-//        }
+        $this->contisSyncTransactionService->execute($account);
 
         $payProTransactions = $this->transactionRepository->getTransactionsOfAccount($account, $page, $size);
 
