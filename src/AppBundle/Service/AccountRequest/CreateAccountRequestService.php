@@ -101,18 +101,46 @@ class CreateAccountRequestService
         if ($user->getAccount()) {
             throw new PayProException("You already have an account", 400);
         }
+        if (!$country) {
+            throw new PayProException("Country not found", 400);
+        }
+        if (!$agreement) {
+            throw new PayProException("Agreement not found", 400);
+        }
+
+        if (!is_string($forename) || strlen($forename) > 255){
+            throw new PayProException("invalid forename format", 400);
+        }
+        if (!is_string($lastname) || strlen($lastname) > 255){
+            throw new PayProException("invalid lastname format", 400);
+        }
+        if (!is_string($documentNumber) || strlen($documentNumber) > 255){
+            throw new PayProException("invalid documentNumber format", 400);
+        }
+        if (!is_string($street) || strlen($street) > 255){
+            throw new PayProException("invalid street format", 400);
+        }
+        if (!is_string($buildingNumber) || strlen($buildingNumber) > 255){
+            throw new PayProException("invalid buildingNumber format", 400);
+        }
+        if (!is_string($postcode) || strlen($postcode) > 255){
+            throw new PayProException("invalid postcode format", 400);
+        }
+        if (!is_string($city) || strlen($city) > 255){
+            throw new PayProException("invalid city format", 400);
+        }
 
         if (imagecreatefromstring(base64_decode($base64DocumentPicture1))) {
             $pictures[] = $base64DocumentPicture1;
         } else {
-            throw new PayProException('Invalid image', 400);
+            throw new PayProException('Invalid image1', 400);
         }
 
         if ($documentType != Account::DOCUMENT_TYPE_PASSPORT) {
             if (imagecreatefromstring(base64_decode($base64DocumentPicture2))) {
                 $pictures[] = $base64DocumentPicture2;
             } else {
-                throw new PayProException('Invalid image', 400);
+                throw new PayProException('Invalid image2', 400);
             }
         }
 
