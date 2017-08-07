@@ -88,7 +88,8 @@ class Card
 
         $response = $this->requestService->call('Card_GetActivationCode', $params, $requestParams);
 
-        if ($response['Card_GetActivationCodeResult']['Description'] == 'Success ') {
+        if ($response['Card_GetActivationCodeResult']['Description'] == 'Success ' &&
+            $response['Card_GetActivationCodeResult']['ResultObject'] != null) {
             return $response['Card_GetActivationCodeResult']['ResultObject'];
         }
         dump($response);die();

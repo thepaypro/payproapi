@@ -17,7 +17,7 @@ class TransactionSyncCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getCardHolder();
+        $this->syncTransactions();
     }
 
     /**
@@ -25,7 +25,7 @@ class TransactionSyncCommand extends ContainerAwareCommand
      * without a notification sent to them and calls the Card Holder
      * verification service.
      */
-    private function getCardHolder()
+    private function syncTransactions()
     {
         $accounts = $this->getContainer()
             ->get('doctrine.orm.entity_manager')

@@ -57,7 +57,11 @@ class ActivateCardService
             throw new PayProException('You must request a card to activate it', 400);
         }
 
+        $response = $this->contisCardApiClient->getActivationCode($card);
+
         $card->setIsActive(true);
+        $card->setContisCardID($response['CardID']);
+        $card->setContisCardActivationCode($response['CardActivationCode']);
 
         $errors = $this->validationService->validate($card);
 
@@ -67,12 +71,7 @@ class ActivateCardService
             }
         }
 
-        $response = $this->contisCardApiClient->getActivationCode($card);
-
-        $card->setContisCardID($response['CardID']);
-        $card->setContisCardActivationCode($response['CardActivationCode']);
-
-        $response = $this->contisCardApiClient->activate($card);
+        $this->contisCardApiClient->activate($card);
 
         $this->cardRepository->save($card);
 
