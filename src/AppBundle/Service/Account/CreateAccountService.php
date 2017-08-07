@@ -70,7 +70,7 @@ class CreateAccountService
      * @param  string $postcode
      * @param  string $city
      * @param  string $countryIso2
-     * @param string $deviceId
+     * @param string $deviceToken
      * @return Account
      * @throws PayProException
      */
@@ -87,12 +87,13 @@ class CreateAccountService
         string $postcode,
         string $city,
         string $countryIso2,
-        string $deviceId
+        string $deviceToken
     ): Account
     {
         $agreement = $this->agreementRepository->findOneById($agreementId);
         $country = $this->countryRepository->findOneByIso2($countryIso2);
         $user = $this->userRepository->findOneById($userId);
+        $birthDate = DateTime::createFromFormat('d/m/Y', $birthDate);
 
         if (!$country) {
             throw new PayProException("Country not found", 400);
@@ -104,7 +105,30 @@ class CreateAccountService
             throw new PayProException("You already have an account", 400);
         }
 
-        $birthDate = DateTime::createFromFormat('d/m/Y', $birthDate);
+        if (!is_string($forename) || strlen($forename) > 255){
+            throw new PayProException("invalid forename format", 400);
+        }
+        if (!is_string($lastname) || strlen($lastname) > 255){
+            throw new PayProException("invalid lastname format", 400);
+        }
+        if (!is_string($documentNumber) || strlen($documentNumber) > 255){
+            throw new PayProException("invalid documentNumber format", 400);
+        }
+        if (!is_string($street) || strlen($street) > 255){
+            throw new PayProException("invalid street format", 400);
+        }
+        if (!is_string($buildingNumber) || strlen($buildingNumber) > 255){
+            throw new PayProException("invalid buildingNumber format", 400);
+        }
+        if (!is_string($postcode) || strlen($postcode) > 255){
+            throw new PayProException("invalid postcode format", 400);
+        }
+        if (!is_string($city) || strlen($city) > 255){
+            throw new PayProException("invalid city format", 400);
+        }
+        if (!is_string($deviceToken) || strlen($deviceToken) > 255){
+            throw new PayProException("invalid deviceToken format", 400);
+        }
 
         $account = new Account(
             $user,
@@ -141,7 +165,7 @@ class CreateAccountService
 
         $this->dispatcher->dispatch(
             AccountEvents::ACCOUNT_CREATED,
-            new AccountEvent($account, $deviceId)
+            new AccountEvent($account, $deviceToken)
         );
 
         return $account;
