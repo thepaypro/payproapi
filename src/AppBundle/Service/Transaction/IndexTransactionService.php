@@ -2,14 +2,10 @@
 
 namespace AppBundle\Service\Transaction;
 
-use DateTime;
-
-use AppBundle\Repository\TransactionRepository;
-use AppBundle\Repository\AccountRepository;
-use AppBundle\Repository\UserRepository;
-use AppBundle\Entity\Transaction;
 use AppBundle\Exception\PayProException;
-use AppBundle\Service\ContisApiClient\Transaction as ContisTransactionApiClient;
+use AppBundle\Repository\TransactionRepository;
+use AppBundle\Repository\UserRepository;
+use DateTime;
 
 /**
  * Class IndexTransactionService
@@ -17,47 +13,58 @@ use AppBundle\Service\ContisApiClient\Transaction as ContisTransactionApiClient;
 class IndexTransactionService
 {
     protected $transactionRepository;
-    protected $accountRepository;
     protected $userRepository;
-    protected $contisTransactionApiClient;
+    protected $contisSyncTransactionService;
 
     /**
-     * @param TransactionRepository      $transactionRepository
-     * @param AccountRepository          $accountRepository
-     * @param UserRepository             $userRepository
-     * @param ContisTransactionApiClient $contisTransactionApiClient
+     * @param TransactionRepository $transactionRepository
+     * @param UserRepository $userRepository
+     * @param ContisSyncTransactionService $contisSyncTransactionService
      */
     public function __construct(
         TransactionRepository $transactionRepository,
-        AccountRepository $accountRepository,
         UserRepository $userRepository,
-        ContisTransactionApiClient $contisTransactionApiClient
-    ) {
+        ContisSyncTransactionService $contisSyncTransactionService
+    )
+    {
         $this->transactionRepository = $transactionRepository;
-        $this->accountRepository = $accountRepository;
         $this->userRepository = $userRepository;
-        $this->contisTransactionApiClient = $contisTransactionApiClient;
+        $this->contisSyncTransactionService = $contisSyncTransactionService;
     }
 
     /**
      * This method will retrieve all the transactions from the database and from Contis and will merge them.
      *
-     * @param  int    $userId
-     * @param  int    $payerId
-     * @param  int    $beneficiaryId
+     * @param  int $userId
+     * @param int $page
+     * @param int $size
      * @param  string $fromDate
      * @param  string $toDate
-     * @return array  $transactions
+     * @return array $transactions
+     * @throws PayProException
+     * @internal param int $payerId
+     * @internal param int $beneficiaryId
      */
     public function execute(
         int $userId,
+        int $page = 0,
+        int $size = 10,
         string $fromDate = null,
         string $toDate = null
-    ) : array
+    ): array
     {
         $user = $this->userRepository->findOneById($userId);
         $account = $user->getAccount();
 
+        if (!is_int($page)) {
+            throw new PayProException("Invalid page format.", 400);
+        }
+
+        if (!is_int($size)) {
+            throw new PayProException("Invalid size format.", 400);
+        }
+
+        // TODO: Decide what should we do with the timestamps filters of the index.
         if (!$fromDate) {
             $fromDate = $account->getCreatedAt();
         }
@@ -66,41 +73,9 @@ class IndexTransactionService
             $toDate = new DateTime();
         }
 
-        $contisTransactions = $this->contisTransactionApiClient->getAll($account, $fromDate, $toDate);
-        foreach ($contisTransactions as $contisTransaction) {
-            $transaction = $this->transactionRepository->findOneByContisTransactionId($contisTransaction['TransactionID']);
-            if ($transaction && $transaction->getId() == 19) {
-                dump($transaction->getId());
-                dump($transaction->getCreatedAt());
-                $time = intval(trim($contisTransaction['SettlementDate'], '/Date()')/1000);
-                $creationDateTime = (new DateTime())->setTimestamp($time);
-                dump($creationDateTime);
-                die();
-                continue;
-            }
+        $this->contisSyncTransactionService->execute($account);
 
-            $time = intval(trim($contisTransaction['SettlementDate'], '/Date()')/1000) - 2*60*60;
-            $creationDateTime = (new DateTime())->setTimestamp($time);
-
-            $transaction = new Transaction(
-                null,
-                null,
-                $contisTransaction['SettlementAmount'],
-                $contisTransaction['Description'],
-                $creationDateTime
-            );
-            $transaction->setContisTransactionId($contisTransaction['TransactionID']);
-
-            if ($account->getAccountNumber() == $contisTransaction['TranFromAccountNumber']) {
-                $transaction->setPayer($account);
-            }
-            if ($account->getAccountNumber() == $contisTransaction['TranToAccountNumber']) {
-                $transaction->setBeneficiary($account);
-            }
-            $this->transactionRepository->save($transaction);
-        }
-
-        $payProTransactions = $this->transactionRepository->getTransactionsOfAccount($account);
+        $payProTransactions = $this->transactionRepository->getTransactionsOfAccount($account, $page, $size);
 
         return $payProTransactions;
     }

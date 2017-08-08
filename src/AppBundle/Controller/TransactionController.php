@@ -67,9 +67,9 @@ class TransactionController extends Controller
     /**
      * Returns a list of transactions
      * @param  UserInterface $user
-     * @param  Request       $request
+     * @param  Request $request
      * @return JsonResponse
-     * 
+     * @throws PayProException
      * @Route("", name="transactions_list")
      * @Method("GET")
      */
@@ -78,7 +78,8 @@ class TransactionController extends Controller
         $filters = $request->query->all();
 
         try {
-            $transactions = $this->get('payproapi.index_transaction_service')->execute($user->getId());
+            $transactions = $this->get('payproapi.index_transaction_service')->execute(
+                $user->getId(), $filters['page'], $filters['size']);
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $$e->getMessage()], $e->getCode());
         }

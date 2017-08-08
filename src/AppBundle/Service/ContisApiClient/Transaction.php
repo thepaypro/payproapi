@@ -2,11 +2,9 @@
 
 namespace AppBundle\Service\ContisApiClient;
 
-use Exception;
-use DateTime;
-
 use AppBundle\Entity\Account;
 use AppBundle\Entity\Transaction as TransactionEntity;
+use DateTime;
 
 /**
  * Class Transaction
@@ -27,13 +25,14 @@ class Transaction
         RequestService $requestService,
         HashingService $hashingService,
         AuthenticationService $authenticationService
-    ) {
+    )
+    {
         $this->requestService = $requestService;
         $this->hashingService = $hashingService;
         $this->authenticationService = $authenticationService;
     }
 
-    public function create(TransactionEntity $transaction) : array
+    public function create(TransactionEntity $transaction): array
     {
         $params = [
             'FromAccountNumber' => $transaction->getPayer()->getAccountNumber(),
@@ -59,25 +58,31 @@ class Transaction
         if ($response['Account_TransferMoneyResult']['Description'] == 'Success ') {
             return $response['Account_TransferMoneyResult']['ResultObject'][0];
         }
-        dump($response);die();
+        dump($response);
+        die();
     }
 
     /**
      * Get a list of transactions from Contis.
-     * @param  Account  $account
+     * @param  Account $account
      * @param  DateTime $fromDate
      * @param  DateTime $toDate
      * @return array $response
      */
-    public function getAll(Account $account, DateTime $fromDate, DateTime $toDate) : array
+    public function getAll(Account $account, DateTime $fromDate, DateTime $toDate): array
     {
         $params = [
             'CardHolderId' => $account->getCardHolderId(),
             'AccountNumber' => $account->getAccountNumber(),
-            'SortCode' => $account->getSortCode(),
-            'FromDate' => '/Date('.(intval($fromDate->getTimeStamp()*1000)).')/',
-            'ToDate' => '/Date('.(intval($toDate->getTimeStamp()*1000)).')/' 
+            'SortCode' => $account->getSortCode()
         ];
+
+        if ($fromDate) {
+            $params['FromDate'] = '/Date(' . (intval($fromDate->getTimeStamp() * 1000)) . ')/';
+        }
+        if ($toDate) {
+            $params['ToDate'] = '/Date(' . (intval($toDate->getTimeStamp() * 1000)) . ')/';
+        }
 
         $params['Token'] = $this->authenticationService->getAuthenticationToken();
 
@@ -93,8 +98,12 @@ class Transaction
         $response = $this->requestService->call('Account_GetStatement', $params, $requestParams);
 
         if ($response['Account_GetStatementResult']['Description'] == 'Success ') {
+            if (!$response['Account_GetStatementResult']['ResultObject']) {
+                return [];
+            }
             return $response['Account_GetStatementResult']['ResultObject'];
         }
-        dump($response);die();
+        dump($response);
+        die();
     }
 }
