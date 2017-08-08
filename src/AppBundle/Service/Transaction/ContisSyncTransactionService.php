@@ -45,7 +45,6 @@ class ContisSyncTransactionService
     {
         $lastSyncedTransaction = $account->getLastSyncedTransaction();
 
-
         $fromDate = $account->getCreatedAt();
         $toDate = new DateTime();
         $lastSyncedTransactionFound = false;
@@ -59,16 +58,19 @@ class ContisSyncTransactionService
 
                 $lastSyncedTransactionFound = $this->parseContisTransactions($contisTransactions, $account, $lastSyncedTransaction);
 
-                $toDate = end($contisTransactions)['SettlementDate'];
+                $time = intval(trim(end($contisTransactions)['SettlementDate'], '/Date()') / 1000) - 2 * 60 * 60;
+                $toDate = (new DateTime())->setTimestamp($time);
             }
         }
 
         $transactions = $this->transactionRepository->getTransactionsOfAccount($account, 1, 1);
 
-        $newLastSyncedTransaction = $transactions['content'][0];
+        if (!empty($transactions['content'])) {
 
-        $account->setLastSyncedTransaction($newLastSyncedTransaction);
-        $this->accountRepository->save($account);
+            $newLastSyncedTransaction = $transactions['content'][0];
+            $account->setLastSyncedTransaction($newLastSyncedTransaction);
+            $this->accountRepository->save($account);
+        }
     }
 
     /**
@@ -96,9 +98,8 @@ class ContisSyncTransactionService
                 $this->processTransaction($account, $contisTransaction);
             }
 
-            $time = intval(trim($contisTransaction['SettlementDate'], '/Date()') / 1000) - 2 * 60 * 60;
+            $time = intval(trim(end($contisTransactions)['SettlementDate'], '/Date()') / 1000) - 2 * 60 * 60;
             $toDate = (new DateTime())->setTimestamp($time);
-
         } while (count($contisTransactions) == 50);
 
         return;

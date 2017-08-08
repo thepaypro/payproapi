@@ -78,10 +78,8 @@ class Transaction
         ];
 
         if ($fromDate) {
-            $params['FromDate'] = '/Date(' . (intval($fromDate->getTimeStamp() * 1000)) . ')/'; // Previous format, this returns an empty array for correct timestamp values.
-//            $params['FromDate'] = $fromDate->format('YmdHms'); // Contis Contract format, this returns 500.
+            $params['FromDate'] = '/Date(' . (intval($fromDate->getTimeStamp() * 1000)) . ')/';
         }
-
         if ($toDate) {
             $params['ToDate'] = '/Date(' . (intval($toDate->getTimeStamp() * 1000)) . ')/';
         }
@@ -99,8 +97,10 @@ class Transaction
 
         $response = $this->requestService->call('Account_GetStatement', $params, $requestParams);
 
-        if ($response['Account_GetStatementResult']['Description'] == 'Success ' &&
-            $response['Account_GetStatementResult']['ResultObject'] != null) {
+        if ($response['Account_GetStatementResult']['Description'] == 'Success ') {
+            if (!$response['Account_GetStatementResult']['ResultObject']) {
+                return [];
+            }
             return $response['Account_GetStatementResult']['ResultObject'];
         }
         dump($response);
