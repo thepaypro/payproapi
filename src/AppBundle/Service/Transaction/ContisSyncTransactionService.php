@@ -96,7 +96,9 @@ class ContisSyncTransactionService
                 $this->processTransaction($account, $contisTransaction);
             }
 
-            $toDate = end($contisTransactions)['SettlementDate'];
+            $time = intval(trim($contisTransaction['SettlementDate'], '/Date()') / 1000) - 2 * 60 * 60;
+            $toDate = (new DateTime())->setTimestamp($time);
+
         } while (count($contisTransactions) == 50);
 
         return;
