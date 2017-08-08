@@ -3,6 +3,7 @@
 namespace AppBundle\Service\ContisApiClient;
 
 use AppBundle\Entity\Account as AccountEntity;
+use AppBundle\Exception\PayProException;
 use Exception;
 
 /**
@@ -127,7 +128,8 @@ class Account
         if ($response['CardHolder_UpdateResult']['Description'] == 'Success ') {
             return $response['CardHolder_UpdateResult']['ResultObject'];
         }
-        dump($response);die();
+
+        throw new PayProException("invalid post code", 400);
     }
 
     public function getOne(string $cardHolderId)
