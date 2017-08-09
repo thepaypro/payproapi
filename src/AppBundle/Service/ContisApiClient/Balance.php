@@ -3,6 +3,7 @@
 namespace AppBundle\Service\ContisApiClient;
 
 use AppBundle\Entity\Account;
+use AppBundle\Exception\PayProException;
 
 /**
  * Class Balance
@@ -55,7 +56,6 @@ class Balance
         if ($response['Account_GetBalanceResult']['Description'] == 'Success ') {
             return $response['Account_GetBalanceResult']['ResultObject']['AvailableBalance'];
         }
-        dump($response);
-        die();
+        throw new PayProException("Bad Request", 400);
     }
 }

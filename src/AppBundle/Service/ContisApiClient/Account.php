@@ -84,7 +84,7 @@ class Account
         if ($response['CardHolder_CreateResult']['Description'] == 'Success ') {
             return $response['CardHolder_CreateResult']['ResultObject'][0];
         }
-        dump($response);die();
+        throw new PayProException("Bad Request", 400);
     }
 
     /**
@@ -129,7 +129,7 @@ class Account
             return $response['CardHolder_UpdateResult']['ResultObject'];
         }
 
-        throw new PayProException("invalid post code", 400);
+        throw new PayProException("Bad Request", 400);
     }
 
     public function getOne(string $cardHolderId)
@@ -156,7 +156,7 @@ class Account
         if ($response['CardHolder_Lookup_GetInfoResult']['Description'] == 'Success ') {
             return $response['CardHolder_Lookup_GetInfoResult']['ResultObject'][0];
         }
-        dump($response);die();
+        throw new PayProException("Bad Request", 400);
     }
 
     /**
