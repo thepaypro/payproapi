@@ -3,9 +3,10 @@
 namespace AppBundle\Service\ContisApiClient;
 
 use Symfony\Component\HttpFoundation\Session\Session;
+use AppBundle\Exception\PayProException;
+use Exception;
 use GuzzleHttp\Client;
 use DateTime;
-use Exception;
 
 /**
  * Class RequestService
@@ -59,7 +60,8 @@ class RequestService
                 ]
             );
         } catch (Exception $e) {
-            dump($e->getResponse()->getBody()->getContents());die();
+            throw new PayProException("Bad Request", 400);
+//            dump($e->getResponse()->getBody()->getContents());die();
         }
 
         return json_decode($response->getBody()->getContents(), true);

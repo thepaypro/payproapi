@@ -3,6 +3,7 @@
 namespace AppBundle\Service\ContisApiClient;
 
 use AppBundle\Entity\Account;
+use AppBundle\Exception\PayProException;
 use AppBundle\Entity\Transaction as TransactionEntity;
 use DateTime;
 
@@ -58,8 +59,7 @@ class Transaction
         if ($response['Account_TransferMoneyResult']['Description'] == 'Success ') {
             return $response['Account_TransferMoneyResult']['ResultObject'][0];
         }
-        dump($response);
-        die();
+        throw new PayProException("Bad Request", 400);
     }
 
     /**
@@ -103,7 +103,6 @@ class Transaction
             }
             return $response['Account_GetStatementResult']['ResultObject'];
         }
-        dump($response);
-        die();
+        throw new PayProException("Bad Request", 400);
     }
 }

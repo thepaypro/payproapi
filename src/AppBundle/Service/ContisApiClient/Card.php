@@ -3,7 +3,7 @@
 namespace AppBundle\Service\ContisApiClient;
 
 use AppBundle\Entity\Card as CardEntity;
-use Exception;
+use AppBundle\Exception\PayProException;
 
 /**
  * Class AuthenticationService
@@ -59,7 +59,7 @@ class Card
         if ($response['Card_RequestResult']['Description'] == 'Success ') {
             return true;
         }
-        dump($response);die();
+        throw new PayProException("Bad Request", 400);
     }
 
     /**
@@ -92,7 +92,7 @@ class Card
             $response['Card_GetActivationCodeResult']['ResultObject'] != null) {
             return $response['Card_GetActivationCodeResult']['ResultObject'];
         }
-        dump($response);die();
+        throw new PayProException("Bad Request", 400);
     }
 
     /**
@@ -124,7 +124,7 @@ class Card
         if ($response['Card_ActivateResult']['Description'] == 'Success ') {
             return true;
         }
-        dump($response);die();
+        throw new PayProException("Bad Request", 400);
     }
 
     /**
@@ -157,6 +157,6 @@ class Card
         if ($response['Card_ChangeStatusResult']['Description'] == 'Success ') {
             return true;
         }
-        dump($response);die();
+        throw new PayProException("Bad Request", 400);
     }
 }
