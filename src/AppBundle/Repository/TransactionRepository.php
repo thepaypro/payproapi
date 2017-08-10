@@ -37,10 +37,9 @@ class TransactionRepository extends BaseEntityRepository
         ];
     }
 
-    public function getTransactionsOfAccountBetweenDates(
+    public function getTransactionsOfAccountAfterDate(
         Account $account,
-        DateTime $fromDate,
-        DateTime $toDate)
+        DateTime $fromDate)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb = $qb->select('t')->from('AppBundle\Entity\Transaction', 't');

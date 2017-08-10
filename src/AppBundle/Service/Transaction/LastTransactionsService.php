@@ -10,7 +10,7 @@ use DateTime;
 /**
  * Class IndexTransactionService
  */
-class LastsTransactionService
+class LastTransactionsService
 {
     protected $transactionRepository;
     protected $userRepository;
@@ -47,25 +47,22 @@ class LastsTransactionService
     public function execute(
         int $userId,
         int $transactionId,
-        string $fromDate = null,
-        string $toDate = null
+        string $fromDate = null
     ): array
     {
         $user = $this->userRepository->findOneById($userId);
         $account = $user->getAccount();
 
-        //TODO:check if transaction is owned by account
         $transaction = $this->transactionRepository->findOneById($transactionId);
+        if ($transaction->getPayer() != $account->getId() && $transaction->getBeneficiary() != $account->getId()) {
+            throw new PayProException("invalid transactionId", 400);
+        }
 
-        // TODO: Decide what should we do with the timestamps filters of the index.
         $fromDate = $transaction->getCreatedAt();
-
-        $toDate = new DateTime();
-
 
         $this->contisSyncTransactionService->execute($account);
 
-        $payProTransactions = $this->transactionRepository->getTransactionsOfAccountBetweenDates($account, $fromDate, $toDate);
+        $payProTransactions = $this->transactionRepository->getTransactionsOfAccountAfterDate($account, $fromDate);
 
         return $payProTransactions;
     }
