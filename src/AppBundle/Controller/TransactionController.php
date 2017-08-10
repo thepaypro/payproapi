@@ -79,7 +79,8 @@ class TransactionController extends Controller
                 $user->getId(),
                 $requestData['beneficiary'],
                 $requestData['amount'],
-                $requestData['subject']
+                $requestData['subject'],
+                isset($requestData['title']) ? $requestData['title'] : null
             );
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
@@ -103,7 +104,10 @@ class TransactionController extends Controller
 
         try {
             $transactions = $this->get('payproapi.index_transaction_service')->execute(
-                $user->getId(), $filters['page'], $filters['size']);
+                $user->getId(),
+                isset($filters['page']) ? $filters['page'] : null,
+                isset($filters['size']) ? $filters['size'] : null
+            );
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }

@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "PayProApi",
-		"_postman_id": "e0e0f219-11ce-300f-ef1a-42711ed571ac",
+		"_postman_id": "a710c732-4e61-f60e-1f4b-c4fe361b5204",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -461,7 +461,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"beneficiary\":\"2\",\n\t\"amount\":\"0.01\",\n\t\"subject\":\"barcos y cosas\"\n}\n"
+							"raw": "{\n\t\"beneficiary\":\"2\",\n\t\"amount\":\"1\",\n\t\"subject\":\"string\",\n\t\"title\": \"string\"\n}\n"
 						},
 						"description": ""
 					},

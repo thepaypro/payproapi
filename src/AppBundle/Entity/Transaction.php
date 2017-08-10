@@ -53,6 +53,11 @@ class Transaction implements \JsonSerializable
     protected $subject;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $title;
+
+    /**
      * @ORM\OneToOne(targetEntity="TransactionInvite", mappedBy="transaction")
      */
     protected $transactionInvite;
@@ -78,6 +83,7 @@ class Transaction implements \JsonSerializable
         Account $beneficiary = null,
         int $amount,
         string $subject,
+        string $title = null,
         DateTime $creationDate = null
     )
     {
@@ -85,6 +91,7 @@ class Transaction implements \JsonSerializable
         $this->beneficiary = $beneficiary;
         $this->amount = $amount;
         $this->subject = $subject;
+        $this->title = $title;
         $this->createdAt = $creationDate;
         $this->updatedAt = $creationDate;
     }
@@ -97,6 +104,7 @@ class Transaction implements \JsonSerializable
             'beneficiary' => $this->beneficiary,
             'amount' => $this->amount,
             'subject' => $this->subject,
+            'title' => $this->title,
             'transactionInvite' => $this->transactionInvite
         ];
 
@@ -255,6 +263,22 @@ class Transaction implements \JsonSerializable
     public function getSubject()
     {
         return $this->subject;
+    }
+
+    /**
+     * @param mixed $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 
    /**
