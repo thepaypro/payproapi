@@ -45,16 +45,20 @@ class TransactionRepository extends BaseEntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb = $qb->select('t')->from('AppBundle\Entity\Transaction', 't');
 
+        $qb->setParameters(array('account' => $account, 'fromDate' => $fromDate ));
 
-        $query = $qb
-            ->expr()->orX()->addMultiple([
+        $query1 = $qb->expr()->orX()->addMultiple([
             $qb->expr()->eq('t.payer', ':account'),
             $qb->expr()->eq('t.beneficiary', ':account')
         ]);
 
+        $query = $qb->expr()->andX()->addMultiple([
+            $qb->expr()->gt('t.createdAt', ':fromDate'),
+            $query1
+        ]);
+
         $qb = $qb->where($query);
         $qb->addOrderBy('t.createdAt', 'DESC');
-        $qb->setParameters(array('account' => $account, 'fromDate' => $fromDate ));
         $content = $qb->getQuery()->getResult();
 
         return [
