@@ -22,20 +22,20 @@ class TransactionController extends Controller
 {
     use JWTResponseControllerTrait;
 
-    /**
-     * Returns the information of a given transaction
-     * @param  UserInterface $user
-     * @param  Request       $request
-     * @return JsonResponse
-     * 
-     * @Route("/{id}", name="transactions_show")
-     * @Method("GET")
-     */
-    public function getAction(UserInterface $user, Request $request) : JsonResponse
-    {
-        $transaction = null;
-        return $this->JWTResponse($user, ['transaction' => $transaction]);
-    }
+//    /**
+//     * Returns the information of a given transaction
+//     * @param  UserInterface $user
+//     * @param  Request       $request
+//     * @return JsonResponse
+//     *
+//     * @Route("/{id}", name="transactions_show")
+//     * @Method("GET")
+//     */
+//    public function getAction(UserInterface $user, Request $request) : JsonResponse
+//    {
+//        $transaction = null;
+//        return $this->JWTResponse($user, ['transaction' => $transaction]);
+//    }
 
     /**
      * Create a transaction
@@ -80,6 +80,29 @@ class TransactionController extends Controller
         try {
             $transactions = $this->get('payproapi.index_transaction_service')->execute(
                 $user->getId(), $filters['page'], $filters['size']);
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $$e->getMessage()], $e->getCode());
+        }
+
+        return $this->JWTResponse($user, ['transactions' => $transactions]);
+    }
+
+    /**
+     * Returns a list of transactions
+     * @param  UserInterface $user
+     * @param  Request $request
+     * @return JsonResponse
+     * @throws PayProException
+     * @Route("/lasts", name="lasts_transactions_list")
+     * @Method("GET")
+     */
+    public function lastsTransactionAction(UserInterface $user, Request $request) : JsonResponse
+    {
+        $filters = $request->query->all();
+
+        try {
+            $transactions = $this->get('payproapi.lasts_transaction_service')->execute(
+                $user->getId(), $filters['transactionId']);
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $$e->getMessage()], $e->getCode());
         }

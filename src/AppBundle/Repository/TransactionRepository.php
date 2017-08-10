@@ -3,6 +3,7 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\Account;
+use DateTime;
 
 class TransactionRepository extends BaseEntityRepository
 {
@@ -33,6 +34,31 @@ class TransactionRepository extends BaseEntityRepository
             'content' => $content,
             'page' => $page,
             'size' => $size
+        ];
+    }
+
+    public function getTransactionsOfAccountBetweenDates(
+        Account $account,
+        DateTime $fromDate,
+        DateTime $toDate)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb = $qb->select('t')->from('AppBundle\Entity\Transaction', 't');
+
+
+        $query = $qb
+            ->expr()->orX()->addMultiple([
+            $qb->expr()->eq('t.payer', ':account'),
+            $qb->expr()->eq('t.beneficiary', ':account')
+        ]);
+
+        $qb = $qb->where($query);
+        $qb->addOrderBy('t.createdAt', 'DESC');
+        $qb->setParameters(array('account' => $account, 'fromDate' => $fromDate ));
+        $content = $qb->getQuery()->getResult();
+
+        return [
+            'content' => $content,
         ];
     }
 }

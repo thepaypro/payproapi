@@ -84,6 +84,7 @@ class Account
         if ($response['CardHolder_CreateResult']['Description'] == 'Success ') {
             return $response['CardHolder_CreateResult']['ResultObject'][0];
         }
+        dump($response);die();
         throw new PayProException("Bad Request", 400);
     }
 
@@ -128,7 +129,7 @@ class Account
         if ($response['CardHolder_UpdateResult']['Description'] == 'Success ') {
             return $response['CardHolder_UpdateResult']['ResultObject'];
         }
-
+        dump($response);die();
         throw new PayProException("Bad Request", 400);
     }
 
