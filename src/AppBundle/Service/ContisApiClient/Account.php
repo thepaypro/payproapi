@@ -128,7 +128,6 @@ class Account
         if ($response['CardHolder_UpdateResult']['Description'] == 'Success ') {
             return $response['CardHolder_UpdateResult']['ResultObject'];
         }
-
         throw new PayProException("Bad Request", 400);
     }
 
