@@ -2,10 +2,9 @@
 
 namespace AppBundle\Service\Transaction;
 
+use AppBundle\Exception\PayProException;
 use AppBundle\Repository\TransactionRepository;
 use AppBundle\Repository\UserRepository;
-use AppBundle\Exception\PayProException as PayProException;
-use AppBundle\Service\ContisApiClient\Account;
 
 
 /**
@@ -56,16 +55,14 @@ class LastTransactionsService
         $transaction = $this->transactionRepository->findOneById($transactionId);
         if (!$account) {
             throw new PayProException("invalid token", 400);
-
         }
         if (!$transaction || !($transaction->getPayer() || $transaction->getBeneficiary())) {
             throw new PayProException("invalid transactionId", 400);
         }
-
-        if (!!$transaction->getPayer()) {
+        if ($transaction->getPayer()) {
             $accountIsPayer = ($transaction->getPayer()->getId() == $account->getId());
         }
-        if (!!$transaction->getBeneficiary()) {
+        if ($transaction->getBeneficiary()) {
             $accountIsBeneficiary = ($transaction->getBeneficiary()->getId() == $account->getId());
         }
         if (!$accountIsBeneficiary && !$accountIsPayer) {

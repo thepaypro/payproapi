@@ -40,7 +40,7 @@ class TransactionController extends Controller
                 $user->getId(),
                 isset($filters['transactionId']) ? $filters['transactionId'] : null);
         } catch (PayProException $e) {
-            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
+            return $this->JWTResponse($user, ['errorMessage' => $$e->getMessage()], $e->getCode());
         }
 
         return $this->JWTResponse($user, ['transactions' => $transactions]);
