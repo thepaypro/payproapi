@@ -33,7 +33,7 @@ class LastTransactionsService
     }
 
     /**
-     * This method will retrieve all the transactions from the database and from Contis and will merge them.
+     * This method retrieves all the transactions after a given transaction timestamp.
      *
      * @param  int $userId
      * @param int $transactionId
@@ -53,10 +53,11 @@ class LastTransactionsService
         $user = $this->userRepository->findOneById($userId);
         $account = $user->getAccount();
 
+        //TODO: check ownership of given transaction
         $transaction = $this->transactionRepository->findOneById($transactionId);
-        if ($transaction->getPayer() != $account->getId() && $transaction->getBeneficiary() != $account->getId()) {
-            throw new PayProException("invalid transactionId", 400);
-        }
+//        if ($transaction->getPayer() != $account->getId() && $transaction->getBeneficiary() != $account->getId()) {
+//            throw new PayProException("invalid transactionId", 400);
+//        }
 
         $fromDate = $transaction->getCreatedAt();
 

@@ -23,8 +23,8 @@ services:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Account')"
       - "@contis_api_client.transaction_service"
 
-  payproapi.lasts_transaction_service:
-    class: AppBundle\Service\Transaction\LastsTransactionService
+  payproapi.last_transactions_service:
+    class: AppBundle\Service\Transaction\LastTransactionsService
     arguments:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Transaction')"
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"

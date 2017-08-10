@@ -27,7 +27,7 @@ class TransactionController extends Controller
      * @param  Request $request
      * @return JsonResponse
      * @throws PayProException
-     * @Route("/last", name="lasts_transactions_list")
+     * @Route("/latest", name="last_transactions_list")
      * @Method("GET")
      */
     public function lastTransactionsAction(UserInterface $user, Request $request) : JsonResponse
@@ -35,7 +35,7 @@ class TransactionController extends Controller
         $filters = $request->query->all();
 
         try {
-            $transactions = $this->get('payproapi.lasts_transaction_service')->execute(
+            $transactions = $this->get('payproapi.last_transactions_service')->execute(
                 $user->getId(), $filters['transactionId']);
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $$e->getMessage()], $e->getCode());
