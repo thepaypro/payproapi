@@ -53,11 +53,10 @@ class LastTransactionsService
         $user = $this->userRepository->findOneById($userId);
         $account = $user->getAccount();
 
-        //TODO: check ownership of given transaction
         $transaction = $this->transactionRepository->findOneById($transactionId);
-//        if ($transaction->getPayer() != $account->getId() && $transaction->getBeneficiary() != $account->getId()) {
-//            throw new PayProException("invalid transactionId", 400);
-//        }
+        if ($transaction->getPayer()->getId() != $account->getId() && $transaction->getBeneficiary()->getId() != $account->getId()) {
+            throw new PayProException("invalid transactionId", 400);
+        }
 
         $fromDate = $transaction->getCreatedAt();
 
