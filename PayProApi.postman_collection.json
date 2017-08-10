@@ -418,6 +418,31 @@
 					"response": []
 				},
 				{
+					"name": "latest transactions",
+					"request": {
+						"url": "{{host}}/transactions/lastest",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Parameters:  \n* transactionId (required)"
+					},
+					"response": []
+				},
+				{
 					"name": "Create",
 					"request": {
 						"url": "{{host}}/transactions",
