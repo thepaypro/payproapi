@@ -3,7 +3,6 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\Account;
-use DateTime;
 
 class TransactionRepository extends BaseEntityRepository
 {
@@ -37,14 +36,14 @@ class TransactionRepository extends BaseEntityRepository
         ];
     }
 
-    public function getTransactionsOfAccountAfterDate(
+    public function getTransactionsOfAccountAfterTransactionId(
         Account $account,
-        DateTime $fromDate)
+        int $transactionId)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb = $qb->select('t')->from('AppBundle\Entity\Transaction', 't');
 
-        $qb->setParameters(array('account' => $account, 'fromDate' => $fromDate ));
+        $qb->setParameters(array('account' => $account, 'transactionId' => $transactionId));
 
         $query1 = $qb->expr()->orX()->addMultiple([
             $qb->expr()->eq('t.payer', ':account'),
@@ -52,7 +51,7 @@ class TransactionRepository extends BaseEntityRepository
         ]);
 
         $query = $qb->expr()->andX()->addMultiple([
-            $qb->expr()->gt('t.createdAt', ':fromDate'),
+            $qb->expr()->gt('t.id', ':transactionId'),
             $query1
         ]);
 

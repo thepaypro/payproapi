@@ -2,13 +2,14 @@
 
 namespace AppBundle\Service\Transaction;
 
-use AppBundle\Exception\PayProException;
 use AppBundle\Repository\TransactionRepository;
 use AppBundle\Repository\UserRepository;
-use DateTime;
+use AppBundle\Exception\PayProException as PayProException;
+use AppBundle\Service\ContisApiClient\Account;
+
 
 /**
- * Class IndexTransactionService
+ * Class LastTransactionsService
  */
 class LastTransactionsService
 {
@@ -41,28 +42,39 @@ class LastTransactionsService
      * @param string toDate
      * @return array $transactions
      * @throws PayProException
-     * @internal param int $payerId
-     * @internal param int $beneficiaryId
      */
     public function execute(
         int $userId,
-        int $transactionId,
-        string $fromDate = null
+        int $transactionId = null
     ): array
     {
         $user = $this->userRepository->findOneById($userId);
         $account = $user->getAccount();
+        $accountIsBeneficiary = false;
+        $accountIsPayer = false;
 
         $transaction = $this->transactionRepository->findOneById($transactionId);
-        if ($transaction->getPayer()->getId() != $account->getId() && $transaction->getBeneficiary()->getId() != $account->getId()) {
+        if (!$account) {
+            throw new PayProException("invalid token", 400);
+
+        }
+        if (!$transaction || !($transaction->getPayer() || $transaction->getBeneficiary())) {
             throw new PayProException("invalid transactionId", 400);
         }
 
-        $fromDate = $transaction->getCreatedAt();
+        if (!!$transaction->getPayer()) {
+            $accountIsPayer = ($transaction->getPayer()->getId() == $account->getId());
+        }
+        if (!!$transaction->getBeneficiary()) {
+            $accountIsBeneficiary = ($transaction->getBeneficiary()->getId() == $account->getId());
+        }
+        if (!$accountIsBeneficiary && !$accountIsPayer) {
+            throw new PayProException("invalid transactionId", 400);
+        }
 
         $this->contisSyncTransactionService->execute($account);
 
-        $payProTransactions = $this->transactionRepository->getTransactionsOfAccountAfterDate($account, $fromDate);
+        $payProTransactions = $this->transactionRepository->getTransactionsOfAccountAfterTransactionId($account, $transaction->getId());
 
         return $payProTransactions;
     }

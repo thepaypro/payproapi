@@ -21,6 +21,7 @@ use AppBundle\Exception\PayProException;
 class TransactionController extends Controller
 {
     use JWTResponseControllerTrait;
+
     /**
      * Returns a list of transactions
      * @param  UserInterface $user
@@ -36,9 +37,10 @@ class TransactionController extends Controller
 
         try {
             $transactions = $this->get('payproapi.last_transactions_service')->execute(
-                $user->getId(), $filters['transactionId']);
+                $user->getId(),
+                isset($filters['transactionId']) ? $filters['transactionId'] : null);
         } catch (PayProException $e) {
-            return $this->JWTResponse($user, ['errorMessage' => $$e->getMessage()], $e->getCode());
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
 
         return $this->JWTResponse($user, ['transactions' => $transactions]);
@@ -103,7 +105,7 @@ class TransactionController extends Controller
             $transactions = $this->get('payproapi.index_transaction_service')->execute(
                 $user->getId(), $filters['page'], $filters['size']);
         } catch (PayProException $e) {
-            return $this->JWTResponse($user, ['errorMessage' => $$e->getMessage()], $e->getCode());
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
 
         return $this->JWTResponse($user, ['transactions' => $transactions]);
