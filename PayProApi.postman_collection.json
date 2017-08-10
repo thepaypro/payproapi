@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "PayProApi",
-		"_postman_id": "04622f86-41d5-da3a-e1a1-70e3bc975dde",
+		"_postman_id": "e0e0f219-11ce-300f-ef1a-42711ed571ac",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -420,7 +420,7 @@
 				{
 					"name": "latest transactions",
 					"request": {
-						"url": "{{host}}/transactions/lastest",
+						"url": "{{host}}/transactions/latest",
 						"method": "GET",
 						"header": [
 							{
