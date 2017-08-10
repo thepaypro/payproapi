@@ -56,6 +56,7 @@ class CreateTransactionService
      * @param  int $beneficiaryId
      * @param float|int $amount
      * @param  string $subject
+     * @param string $title
      * @return Transaction $transaction
      * @throws PayProException
      */
@@ -63,12 +64,17 @@ class CreateTransactionService
         int $userId,
         int $beneficiaryId,
         int $amount,
-        string $subject
+        string $subject,
+        string $title
     ): Transaction
     {
         // First we do the validations that don't require a database query
         if (!is_string($subject) || strlen($subject) > 100) {
             throw new PayProException('Subject must be a string shorter than 100 characters', 400);
+        }
+
+        if (is_string($title) && strlen($title) > 255) {
+            throw new PayProException('Title must be a string shorter than 255 characters', 400);
         }
 
         // We get the payer details in order to make the associated validations.
@@ -96,7 +102,8 @@ class CreateTransactionService
             $payer,
             $beneficiary,
             $amount,
-            $subject
+            $subject,
+            $title
         );
 
         $errors = $this->validationService->validate($transaction);

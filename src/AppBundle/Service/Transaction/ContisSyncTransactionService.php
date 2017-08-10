@@ -153,6 +153,7 @@ class ContisSyncTransactionService
             null,
             $contisTransaction['SettlementAmount'],
             $contisTransaction['Description'],
+            null,
             $creationDateTime
         );
         $transaction->setContisTransactionId($contisTransaction['TransactionID']);
