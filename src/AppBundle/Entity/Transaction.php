@@ -104,6 +104,7 @@ class Transaction implements \JsonSerializable
             'beneficiary' => $this->beneficiary,
             'amount' => $this->amount,
             'subject' => $this->subject,
+            'title' => $this->title,
             'transactionInvite' => $this->transactionInvite
         ];
 
@@ -264,13 +265,21 @@ class Transaction implements \JsonSerializable
         return $this->subject;
     }
 
-//    /**
-//     * @return string
-//     */
-//    public function getTitle()
-//    {
-//        return $this->title;
-//    }
+    /**
+     * @param mixed $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
 
    /**
      * Gets triggered only on insert
