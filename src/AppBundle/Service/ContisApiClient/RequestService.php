@@ -56,6 +56,7 @@ class RequestService
                     'headers' => [
                         'Content-type' => 'application/json'
                     ],
+                    'connect_timeout' => 20,
                     'body' => $payload
                 ]
             );
