@@ -105,7 +105,8 @@ class Transaction implements \JsonSerializable
             'amount' => $this->amount,
             'subject' => $this->subject,
             'title' => $this->title,
-            'transactionInvite' => $this->transactionInvite
+            'transactionInvite' => $this->transactionInvite,
+            'createdAt' => $this->createdAt
         ];
 
         return $publicProperties;
