@@ -7,6 +7,7 @@ use AppBundle\Entity\Transaction;
 use AppBundle\Repository\AccountRepository;
 use AppBundle\Repository\TransactionRepository;
 use AppBundle\Service\ContisApiClient\Transaction as ContisTransactionApiClient;
+use DateInterval;
 use DateTime;
 
 /**
@@ -36,7 +37,6 @@ class ContisSyncTransactionService
 
     /**
      * This method will retrieve all the transactions from the database and from Contis and will merge them.
-     *
      * @param Account $account
      * @return void
      */
@@ -47,26 +47,18 @@ class ContisSyncTransactionService
 
         $fromDate = $account->getCreatedAt();
         $toDate = new DateTime();
-        $lastSyncedTransactionFound = false;
+        $toDate->add(new DateInterval('PT2H'));
 
-        if ($lastSyncedTransaction == null) {
-            $this->initiallyParseContisTransactions($account, $fromDate, $toDate);
-        } else {
-            while (!$lastSyncedTransactionFound) {
-
-                $contisTransactions = $this->contisTransactionApiClient->getAll($account, $fromDate, $toDate);
-
-                $lastSyncedTransactionFound = $this->parseContisTransactions($contisTransactions, $account, $lastSyncedTransaction);
-
-                $time = intval(trim(end($contisTransactions)['SettlementDate'], '/Date()') / 1000) - 2 * 60 * 60;
-                $toDate = (new DateTime())->setTimestamp($time);
-            }
-        }
+        $this->persistContisTransactionsUntilLastSyncedTransactionIsFound(
+            $account,
+            $fromDate,
+            $toDate,
+            $lastSyncedTransaction
+        );
 
         $transactions = $this->transactionRepository->getTransactionsOfAccount($account, 1, 1);
 
         if (!empty($transactions['content'])) {
-
             $newLastSyncedTransaction = $transactions['content'][0];
             $account->setLastSyncedTransaction($newLastSyncedTransaction);
             $this->accountRepository->save($account);
@@ -74,77 +66,80 @@ class ContisSyncTransactionService
     }
 
     /**
-     * Method to be run when there are no synced transactions in the Account,
-     * which parses all the transactions that contis has for the user.
+     * Get all transaction from Contis on a date interval and persist them
+     * until the last synced transaction is found (if there is last synced transaction).
      * @param Account $account
      * @param DateTime $fromDate
      * @param DateTime $toDate
+     * @param Transaction $lastSyncedTransaction
      */
-    private function initiallyParseContisTransactions(
+    private function persistContisTransactionsUntilLastSyncedTransactionIsFound(
         Account $account,
         DateTime $fromDate,
-        DateTime $toDate)
+        DateTime $toDate,
+        Transaction $lastSyncedTransaction = null)
     {
         do {
             $contisTransactions = $this->contisTransactionApiClient->getAll($account, $fromDate, $toDate);
 
-            foreach ($contisTransactions as $contisTransaction) {
-                $transaction = $this->transactionRepository->findOneByContisTransactionId($contisTransaction['TransactionID']);
+            $lastSyncedTransactionFound = $this->persistContisTransactions(
+                $account,
+                $contisTransactions,
+                $lastSyncedTransaction
+            );
 
-                if ($transaction) {
-                    continue;
-                }
-
-                $this->processTransaction($account, $contisTransaction);
-            }
-
-            $time = intval(trim(end($contisTransactions)['SettlementDate'], '/Date()') / 1000) - 2 * 60 * 60;
+            $time = intval(trim(end($contisTransactions)['SettlementDate'], '/Date()') / 1000);
             $toDate = (new DateTime())->setTimestamp($time);
-        } while (count($contisTransactions) == 50);
-
-        return;
+        } while (!$lastSyncedTransactionFound && count($contisTransactions) == 50);
     }
 
     /**
      * Regular method for when the user has a last synced transaction, which parses
      * all the transactions until it finds the last synced one.
-     * @param array $contisTransactions
      * @param Account $account
+     * @param array $contisTransactions
      * @param Transaction $lastSyncedTransaction
      * @return bool
      */
-    private function parseContisTransactions(
-        array $contisTransactions,
+    private function persistContisTransactions(
         Account $account,
+        array $contisTransactions,
         Transaction $lastSyncedTransaction
     ): bool
     {
-
         foreach ($contisTransactions as $contisTransaction) {
-            $transaction = $this->transactionRepository->findOneByContisTransactionId($contisTransaction['TransactionID']);
-
-            if ($lastSyncedTransaction->getContisTransactionId() == $contisTransaction['TransactionID']) {
+            if (!is_null($lastSyncedTransaction) &&
+                $lastSyncedTransaction->getContisTransactionId() == $contisTransaction['TransactionID']
+            ) {
                 return true;
             }
+
+            $transaction = $this->transactionRepository->findOneByContisTransactionId(
+                $contisTransaction['TransactionID']
+            );
 
             if ($transaction) {
                 continue;
             }
 
-            $this->processTransaction($account, $contisTransaction);
+            $this->persistTransaction($account, $contisTransaction);
         }
 
         return false;
     }
 
     /**
-     * Generic method that receives an account and a contis transaction and adds the
+     * Generic method that receives an account and a Contis transaction and adds the
      * last one to the PayPro transactions if its missing from the list.
-     * @param $account
-     * @param $contisTransaction
+     * @param Account $account
+     * @param Transaction $contisTransaction
      */
-    private function processTransaction($account, $contisTransaction)
+    private function persistTransaction(Account $account, Transaction $contisTransaction)
     {
+        /**
+         * Remove 2 hours from the Contis date due to the difference of timezone
+         * between their server and ours.
+         */
         $time = intval(trim($contisTransaction['SettlementDate'], '/Date()') / 1000) - 2 * 60 * 60;
         $creationDateTime = (new DateTime())->setTimestamp($time);
 

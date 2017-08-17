@@ -42,12 +42,10 @@ class IndexTransactionService
      * @param  string $toDate
      * @return array $transactions
      * @throws PayProException
-     * @internal param int $payerId
-     * @internal param int $beneficiaryId
      */
     public function execute(
         int $userId,
-        int $page = 0,
+        int $page = 1,
         int $size = 10,
         string $fromDate = null,
         string $toDate = null

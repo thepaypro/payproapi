@@ -33,6 +33,11 @@ class Transaction
         $this->authenticationService = $authenticationService;
     }
 
+    /**
+     * @param TransactionEntity $transaction
+     * @return array
+     * @throws PayProException
+     */
     public function create(TransactionEntity $transaction): array
     {
         $params = [
@@ -56,10 +61,11 @@ class Transaction
 
         $response = $this->requestService->call('Account_TransferMoney', $params, $requestParams);
 
-        if ($response['Account_TransferMoneyResult']['Description'] == 'Success ') {
-            return $response['Account_TransferMoneyResult']['ResultObject'][0];
+        if ($response['Account_TransferMoneyResult']['Description'] != 'Success ') {
+            throw new PayProException("Bad Request", 400);
         }
-        throw new PayProException("Bad Request", 400);
+
+        return $response['Account_TransferMoneyResult']['ResultObject'][0];
     }
 
     /**
@@ -68,6 +74,7 @@ class Transaction
      * @param  DateTime $fromDate
      * @param  DateTime $toDate
      * @return array $response
+     * @throws PayProException
      */
     public function getAll(Account $account, DateTime $fromDate, DateTime $toDate): array
     {
@@ -97,12 +104,14 @@ class Transaction
 
         $response = $this->requestService->call('Account_GetStatement', $params, $requestParams);
 
-        if ($response['Account_GetStatementResult']['Description'] == 'Success ') {
-            if (!$response['Account_GetStatementResult']['ResultObject']) {
-                return [];
-            }
-            return $response['Account_GetStatementResult']['ResultObject'];
+        if ($response['Account_GetStatementResult']['Description'] != 'Success ') {
+            throw new PayProException("Bad Request", 400);
         }
-        throw new PayProException("Bad Request", 400);
+
+        if (!$response['Account_GetStatementResult']['ResultObject']) {
+            return [];
+        }
+
+        return $response['Account_GetStatementResult']['ResultObject'];
     }
 }
