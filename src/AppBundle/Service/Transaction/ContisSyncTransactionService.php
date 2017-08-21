@@ -104,7 +104,7 @@ class ContisSyncTransactionService
     private function persistContisTransactions(
         Account $account,
         array $contisTransactions,
-        Transaction $lastSyncedTransaction
+        Transaction $lastSyncedTransaction = null
     ): bool
     {
         foreach ($contisTransactions as $contisTransaction) {
