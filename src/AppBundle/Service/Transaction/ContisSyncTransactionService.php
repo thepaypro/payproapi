@@ -132,9 +132,9 @@ class ContisSyncTransactionService
      * Generic method that receives an account and a Contis transaction and adds the
      * last one to the PayPro transactions if its missing from the list.
      * @param Account $account
-     * @param Transaction $contisTransaction
+     * @param array $contisTransaction
      */
-    private function persistTransaction(Account $account, Transaction $contisTransaction)
+    private function persistTransaction(Account $account, array $contisTransaction)
     {
         /**
          * Remove 2 hours from the Contis date due to the difference of timezone
