@@ -30,7 +30,6 @@ class CreateTransactionService
      * @param ValidatorInterface $validationService
      * @param GetBalanceService $getBalanceService
      * @param ContisTransactionApiClient $contisTransactionApiClient
-     * @internal param GetBalanceService $getBalanceService
      */
     public function __construct(
         TransactionRepository $transactionRepository,
@@ -54,9 +53,9 @@ class CreateTransactionService
      *
      * @param  int $userId
      * @param  int $beneficiaryId
-     * @param float|int $amount
+     * @param  int $amount
      * @param  string $subject
-     * @param string $title
+     * @param  string $title
      * @return Transaction $transaction
      * @throws PayProException
      */

@@ -37,10 +37,10 @@ class LastTransactionsService
      *
      * @param  int $userId
      * @param int $transactionId
-     * @param string fromDate
-     * @param string toDate
      * @return array $transactions
      * @throws PayProException
+     * @internal param string $fromDate
+     * @internal param string $toDate
      */
     public function execute(
         int $userId,
@@ -71,7 +71,10 @@ class LastTransactionsService
 
         $this->contisSyncTransactionService->execute($account);
 
-        $payProTransactions = $this->transactionRepository->getTransactionsOfAccountAfterTransactionId($account, $transaction->getId());
+        $payProTransactions = $this->transactionRepository->getTransactionsOfAccountAfterTransactionId(
+            $account,
+            $transaction->getId()
+        );
 
         return $payProTransactions;
     }

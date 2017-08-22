@@ -8,7 +8,7 @@ class TransactionRepository extends BaseEntityRepository
 {
     public function getTransactionsOfAccount(
         Account $account,
-        int $page = 0,
+        int $page = 1,
         int $size = 10)
     {
         $firstResult = ($page - 1) * $size;
@@ -43,7 +43,10 @@ class TransactionRepository extends BaseEntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb = $qb->select('t')->from('AppBundle\Entity\Transaction', 't');
 
-        $qb->setParameters(array('account' => $account, 'transactionId' => $transactionId));
+        $qb->setParameters([
+            'account' => $account,
+            'transactionId' => $transactionId
+        ]);
 
         $query1 = $qb->expr()->orX()->addMultiple([
             $qb->expr()->eq('t.payer', ':account'),

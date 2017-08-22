@@ -60,6 +60,7 @@ class RequestService
                     'body' => $payload
                 ]
             );
+
         } catch (Exception $e) {
             throw new PayProException("Bad Request", 400);
 //            dump($e->getResponse()->getBody()->getContents());die();
