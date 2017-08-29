@@ -14,7 +14,7 @@ use AppBundle\Exception\PayProException;
 
 /**
  * Account controller.
- * @Security("has_role('ROLE_USER')")
+ * @Security("has_role('ROLE_ADMIN')")
  *
  * @Route("/accounts")
  */
