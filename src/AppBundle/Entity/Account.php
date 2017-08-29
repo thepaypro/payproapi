@@ -117,8 +117,8 @@ class Account implements \JsonSerializable
     protected $receivedTransactions;
 
     /**
-     * @ORM\OneToOne(targetEntity="Transaction")
-     * @JoinColumn(name="last_synced_transaction_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Transaction")
+     * @ORM\JoinColumn(name="last_synced_transaction_id", referencedColumnName="id")
      */
     protected $lastSyncedTransaction;
 
