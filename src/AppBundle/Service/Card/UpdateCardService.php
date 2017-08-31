@@ -21,10 +21,10 @@ class UpdateCardService
     protected $validationService;
 
     /**
-     * @param UserRepository        $userRepository
-     * @param CardRepository        $cardRepository
-     * @param ContisCardApiClient   $contisCardApiClient
-     * @param ValidatorInterface    $validationService
+     * @param ObjectRepositoryInterface $userRepository
+     * @param ObjectRepositoryInterface $cardRepository
+     * @param ContisCardApiClient       $contisCardApiClient
+     * @param ValidatorInterface        $validationService
      */
     public function __construct(
         ObjectRepositoryInterface $userRepository,
@@ -45,6 +45,7 @@ class UpdateCardService
      * @param  int  $userId
      * @param  bool $isEnabled
      * @return Card
+     * @throws PayProException
      */
     public function execute(int $userId, bool $isEnabled) : Card
     {
@@ -73,7 +74,7 @@ class UpdateCardService
             }
         }
 
-        $response = $this->contisCardApiClient->update($card);
+        $this->contisCardApiClient->update($card);
 
         $this->cardRepository->save($card);
 

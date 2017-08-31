@@ -14,7 +14,7 @@ use AppBundle\Exception\PayProException;
 
 /**
  * Account controller.
- * @Security("has_role('ROLE_USER')")
+ * @Security("has_role('ROLE_ADMIN')")
  *
  * @Route("/accounts")
  */
@@ -63,7 +63,8 @@ class AccountController extends Controller
                 $requestData['buildingNumber'],
                 $requestData['postcode'],
                 $requestData['city'],
-                $requestData['country']
+                $requestData['country'],
+                $requestData['deviceToken']
             );
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
@@ -83,13 +84,14 @@ class AccountController extends Controller
      */
     public function updateAction(UserInterface $user, Request $request) : JsonResponse
     {
-        $accountId = $request->attributes->get('accountId');
+
         $requestData = $request->request->all();
+        $accountId = $request->attributes->get('accountId');
 
         try {
             $account = $this->get('payproapi.update_account_service')->execute(
                 $accountId,
-                $user->getId(),
+                in_array('ROLE_ADMIN', $user->getRoles()) ? $requestData['userId'] : $user->getId(),
                 isset($requestData['forename']) ? $requestData['forename'] : null,
                 isset($requestData['lastname']) ? $requestData['lastname'] : null,
                 isset($requestData['email']) ? $requestData['email'] : null,

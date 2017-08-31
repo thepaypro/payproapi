@@ -20,11 +20,11 @@ class TwilioShortMessageService
     protected $phoneNumber;
 
     /**
-     * @param String $twilioAccountId Twilio account id
-     * @param String $twilioAuthToken Twilio authorization token
-     * @param String $payProPhoneNumber A Twilio phone number you purchased at twilio.com/console
+     * @param string $twilioAccountId Twilio account id
+     * @param string $twilioAuthToken Twilio authorization token
+     * @param string $payProPhoneNumber A Twilio phone number you purchased at twilio.com/console
      */
-    public function __construct(String $twilioAccountId, String $twilioAuthToken, String $payProPhoneNumber)
+    public function __construct(string $twilioAccountId, string $twilioAuthToken, string $payProPhoneNumber)
     {
         $this->twilioClient = new Client($twilioAccountId, $twilioAuthToken);
         $this->phoneNumber = $payProPhoneNumber;
@@ -33,10 +33,10 @@ class TwilioShortMessageService
     /**
      * This method send an SMS with the specified message to the specified phone number.
      * 
-     * @param  String $phoneNumber The number you'd like to send the message to
-     * @param  String $message The body of the text message you'd like to send
+     * @param  string $phoneNumber The number you'd like to send the message to
+     * @param  string $message The body of the text message you'd like to send
      */
-    public function sendShortMessage(String $to, String $message)
+    public function sendShortMessage(string $to, string $message)
     {
         $response = $this->twilioClient->account->messages->create(
             $to,

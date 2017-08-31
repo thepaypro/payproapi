@@ -3,12 +3,16 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\Account;
-use Doctrine\ORM\QueryBuilder;
 
 class TransactionRepository extends BaseEntityRepository
 {
-    public function getTransactionsOfAccount(Account $account)
+    public function getTransactionsOfAccount(
+        Account $account,
+        int $page = 1,
+        int $size = 10)
     {
+        $firstResult = ($page - 1) * $size;
+
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb = $qb->select('t')->from('AppBundle\Entity\Transaction', 't');
 
@@ -20,7 +24,46 @@ class TransactionRepository extends BaseEntityRepository
         ]);
 
         $qb = $qb->where($query);
+        $qb->addOrderBy('t.createdAt', 'DESC');
+        $qb->setMaxResults($size);
+        $qb->setFirstResult($firstResult);
+        $content = $qb->getQuery()->getResult();
 
-        return $qb->getQuery()->getResult();
+        return [
+            'content' => $content,
+            'page' => $page,
+            'size' => $size
+        ];
+    }
+
+    public function getTransactionsOfAccountAfterTransactionId(
+        Account $account,
+        int $transactionId)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb = $qb->select('t')->from('AppBundle\Entity\Transaction', 't');
+
+        $qb->setParameters([
+            'account' => $account,
+            'transactionId' => $transactionId
+        ]);
+
+        $query1 = $qb->expr()->orX()->addMultiple([
+            $qb->expr()->eq('t.payer', ':account'),
+            $qb->expr()->eq('t.beneficiary', ':account')
+        ]);
+
+        $query = $qb->expr()->andX()->addMultiple([
+            $qb->expr()->gt('t.id', ':transactionId'),
+            $query1
+        ]);
+
+        $qb = $qb->where($query);
+        $qb->addOrderBy('t.createdAt', 'DESC');
+        $content = $qb->getQuery()->getResult();
+
+        return [
+            'content' => $content,
+        ];
     }
 }

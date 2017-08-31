@@ -3,9 +3,10 @@
 namespace AppBundle\Service\ContisApiClient;
 
 use Symfony\Component\HttpFoundation\Session\Session;
+use AppBundle\Exception\PayProException;
+use Exception;
 use GuzzleHttp\Client;
 use DateTime;
-use Exception;
 
 /**
  * Class RequestService
@@ -22,30 +23,30 @@ class RequestService
     protected $session;
 
     /**
-     * @param String $contisSecretKey
-     * @param String $contisApiHost
+     * @param string $contisApiHost
+     * @internal param string $contisSecretKey
      */
-    public function __construct(String $contisApiHost) {
+    public function __construct(string $contisApiHost) {
         $this->contisApiHost = $contisApiHost;
         $this->httpClient = new Client();
     }
 
     /**
      * This method authenticates with Contis if needed and create the hash data string and hash required by contis to execute the call.
-     * @param String $endpoint
-     * @param Array $params
-     * @param Array $requestParams
-     * @param String $jsonParametersKey
-     * @return Array
+     * @param string $endpoint
+     * @param array $params
+     * @param array $requestParams
+     * @param string $jsonParametersKey
+     * @return array
      */
-    public function call(String $endpoint, Array $params, Array $requestParams = [], String $jsonParamtersKey = 'objInfo') : Array
+    public function call(string $endpoint, array $params, array $requestParams = [], string $jsonParametersKey = 'objInfo') : array
     {
         $payload['objReqInfo'] = $requestParams;
-        $payload[$jsonParamtersKey] = $params;
+        $payload[$jsonParametersKey] = $params;
 
-        $payload = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $payload = json_encode($payload, JSON_UNESCAPED_SLASHES);
         if ($endpoint != 'Login') {
-            // dump($payload);die();
+//            dump($payload);die();
         }
         try {
             $response = $this->httpClient->request(
@@ -55,11 +56,14 @@ class RequestService
                     'headers' => [
                         'Content-type' => 'application/json'
                     ],
+                    'connect_timeout' => 20,
                     'body' => $payload
                 ]
             );
+
         } catch (Exception $e) {
-            dump($e->getResponse()->getBody()->getContents());die();
+            throw new PayProException("Bad Request", 400);
+//            dump($e->getResponse()->getBody()->getContents());die();
         }
 
         return json_decode($response->getBody()->getContents(), true);

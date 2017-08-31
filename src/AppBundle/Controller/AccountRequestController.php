@@ -14,8 +14,8 @@ use AppBundle\Exception\PayProException;
 
 /**
  * AccountRequest controller.
- * @Security("has_role('ROLE_USER')")
  *
+ * @Security("has_role('ROLE_USER')")
  * @Route("/account-requests")
  */
 class AccountRequestController extends Controller
@@ -25,13 +25,13 @@ class AccountRequestController extends Controller
     /**
      * Create an account request
      * @param  UserInterface $user
-     * @param  Request       $request
+     * @param  Request $request
      * @return JsonResponse
-     * 
+     *
      * @Route("", name="account_requests_create")
      * @Method("POST")
      */
-    public function createAction(UserInterface $user, Request $request) : JsonResponse
+    public function createAction(UserInterface $user, Request $request): JsonResponse
     {
         $requestData = $request->request->all();
 
@@ -49,7 +49,35 @@ class AccountRequestController extends Controller
                 $requestData['buildingNumber'],
                 $requestData['postcode'],
                 $requestData['city'],
-                $requestData['country']
+                $requestData['country'],
+                $requestData['deviceToken']
+            );
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
+        }
+
+        return $this->JWTResponse($user, ['emailSended' => $response]);
+    }
+
+    /**
+     * Update an account request
+     * @param  UserInterface $user
+     * @param  Request $request
+     * @return JsonResponse
+     *
+     * @Route("", name="account_requests_update")
+     * @Method("PUT")
+     */
+    public function UpdateAction(UserInterface $user, Request $request): JsonResponse
+    {
+        $requestData = $request->request->all();
+
+        try {
+            $response = $this->get('payproapi.update_account_request_service')->execute(
+                $user->getId(),
+                $requestData['documentType'],
+                $requestData['documentPicture1'],
+                $requestData['documentPicture2']
             );
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
@@ -58,3 +86,4 @@ class AccountRequestController extends Controller
         return $this->JWTResponse($user, ['emailSended' => $response]);
     }
 }
+

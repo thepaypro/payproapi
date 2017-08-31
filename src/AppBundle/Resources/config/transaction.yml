@@ -3,9 +3,8 @@ services:
     class: AppBundle\Service\Transaction\IndexTransactionService
     arguments:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Transaction')"
-      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Account')"
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
-      - "@contis_api_client.transaction_service"
+      - "@payproapi.contis_sync_transaction_service"
 
   payproapi.create_transaction_service:
     class: AppBundle\Service\Transaction\CreateTransactionService
@@ -14,4 +13,19 @@ services:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Account')"
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
       - "@validator"
+      - "@payproapi.get_balance_service"
       - "@contis_api_client.transaction_service"
+
+  payproapi.contis_sync_transaction_service:
+    class: AppBundle\Service\Transaction\ContisSyncTransactionService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Transaction')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Account')"
+      - "@contis_api_client.transaction_service"
+
+  payproapi.last_transactions_service:
+    class: AppBundle\Service\Transaction\LastTransactionsService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Transaction')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@payproapi.contis_sync_transaction_service"

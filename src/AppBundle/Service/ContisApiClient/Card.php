@@ -3,7 +3,7 @@
 namespace AppBundle\Service\ContisApiClient;
 
 use AppBundle\Entity\Card as CardEntity;
-use Exception;
+use AppBundle\Exception\PayProException;
 
 /**
  * Class AuthenticationService
@@ -33,8 +33,8 @@ class Card
 
     /**
      * Request a card.
-     * @param  Card $card
-     * @return true
+     * @param CardEntity $card
+     * @return bool
      */
     public function request(CardEntity $card) : bool
     {
@@ -59,13 +59,13 @@ class Card
         if ($response['Card_RequestResult']['Description'] == 'Success ') {
             return true;
         }
-        dump($response);die();
+        throw new PayProException("Bad Request", 400);
     }
 
     /**
      * Activate a card.
-     * @param  Card $card
-     * @return true
+     * @param CardEntity $card
+     * @return array
      */
     public function getActivationCode(CardEntity $card) : array
     {
@@ -88,16 +88,17 @@ class Card
 
         $response = $this->requestService->call('Card_GetActivationCode', $params, $requestParams);
 
-        if ($response['Card_GetActivationCodeResult']['Description'] == 'Success ') {
+        if ($response['Card_GetActivationCodeResult']['Description'] == 'Success ' &&
+            $response['Card_GetActivationCodeResult']['ResultObject'] != null) {
             return $response['Card_GetActivationCodeResult']['ResultObject'];
         }
-        dump($response);die();
+        throw new PayProException("Bad Request", 400);
     }
 
     /**
      * Activate a card.
-     * @param  Card $card
-     * @return true
+     * @param CardEntity $card
+     * @return bool
      */
     public function activate(CardEntity $card) : bool
     {
@@ -123,13 +124,13 @@ class Card
         if ($response['Card_ActivateResult']['Description'] == 'Success ') {
             return true;
         }
-        dump($response);die();
+        throw new PayProException("Bad Request", 400);
     }
 
     /**
      * Change the status of a card.
-     * @param  Card $card
-     * @return true
+     * @param CardEntity $card
+     * @return bool
      */
     public function update(CardEntity $card) : bool
     {
@@ -156,6 +157,6 @@ class Card
         if ($response['Card_ChangeStatusResult']['Description'] == 'Success ') {
             return true;
         }
-        dump($response);die();
+        throw new PayProException("Bad Request", 400);
     }
 }

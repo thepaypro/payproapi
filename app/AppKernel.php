@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
             new Nelmio\CorsBundle\NelmioCorsBundle(),
             new FOS\UserBundle\FOSUserBundle(),
+            new RMS\PushNotificationsBundle\RMSPushNotificationsBundle(),
 
             /* PayPro Bundles */
             new AppBundle\AppBundle(),

@@ -27,7 +27,13 @@ class UpdateAccountService
     protected $contisAccountApiClient;
 
     /**
-     * @param EntityManager $em
+     * UpdateAccountService constructor.
+     * @param AccountRepository $accountRepository
+     * @param AgreementRepository $agreementRepository
+     * @param CountryRepository $countryRepository
+     * @param UserRepository $userRepository
+     * @param ValidatorInterface $validationService
+     * @param ContisAccountApiClient $contisAccountApiClient
      */
     public function __construct(
         AccountRepository $accountRepository,
@@ -46,42 +52,64 @@ class UpdateAccountService
     }
 
     /**
-     * This method will create the cardHolder on Contis system and will persist the new account of the user.
-     * @param  int|null     $accountId
-     * @param  int|null     $userId
-     * @param  String|null  $forename
-     * @param  String|null  $lastname
-     * @param  String|null  $email
-     * @param  String|null  $birthDate
-     * @param  String|null  $documentType
-     * @param  String|null  $documentNumber
-     * @param  int|null     $agreementId
-     * @param  String|null  $street
-     * @param  String|null  $buildingNumber
-     * @param  String|null  $postcode
-     * @param  String|null  $city
-     * @param  String|null  $countryIso2
+     * @param int|null $accountId
+     * @param int|null $userId
+     * @param string|null $forename
+     * @param string|null $lastname
+     * @param string|null $email
+     * @param string|null $birthDate
+     * @param string|null $documentType
+     * @param string|null $documentNumber
+     * @param int|null $agreementId
+     * @param string|null $street
+     * @param string|null $buildingNumber
+     * @param string|null $postcode
+     * @param string|null $city
+     * @param string|null $countryIso2
      * @return Account
+     * @throws PayProException
      */
     public function execute(
         int $accountId = null,
         int $userId = null,
-        String $forename = null,
-        String $lastname = null,
-        String $email = null,
-        String $birthDate = null,
-        String $documentType = null,
-        String $documentNumber = null,
+        string $forename = null,
+        string $lastname = null,
+        string $email = null,
+        string $birthDate = null,
+        string $documentType = null,
+        string $documentNumber = null,
         int $agreementId = null,
-        String $street = null,
-        String $buildingNumber = null,
-        String $postcode = null,
-        String $city = null,
+        string $street = null,
+        string $buildingNumber = null,
+        string $postcode = null,
+        string $city = null,
         string $countryIso2 = null
     ) : Account
     {
         $account = $this->accountRepository->findOneById($accountId);
         $user = $this->userRepository->findOneById($userId);
+
+        if ($forename && (!is_string($forename) || strlen($forename) > 255)){
+            throw new PayProException("invalid forename format", 400);
+        }
+        if ($lastname && (!is_string($lastname) || strlen($lastname) > 255)){
+            throw new PayProException("invalid lastname format", 400);
+        }
+        if ($documentNumber && (!is_string($documentNumber) || strlen($documentNumber) > 255)){
+            throw new PayProException("invalid documentNumber format", 400);
+        }
+        if ($street && (!is_string($street) || strlen($street) > 255)){
+            throw new PayProException("invalid street format", 400);
+        }
+        if ($buildingNumber && (!is_string($buildingNumber) || strlen($buildingNumber) > 255)){
+            throw new PayProException("invalid buildingNumber format", 400);
+        }
+        if ($postcode && (!is_string($postcode) || strlen($postcode) > 255)){
+            throw new PayProException("invalid postcode format", 400);
+        }
+        if ($city && (!is_string($city) || strlen($city) > 255)){
+            throw new PayProException("invalid city format", 400);
+        }
 
         if (!$account || !$account->getUsers()->contains($user)) {
             throw new PayProException("Account not found", 404);
@@ -96,6 +124,9 @@ class UpdateAccountService
 
         if ($agreementId) {
             $agreement = $this->agreementRepository->findOneById($agreementId);
+            if (!$agreement) {
+                throw new PayProException("Agreement not found", 400);
+            }
             $account->setAgreement($agreement);
         }
 
@@ -106,6 +137,9 @@ class UpdateAccountService
 
         if ($countryIso2) {
             $country = $this->countryRepository->findOneByIso2($countryIso2);
+            if (!$country) {
+                throw new PayProException("Country not found", 400);
+            }
             $account->setCountry($country);
         }
 

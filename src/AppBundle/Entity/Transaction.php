@@ -41,7 +41,7 @@ class Transaction implements \JsonSerializable
     protected $contisTransactionId;
 
     /**
-     * @ORM\Column(type="float", nullable=false)
+     * @ORM\Column(type="bigint", nullable=false)
      * @Assert\NotBlank()
      */
     protected $amount;
@@ -51,6 +51,11 @@ class Transaction implements \JsonSerializable
      * @Assert\NotBlank()
      */
     protected $subject;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $title;
 
     /**
      * @ORM\OneToOne(targetEntity="TransactionInvite", mappedBy="transaction")
@@ -76,8 +81,9 @@ class Transaction implements \JsonSerializable
     public function __construct(
         Account $payer = null,
         Account $beneficiary = null,
-        float $amount,
+        int $amount,
         string $subject,
+        string $title = null,
         DateTime $creationDate = null
     )
     {
@@ -85,6 +91,7 @@ class Transaction implements \JsonSerializable
         $this->beneficiary = $beneficiary;
         $this->amount = $amount;
         $this->subject = $subject;
+        $this->title = $title;
         $this->createdAt = $creationDate;
         $this->updatedAt = $creationDate;
     }
@@ -97,7 +104,9 @@ class Transaction implements \JsonSerializable
             'beneficiary' => $this->beneficiary,
             'amount' => $this->amount,
             'subject' => $this->subject,
-            'transactionInvite' => $this->transactionInvite
+            'title' => $this->title,
+            'transactionInvite' => $this->transactionInvite,
+            'createdAt' => $this->createdAt
         ];
 
         return $publicProperties;
@@ -140,7 +149,7 @@ class Transaction implements \JsonSerializable
     /**
      * Set amount
      *
-     * @param float $amount
+     * @param int $amount
      *
      * @return Transaction
      */
@@ -154,7 +163,7 @@ class Transaction implements \JsonSerializable
     /**
      * Get amount
      *
-     * @return float
+     * @return int
      */
     public function getAmount()
     {
@@ -236,11 +245,11 @@ class Transaction implements \JsonSerializable
     /**
      * Set subject
      *
-     * @param String $subject
+     * @param string $subject
      *
      * @return Transaction
      */
-    public function setSubject(String $subject = null)
+    public function setSubject(string $subject = null)
     {
         $this->subject = $subject;
 
@@ -250,11 +259,27 @@ class Transaction implements \JsonSerializable
     /**
      * Get subject
      *
-     * @return String
+     * @return string
      */
     public function getSubject()
     {
         return $this->subject;
+    }
+
+    /**
+     * @param mixed $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 
    /**

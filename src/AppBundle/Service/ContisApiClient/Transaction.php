@@ -2,11 +2,10 @@
 
 namespace AppBundle\Service\ContisApiClient;
 
-use Exception;
-use DateTime;
-
 use AppBundle\Entity\Account;
+use AppBundle\Exception\PayProException;
 use AppBundle\Entity\Transaction as TransactionEntity;
+use DateTime;
 
 /**
  * Class Transaction
@@ -21,24 +20,30 @@ class Transaction
     /**
      * @param RequestService $requestService
      * @param HashingService $hashingService
-     * @param AuthorizationService $authorizationService
+     * @param AuthenticationService $authenticationService
      */
     public function __construct(
         RequestService $requestService,
         HashingService $hashingService,
         AuthenticationService $authenticationService
-    ) {
+    )
+    {
         $this->requestService = $requestService;
         $this->hashingService = $hashingService;
         $this->authenticationService = $authenticationService;
     }
 
-    public function create(TransactionEntity $transaction) : Array
+    /**
+     * @param TransactionEntity $transaction
+     * @return array
+     * @throws PayProException
+     */
+    public function create(TransactionEntity $transaction): array
     {
         $params = [
             'FromAccountNumber' => $transaction->getPayer()->getAccountNumber(),
             'ToAccountNumber' => $transaction->getBeneficiary()->getAccountNumber(),
-            'Amount' => $transaction->getAmount()*100,
+            'Amount' => $transaction->getAmount(),
             'CurrencyCode' => '826',
             'Description' => $transaction->getSubject()
         ];
@@ -56,28 +61,35 @@ class Transaction
 
         $response = $this->requestService->call('Account_TransferMoney', $params, $requestParams);
 
-        if ($response['Account_TransferMoneyResult']['Description'] == 'Success ') {
-            return $response['Account_TransferMoneyResult']['ResultObject'][0];
+        if ($response['Account_TransferMoneyResult']['Description'] != 'Success ') {
+            throw new PayProException("Bad Request", 400);
         }
-        dump($response);die();
+
+        return $response['Account_TransferMoneyResult']['ResultObject'][0];
     }
 
     /**
      * Get a list of transactions from Contis.
-     * @param  Account  $account
+     * @param  Account $account
      * @param  DateTime $fromDate
      * @param  DateTime $toDate
-     * @return Array $response
+     * @return array $response
+     * @throws PayProException
      */
-    public function getAll(Account $account, DateTime $fromDate, DateTime $toDate) : Array
+    public function getAll(Account $account, DateTime $fromDate, DateTime $toDate): array
     {
         $params = [
             'CardHolderId' => $account->getCardHolderId(),
             'AccountNumber' => $account->getAccountNumber(),
-            'SortCode' => $account->getSortCode(),
-            'FromDate' => '/Date('.(intval($fromDate->getTimeStamp()*1000)).')/',
-            'ToDate' => '/Date('.(intval($toDate->getTimeStamp()*1000)).')/' 
+            'SortCode' => $account->getSortCode()
         ];
+
+        if ($fromDate) {
+            $params['FromDate'] = '/Date(' . (intval($fromDate->getTimeStamp() * 1000)) . ')/';
+        }
+        if ($toDate) {
+            $params['ToDate'] = '/Date(' . (intval($toDate->getTimeStamp() * 1000)) . ')/';
+        }
 
         $params['Token'] = $this->authenticationService->getAuthenticationToken();
 
@@ -92,9 +104,14 @@ class Transaction
 
         $response = $this->requestService->call('Account_GetStatement', $params, $requestParams);
 
-        if ($response['Account_GetStatementResult']['Description'] == 'Success ') {
-            return $response['Account_GetStatementResult']['ResultObject'];
+        if ($response['Account_GetStatementResult']['Description'] != 'Success ') {
+            throw new PayProException("Bad Request", 400);
         }
-        dump($response);die();
+
+        if (!$response['Account_GetStatementResult']['ResultObject']) {
+            return [];
+        }
+
+        return $response['Account_GetStatementResult']['ResultObject'];
     }
 }

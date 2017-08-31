@@ -32,6 +32,7 @@
         "lexik/jwt-authentication-bundle": "^2.4",
         "nelmio/cors-bundle": "^1.5",
         "respect/validation": "^1.1",
+        "richsage/rms-push-notifications-bundle": "^0.2.3",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "symfony/event-dispatcher": "3.2.*",
