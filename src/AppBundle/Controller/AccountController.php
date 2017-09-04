@@ -14,7 +14,7 @@ use AppBundle\Exception\PayProException;
 
 /**
  * Account controller.
- * @Security("has_role('ROLE_ADMIN')")
+ * @Security("has_role('ROLE_USER')")
  *
  * @Route("/accounts")
  */
@@ -42,7 +42,8 @@ class AccountController extends Controller
      * @param  UserInterface $user
      * @param  Request       $request
      * @return JsonResponse
-     * 
+     *
+     * @Security("has_role('ROLE_ADMIN')")
      * @Route("", name="accounts_create")
      * @Method("POST")
      */
