@@ -44,7 +44,9 @@ class SendNotificationService
     {
         $pushNotification = new iOSMessage();
         $pushNotification->setMessage($message);
+        $pushNotification->setData($notification->getAccount()->jsonSerialize());
         $pushNotification->setDeviceIdentifier($notification->getDeviceId());
+
         $this->pushNotifications->send($pushNotification);
 
         $this->updateNotificationService->execute(
