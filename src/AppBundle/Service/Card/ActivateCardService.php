@@ -46,7 +46,7 @@ class ActivateCardService
      * @return array
      * @throws PayProException
      */
-    public function execute(int $userId)
+    public function getActivationCode(int $userId)
     {
         $user = $this->userRepository->findOneById($userId);
 
@@ -56,12 +56,14 @@ class ActivateCardService
         if (!$card = $account->getCard()) {
             throw new PayProException('You must request a card to activate it', 400);
         }
-
-        $response = $this->contisCardApiClient->getActivationCode($card);
-
-        $card->setIsActive(true);
-        $card->setContisCardID($response['CardID']);
-        $card->setContisCardActivationCode($response['CardActivationCode']);
+        if(!$card->getIsActive()){
+            throw new PayProException('Your card it\'s already active', 400);
+        }
+        
+        if(!$card->getContisCardActivationCode()){
+            $response = $this->contisCardApiClient->getActivationCode($card);
+            $card->setContisCardActivationCode($response['CardActivationCode']);
+        } 
 
         $errors = $this->validationService->validate($card);
 
@@ -71,10 +73,27 @@ class ActivateCardService
             }
         }
 
-        $this->contisCardApiClient->activate($card);
-
         $this->cardRepository->save($card);
 
         return $card;
     }
+
+    /**
+     * This method will dispatch an event of the card activation code
+     * 
+     * @param int $userId
+     * @return array
+     * @throws PayProException 
+     */
+    public function sendActivationCodeToUser(int $userId){
+
+        $account = $this->userRepository->findOneById($userId)->getAccount();
+
+        $this->dispatcher->dispatch(
+            CardActivationCodeEvents::CARD_ACTIVATION_CODE_REQUESTED,
+            new CardActivationCodeEvent($account)
+        );
+    }
+
+
 }
