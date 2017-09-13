@@ -90,4 +90,28 @@ class CardController extends Controller
 
         return $this->JWTResponse($user, ['card' => $card]);
     }
+
+    /**
+     * @param  UserInterface $user
+     * @param  Request $request
+     * @return JsonResponse
+     * @throws PayProException
+     * @Route("/retrive-pin", name="retrive_pin")
+     * @Method("POST")
+     */
+    public function retrivePinAction(UserInterface $user, Request $request): JsonResponse
+    {
+        $cvv2 = $request->request->get('cvv2');
+        
+        try {
+            $card = $this->get('payproapi.retrive_pin_card_service')->execute(
+                $user->getId(),
+                isset($cvv2)?$cvv2:00
+            );
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
+        }
+
+        return $this->JWTResponse($user, ['card' => $card]);
+    }
 }
