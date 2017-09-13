@@ -46,7 +46,11 @@ class ActivateCardService
      * @return array
      * @throws PayProException
      */
-    public function execute(int $userId)
+    public function execute(
+        int $userId,
+        string $card_activation_code,
+        int $pan
+    )
     {
         $user = $this->userRepository->findOneById($userId);
 
@@ -56,12 +60,17 @@ class ActivateCardService
         if (!$card = $account->getCard()) {
             throw new PayProException('You must request a card to activate it', 400);
         }
+        if(!$card->getIsActive()){
+            throw new PayProException('Your card it\'s already active', 400);
+        }
 
-        $response = $this->contisCardApiClient->getActivationCode($card);
+        if(!$card_activation_code == $card->getContisCardActivationCode()){
+            throw new PayProException('Your card activation code is incorrect', 400);
+        }
+        $response = $this->contisCardApiClient->activate($card);
 
-        $card->setIsActive(true);
+        $card->setIsActive(true); 
         $card->setContisCardID($response['CardID']);
-        $card->setContisCardActivationCode($response['CardActivationCode']);
 
         $errors = $this->validationService->validate($card);
 
@@ -70,8 +79,6 @@ class ActivateCardService
                 throw new PayProException($error->getPropertyPath().': '.$error->getMessage(), 400);
             }
         }
-
-        $this->contisCardApiClient->activate($card);
 
         $this->cardRepository->save($card);
 
