@@ -7,14 +7,21 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use AppBundle\Event\CardActivationCodeEvent;
 use AppBundle\Event\CardActivationCodeEvents;
 use AppBundle\Service\TwilioShortMessageService;
+use Symfony\Bridge\Monolog\Logger;
 
 class CardActivationCodeSubscriber implements EventSubscriberInterface
 {
 	protected $shortMessageService;
+    protected $logger;
 
-	public function __construct(TwilioShortMessageService $shortMessageService)
+	public function __construct(
+        TwilioShortMessageService $shortMessageService
+        Logger $logger
+
+        )
     {
         $this->shortMessageService = $shortMessageService;
+        $this->logger = $logger;
     }
 
     public static function getSubscribedEvents() : array
@@ -22,6 +29,7 @@ class CardActivationCodeSubscriber implements EventSubscriberInterface
         return array(
             CardActivationCodeEvents::CARD_ACTIVATION_CODE_REQUESTED => array('sendCardActivationCode', 0)
         );
+        $this->logger->info('getSubscribedEvents::::CARD_ACTIVATION_CODE_REQUESTED');
     }
 
     /**
@@ -31,11 +39,13 @@ class CardActivationCodeSubscriber implements EventSubscriberInterface
      */
     public function sendCardActivationCode(CardActivationCodeEvent $event)
     {
+        $this->logger->info('Sending card Activation Code to user by sms');
+
     	$account = $event->getAccount();
         $cardActivationCode = $account->getCard()->getContisCardActivationCode();
-
+        
         $this->shortMessageService->sendShortMessage(
-            $account->getUsers[0]->getUsername(),
+            $account->getUsers()[0]->getUsername(),
             $cardActivationCode
         );
     }

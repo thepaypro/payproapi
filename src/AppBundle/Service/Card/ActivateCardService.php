@@ -4,10 +4,14 @@ namespace AppBundle\Service\Card;
 
 use Doctrine\Common\Persistence\ObjectRepository as ObjectRepositoryInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Bridge\Monolog\Logger;
 
 use AppBundle\Service\ContisApiClient\Card as ContisCardApiClient;
 use AppBundle\Exception\PayProException;
 use AppBundle\Entity\Card;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use AppBundle\Event\CardActivationCodeEvent;
+use AppBundle\Event\CardActivationCodeEvents;
 
 /**
  * Class ActivateCardService
@@ -15,28 +19,37 @@ use AppBundle\Entity\Card;
  */
 class ActivateCardService
 {
+    protected $dispatcher;
     protected $userRepository;
     protected $cardRepository;
     protected $contisCardApiClient;
     protected $validationService;
+    protected $logger;
 
     /**
      * @param UserRepository        $userRepository
      * @param CardRepository        $cardRepository
      * @param ContisCardApiClient   $contisCardApiClient
      * @param ValidatorInterface    $validationService
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param Logger $logger
      */
     public function __construct(
         ObjectRepositoryInterface $userRepository,
         ObjectRepositoryInterface $cardRepository,
         ContisCardApiClient $contisCardApiClient,
-        ValidatorInterface $validationService
+        ValidatorInterface $validationService,
+        EventDispatcherInterface $eventDispatcher,
+        Logger $logger
+
     )
     {
         $this->userRepository = $userRepository;
         $this->cardRepository = $cardRepository;
         $this->contisCardApiClient = $contisCardApiClient;
         $this->validationService = $validationService;
+        $this->dispatcher = $eventDispatcher;
+        $this->logger = $logger;
     }
 
     /**
@@ -56,10 +69,10 @@ class ActivateCardService
         if (!$card = $account->getCard()) {
             throw new PayProException('You must request a card to activate it', 400);
         }
-        if(!$card->getIsActive()){
+        if($card->getIsActive()){
             throw new PayProException('Your card it\'s already active', 400);
         }
-        
+
         if(!$card->getContisCardActivationCode()){
             $response = $this->contisCardApiClient->getActivationCode($card);
             $card->setContisCardActivationCode($response['CardActivationCode']);
@@ -89,9 +102,11 @@ class ActivateCardService
 
         $account = $this->userRepository->findOneById($userId)->getAccount();
 
+        $logger = $this->logger;
+
         $this->dispatcher->dispatch(
             CardActivationCodeEvents::CARD_ACTIVATION_CODE_REQUESTED,
-            new CardActivationCodeEvent($account)
+            new CardActivationCodeEvent($account, $logger)
         );
     }
 
