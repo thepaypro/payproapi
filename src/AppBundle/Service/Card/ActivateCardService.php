@@ -67,7 +67,7 @@ class ActivateCardService
         if($card_activation_code != $card->getContisCardActivationCode()){
             throw new PayProException('Your card activation code is incorrect', 400);
         }
-        $response = $this->contisCardApiClient->activate($card);
+        $response = $this->contisCardApiClient->activate($card,$pan);
         
         $card->setIsActive(true); 
         $card->setContisCardID($response['CardID']);

@@ -100,12 +100,13 @@ class Card
      * @param CardEntity $card
      * @return bool
      */
-    public function activate(CardEntity $card) : bool
+    public function activate(CardEntity $card, int $pan) : bool
     {
         $params = [
             'CardHolderID' => $card->getAccount()->getCardHolderId(),
             'CardActivationCode' => $card->getContisCardActivationCode(),
             'CardID' => $card->getContisCardId(),
+            'PAN' => $pan
         ];
 
         $params['Token'] = $this->authenticationService->getAuthenticationToken();
