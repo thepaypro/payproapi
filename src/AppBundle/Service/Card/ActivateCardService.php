@@ -69,8 +69,7 @@ class ActivateCardService
         }
         $response = $this->contisCardApiClient->activate($card,$pan);
         
-        $card->setIsActive(true); 
-        $card->setContisCardID($response['CardID']);
+        $card->setIsActive(true);
 
         $errors = $this->validationService->validate($card);
 
