@@ -76,6 +76,9 @@ class ActivateCardService
         if(!$card->getContisCardActivationCode()){
             $response = $this->contisCardApiClient->getActivationCode($card);
             $card->setContisCardActivationCode($response['CardActivationCode']);
+            if(!$card->getContisCardId()){
+                $card->setContisCardId($response['CardID']);
+            }
         } 
 
         $errors = $this->validationService->validate($card);
