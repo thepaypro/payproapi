@@ -4,7 +4,6 @@ namespace AppBundle\Service\Card;
 
 use Doctrine\Common\Persistence\ObjectRepository as ObjectRepositoryInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Bridge\Monolog\Logger;
 
 use AppBundle\Service\ContisApiClient\Card as ContisCardApiClient;
 use AppBundle\Exception\PayProException;
@@ -24,7 +23,6 @@ class ActivateCardService
     protected $cardRepository;
     protected $contisCardApiClient;
     protected $validationService;
-    protected $logger;
 
     /**
      * @param UserRepository        $userRepository
@@ -32,16 +30,13 @@ class ActivateCardService
      * @param ContisCardApiClient   $contisCardApiClient
      * @param ValidatorInterface    $validationService
      * @param EventDispatcherInterface $eventDispatcher
-     * @param Logger $logger
      */
     public function __construct(
         ObjectRepositoryInterface $userRepository,
         ObjectRepositoryInterface $cardRepository,
         ContisCardApiClient $contisCardApiClient,
         ValidatorInterface $validationService,
-        EventDispatcherInterface $eventDispatcher,
-        Logger $logger
-
+        EventDispatcherInterface $eventDispatcher
     )
     {
         $this->userRepository = $userRepository;
@@ -49,7 +44,6 @@ class ActivateCardService
         $this->contisCardApiClient = $contisCardApiClient;
         $this->validationService = $validationService;
         $this->dispatcher = $eventDispatcher;
-        $this->logger = $logger;
     }
 
     /**
@@ -104,12 +98,12 @@ class ActivateCardService
     public function sendActivationCodeToUser(int $userId){
 
         $account = $this->userRepository->findOneById($userId)->getAccount();
-
-        $logger = $this->logger;
+        $phoneNumber = $account->getUsers()[0]->getUsername();
+        $cardActivationCode = $account->getCard()->getContisCardActivationCode();
 
         $this->dispatcher->dispatch(
             CardActivationCodeEvents::CARD_ACTIVATION_CODE_REQUESTED,
-            new CardActivationCodeEvent($account, $logger)
+            new CardActivationCodeEvent($phoneNumber, $cardActivationCode)
         );
     }
 

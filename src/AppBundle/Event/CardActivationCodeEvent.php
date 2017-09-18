@@ -3,28 +3,34 @@
 namespace AppBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
-use AppBundle\Entity\Account;
-use Symfony\Bridge\Monolog\Logger;
 
 class CardActivationCodeEvent extends Event
 {
-	protected $account;
-	protected $logger;
+	protected $phoneNumber;
+	protected $cardActivationCode;
 
 	public function __construct(
-		Account $account,
-		Logger $logger
+		String $phoneNumber,
+		string $cardActivationCode
 		)
 	{
-		$this->account = $account;
-		$logger->info('CardActivationCodeEvent');
+		$this->phoneNumber = $phoneNumber;
+		$this->cardActivationCode = $cardActivationCode;
 	}
 
 	/**
-	 * @return Account
+	 * @return String
 	 */
-	public function getAccount(): Account
+	public function getCardActivationCode(): String
 	{
-		return $this->account;
+		return $this->cardActivationCode;
+	}	
+
+	/**
+	 * @return String
+	 */
+	public function getPhoneNumber(): String
+	{
+		return $this->phoneNumber;
 	}
 }

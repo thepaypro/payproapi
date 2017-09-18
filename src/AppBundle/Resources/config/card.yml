@@ -16,7 +16,6 @@ services:
       - "@contis_api_client.card_service"
       - "@validator"
       - "@event_dispatcher"
-      - "@logger"
 
   payproapi.update_card_service:
     class: AppBundle\Service\Card\UpdateCardService
