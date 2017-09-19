@@ -33,7 +33,7 @@ class CardActivationCodeSubscriber implements EventSubscriberInterface
      */
     public function sendCardActivationCode(CardActivationCodeEvent $event)
     {    
-        dump($event->getPhoneNumber()).die();
+        
         $this->shortMessageService->sendShortMessage(
             $event->getPhoneNumber(),
             $event->getCardActivationCode()

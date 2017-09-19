@@ -73,7 +73,7 @@ class ActivateCardService
             if(!$card->getContisCardId()){
                 $card->setContisCardId($response['CardID']);
             }
-        } 
+        }
 
         $errors = $this->validationService->validate($card);
 
