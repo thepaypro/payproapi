@@ -244,6 +244,31 @@
 						],
 						"body": {
 							"mode": "raw",
+							"raw": "{\n\t\"card_activation_code\":\"376\",\n\t\"PAN\":\"1234567812345678\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "RequestActivationCode",
+					"request": {
+						"url": "{{host}}/cards/requestActivationCode",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
 							"raw": ""
 						},
 						"description": ""
