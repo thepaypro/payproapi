@@ -45,9 +45,48 @@ class ActivateCardService
         $this->validationService = $validationService;
         $this->dispatcher = $eventDispatcher;
     }
-
+  
     /**
      * This method activate the card in Contis and update the card in PayPro.
+     * 
+     * @param  int $userId
+     * @return array
+     * @throws PayProException
+     */
+    public function execute(
+        int $userId,
+        string $card_activation_code,
+        int $pan
+    )
+    {
+        $user = $this->userRepository->findOneById($userId);
+        if (!$account = $user->getAccount()) {
+            throw new PayProException('You must have an account to request a card', 400);
+        }
+        if (!$card = $account->getCard()) {
+            throw new PayProException('You must request a card to activate it', 400);
+        }
+        if($card->getIsActive()){
+            throw new PayProException('Your card it\'s already active', 400);
+        }
+        if($card_activation_code != $card->getContisCardActivationCode()){
+            throw new PayProException('Your card activation code is incorrect', 400);
+        }
+        $response = $this->contisCardApiClient->activate($card,$pan);
+        
+        $card->setIsActive(true);
+        $errors = $this->validationService->validate($card);
+        if (count($errors) > 0) {
+            foreach ($errors as $key => $error) {
+                throw new PayProException($error->getPropertyPath().': '.$error->getMessage(), 400);
+            }
+        }
+        $this->cardRepository->save($card);
+        return $card;
+    }
+
+    /**
+     * This method request a activation code in Contis.
      * 
      * @param  int $userId
      * @return array

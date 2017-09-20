@@ -42,6 +42,32 @@ class CardController extends Controller
         return $this->JWTResponse($user, ['card' => $card]);
     }
 
+    /**
+     * Activate the card for an account
+     * @param  UserInterface $user
+     * @param  Request $request
+     * @return JsonResponse
+     *
+     * @Route("/activation", name="card_activation")
+     * @Method("POST")
+     */
+    public function activationAction(UserInterface $user, Request $request): JsonResponse
+    {
+        $card_activation_code = $request->request->get('card_activation_code');
+        $PAN = $request->request->get('PAN');
+
+        try {
+            $card = $this->get('payproapi.activate_card_service')->execute(
+                $user->getId(),
+                $card_activation_code,
+                $PAN
+                );
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
+        }
+
+        return $this->JWTResponse($user, ['card' => $card]);
+    }
 
     /**
      * Update the card
