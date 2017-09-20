@@ -251,6 +251,31 @@
 					"response": []
 				},
 				{
+					"name": "RequestActivationCode",
+					"request": {
+						"url": "{{host}}/cards/requestActivationCode",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
 					"name": "Update",
 					"request": {
 						"url": "{{host}}/cards/1",
