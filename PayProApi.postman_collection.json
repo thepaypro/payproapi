@@ -299,6 +299,31 @@
 						"description": ""
 					},
 					"response": []
+				},
+				{
+					"name": "Retrive PIN",
+					"request": {
+						"url": "{{host}}/cards/retrive-pin",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"cvv2\":\"123\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
 				}
 			]
 		},
