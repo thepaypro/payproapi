@@ -53,8 +53,15 @@ class CardController extends Controller
      */
     public function activationAction(UserInterface $user, Request $request): JsonResponse
     {
+        $card_activation_code = $request->request->get('card_activation_code');
+        $PAN = $request->request->get('PAN');
+
         try {
-            $card = $this->get('payproapi.activate_card_service')->execute($user->getId());
+            $card = $this->get('payproapi.activate_card_service')->execute(
+                $user->getId(),
+                $card_activation_code,
+                $PAN
+                );
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
@@ -84,6 +91,51 @@ class CardController extends Controller
                 $user->getId(),
                 $enabled
             );
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
+        }
+
+        return $this->JWTResponse($user, ['card' => $card]);
+    }
+
+    /**
+     * @param  UserInterface $user
+     * @param  Request $request
+     * @return JsonResponse
+     * @throws PayProException
+     * @Route("/retrive-pin", name="retrive_pin")
+     * @Method("POST")
+     */
+    public function retrivePinAction(UserInterface $user, Request $request): JsonResponse
+    {
+        $cvv2 = $request->request->get('cvv2');
+        
+        try {
+            $card = $this->get('payproapi.retrive_pin_card_service')->execute(
+                $user->getId(),
+                isset($cvv2)?$cvv2:00
+            );
+         } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
+        }
+
+        return $this->JWTResponse($user, ['card' => $card]);
+    }
+
+    /**
+     * Sends the card activation code to the user
+     * @param  UserInterface $user
+     * @param  Request $request
+     * @return JsonResponse
+     *
+     * @Route("/requestActivationCode", name="request_activation_code")
+     * @Method("POST")
+     */
+    public function requestActivationCode(UserInterface $user, Request $request): JsonResponse
+    {
+        try {
+            $card = $this->get('payproapi.activate_card_service')->getActivationCode($user->getId());
+            $this->get('payproapi.activate_card_service')->sendActivationCodeToUser($user->getId());
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }

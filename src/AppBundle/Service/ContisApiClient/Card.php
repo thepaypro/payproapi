@@ -100,12 +100,13 @@ class Card
      * @param CardEntity $card
      * @return bool
      */
-    public function activate(CardEntity $card) : bool
+    public function activate(CardEntity $card, int $pan) : bool
     {
         $params = [
             'CardHolderID' => $card->getAccount()->getCardHolderId(),
             'CardActivationCode' => $card->getContisCardActivationCode(),
             'CardID' => $card->getContisCardId(),
+            'PAN' => $pan
         ];
 
         $params['Token'] = $this->authenticationService->getAuthenticationToken();
@@ -156,6 +157,38 @@ class Card
 
         if ($response['Card_ChangeStatusResult']['Description'] == 'Success ') {
             return true;
+        }
+        throw new PayProException("Bad Request", 400);
+    }
+
+    /**
+     * Get Pin card
+     * @param  CardEntity $card
+     * @param int $cvv2
+     * @return bool
+     */
+    public function retrivePin(CardEntity $card, int $cvv2) : bool
+    {
+        $params = [
+            'CardID' => $card->getContisCardId(),
+            'SecurityCode' => $cvv2
+        ];
+
+        $params['Token'] = $this->authenticationService->getAuthenticationToken();
+
+        $requestParams = [
+            'Token' => $params['Token'],
+            'ClientUniqueReferenceID' => strtotime('now'),
+            'SchemeCode' => 'PAYPRO'
+        ];
+
+        $params = $this->hashingService->generateHashDataStringAndHash($params);
+        $requestParams = $this->hashingService->generateHashDataStringAndHash($requestParams);
+
+        $response = $this->requestService->call('Card_RetrivePIN', $params, $requestParams);
+        
+        if ($response['Card_RetrivePINResult']['Description'] == '000') {
+            return $response['Card_RetrivePINResult']['ResultObject'];
         }
         throw new PayProException("Bad Request", 400);
     }
