@@ -18,6 +18,13 @@ services:
     tags:
       - { name: kernel.event_subscriber }
 
+  payproapi.card_activation_code_subscriber:
+    class: AppBundle\EventSubscriber\CardActivationCodeSubscriber
+    arguments:
+      - '@payproapi.twilio_short_message_service'
+    tags:
+      - { name: kernel.event_subscriber }
+
   payproapi.authentication_subscriber:
     class: AppBundle\EventSubscriber\AuthenticationSubscriber
     tags:
