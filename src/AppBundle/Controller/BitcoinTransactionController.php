@@ -16,35 +16,11 @@ use AppBundle\Exception\PayProException;
  * Transaction controller.
  * @Security("has_role('ROLE_USER')")
  *
- * @Route("/transactions")
+ * @Route("/bitcoin_transactions")
  */
-class TransactionController extends Controller
+class BitcoinTransactionController extends Controller
 {
     use JWTResponseControllerTrait;
-
-    /**
-     * Returns a list of transactions
-     * @param  UserInterface $user
-     * @param  Request $request
-     * @return JsonResponse
-     * @throws PayProException
-     * @Route("/latest", name="last_transactions_list")
-     * @Method("GET")
-     */
-    public function lastTransactionsAction(UserInterface $user, Request $request) : JsonResponse
-    {
-        $filters = $request->query->all();
-
-        try {
-            $transactions = $this->get('payproapi.last_transactions_service')->execute(
-                $user->getId(),
-                isset($filters['transactionId']) ? $filters['transactionId'] : null);
-        } catch (PayProException $e) {
-            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
-        }
-
-        return $this->JWTResponse($user, ['transactions' => $transactions]);
-    }
 
     /**
      * Returns the information of a given transaction
@@ -67,7 +43,7 @@ class TransactionController extends Controller
      * @param  Request       $request
      * @return JsonResponse
      * 
-     * @Route("", name="transactions_create")
+     * @Route("", name="bitcoin_transactions_create")
      * @Method("POST")
      */
     public function createAction(UserInterface $user, Request $request) : JsonResponse
@@ -75,12 +51,11 @@ class TransactionController extends Controller
         $requestData = $request->request->all();
 
         try {
-            $transaction = $this->get('payproapi.create_transaction_service')->execute(
+            $transaction = $this->get('payproapi.create_bitcoin_transaction_service')->execute(
                 $user->getId(),
                 $requestData['beneficiary'],
                 $requestData['amount'],
-                $requestData['subject'],
-                isset($requestData['title']) ? $requestData['title'] : null
+                $requestData['subject']
             );
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
