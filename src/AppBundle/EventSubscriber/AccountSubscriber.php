@@ -26,12 +26,23 @@ class AccountSubscriber implements EventSubscriberInterface
         ];
     }
 
+    public function accountCreated(AccountEvent $event)
+    {
+        $this->createNotification($event);
+        $this->createBitcoinWallet($event);
+    }
+
+    private function createBitcoinWallet(AccountEvent $event)
+    {
+        $this->BitcoinWalletApiClient->createWallet($event->getAccount());
+    }
+
     /**
      * Calls the AppBundle\Service\Notification\CreateNotificationService whenever an
      * account is in order to create a pending iOS push notification for it.
      * @param AccountEvent $event
      */
-    public function createNotification(AccountEvent $event)
+    private function createNotification(AccountEvent $event)
     {
         $accountId = $event->getAccount()->getId();
         $deviceId = $event->getDeviceId();

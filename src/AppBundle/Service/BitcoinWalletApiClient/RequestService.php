@@ -32,13 +32,13 @@ class RequestService
      * @return array
      * @throws PayProException
      */
-    public function call(string $endpoint, array $params) : array
+    public function call(string $method, string $endpoint, array $params) : array
     {
         $payload = json_encode($params, JSON_UNESCAPED_SLASHES);
 
         try {
             $response = $this->httpClient->request(
-                'POST',
+                $method,
                 $this->bitcoinWalletApiHost.$endpoint,
                 [
                     'headers' => [
