@@ -16,7 +16,7 @@ class Wallet
     protected $bitcoinWalletRequestService;
 
     public function __construct(RequestService $bitcoinWalletRequestService) {
-        $this->bitcoinWalletRequestService;
+        $this->bitcoinWalletRequestService = $bitcoinWalletRequestService;
         $this->httpClient = new Client();
     }
 
