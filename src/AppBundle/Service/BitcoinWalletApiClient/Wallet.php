@@ -12,10 +12,10 @@ use GuzzleHttp\Client;
 class Wallet
 {
     protected $httpClient;
-    protected $bitcoinWalletClientHost;
+    protected $bitcoinWalletRequestService;
 
-    public function __construct(string $bitcoinWalletClientHost) {
-        $this->bitcoinWalletClientHost;
+    public function __construct(string $bitcoinWalletRequestService) {
+        $this->bitcoinWalletRequestService;
         $this->httpClient = new Client();
     }
 
@@ -26,24 +26,12 @@ class Wallet
      */
     public function create(AccountEntity $account) : array
     {
+        $response = $this->bitcoinWalletRequestService(
+            'POST',
+            '/wallet',
+            ['filename' =>$account->getId()]
+        );
 
-        try {
-            $response = $this->httpClient->request(
-                'POST',
-                $this->bitcoinWalletClientHost."/wallet",
-                [
-                    'headers' => [
-                        'Content-type' => 'application/json'
-                    ],
-                    'connect_timeout' => 20,
-                    'body' => $payload
-                ]
-            );
-
-        } catch (Exception $e) {
-
-        }
-
-        return json_decode($response->getBody()->getContents(), true);
+        return $response;
     }
 }
