@@ -85,7 +85,7 @@ class ActivateCardService
 
         $this->cardRepository->save($card);
 
-        return $card;
+        return true;
     }
 
     /**
