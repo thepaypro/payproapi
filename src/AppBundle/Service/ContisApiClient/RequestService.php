@@ -2,11 +2,9 @@
 
 namespace AppBundle\Service\ContisApiClient;
 
-use Symfony\Component\HttpFoundation\Session\Session;
 use AppBundle\Exception\PayProException;
 use Exception;
 use GuzzleHttp\Client;
-use DateTime;
 
 /**
  * Class RequestService
