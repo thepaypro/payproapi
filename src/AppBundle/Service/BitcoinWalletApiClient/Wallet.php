@@ -1,8 +1,9 @@
 <?php
 
-namespace AppBundle\Service\ContisApiClient;
+namespace AppBundle\Service\BitcoinWalletApiClient;
 
-use AppBundle\Entity\Account as AccountEntity;
+use AppBundle\Exception\PayProException;
+use Exception;
 use GuzzleHttp\Client;
 
 /**
@@ -14,23 +15,28 @@ class Wallet
     protected $httpClient;
     protected $bitcoinWalletRequestService;
 
-    public function __construct(string $bitcoinWalletRequestService) {
-        $this->bitcoinWalletRequestService;
+    public function __construct(RequestService $bitcoinWalletRequestService) {
+        $this->bitcoinWalletRequestService = $bitcoinWalletRequestService;
         $this->httpClient = new Client();
     }
 
     /**
      * Create a bitcoin wallet for an account
-     * @param  AccountEntity $account
+     * @param string $walletIdentification
      * @return array $response
+     * @throws PayProException
      */
-    public function create(AccountEntity $account) : array
+    public function create(string $walletIdentification) : array
     {
-        $response = $this->bitcoinWalletRequestService(
-            'POST',
-            '/wallet',
-            ['filename' =>$account->getId()]
-        );
+        try {
+            $response = $this->bitcoinWalletRequestService->call(
+                'POST',
+                '/wallet',
+                ['filename' => $walletIdentification]
+            );
+        } catch (Exception $exception) {
+            throw new PayProException('Bitcoin Wallet service unavailable', 500);
+        }
 
         return $response;
     }

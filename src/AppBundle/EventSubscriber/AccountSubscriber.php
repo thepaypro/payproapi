@@ -32,9 +32,13 @@ class AccountSubscriber implements EventSubscriberInterface
         $this->createBitcoinWallet($event);
     }
 
+    /**
+     * Calls the bitcoin wallet in order to create the wallet for the account.
+     * @param AccountEvent $event
+     */
     private function createBitcoinWallet(AccountEvent $event)
     {
-        $this->BitcoinWalletApiClient->createWallet($event->getAccount());
+        $this->BitcoinWalletApiClient->createWallet($event->getAccount()->getId());
     }
 
     /**
