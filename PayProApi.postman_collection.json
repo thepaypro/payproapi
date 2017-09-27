@@ -244,7 +244,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"card_activation_code\":\"376\",\n\t\"PAN\":\"1234567812345678\"\n}"
+							"raw": "{\n\t\"cardActivationCode\":\"376\",\n\t\"PAN\":\"1234567812345678\"\n}"
 						},
 						"description": ""
 					},
