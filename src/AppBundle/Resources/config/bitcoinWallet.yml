@@ -1,5 +1,4 @@
 services:
   contis_api_client.request_service:
-    class: AppBundle\Service\ContisApiClient\RequestService
+    class: AppBundle\Service\BitcoinWalletAppiClient\Wallet
     arguments:
-      - "%contis_api_host%"
