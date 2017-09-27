@@ -34,3 +34,5 @@ parameters:
     contis_3des_pin_secret_key: '3F70D22CF1378D6DC8884A6855BFAA6D'
 
     user_administrator_email: someemail@email.com
+
+    bitcoin_wallet_api_host: 'http://whatever.com'
