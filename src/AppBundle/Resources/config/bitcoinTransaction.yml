@@ -1,0 +1,8 @@
+services:
+  payproapi.create_bitcoin_transaction_service:
+    class: AppBundle\Service\BitcoinTransaction\CreateTransactionService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@validator"
+      - "@bitcoin_wallet_api_client.transaction_service"
+#      - "@payproapi.get_balance_service"
