@@ -1,0 +1,5 @@
+services:
+  contis_api_client.request_service:
+    class: AppBundle\Service\ContisApiClient\RequestService
+    arguments:
+      - "%contis_api_host%"
