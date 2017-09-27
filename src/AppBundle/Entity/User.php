@@ -116,4 +116,14 @@ class User extends BaseUser implements \JsonSerializable
     {
         return $this->invites;
     }
+
+    /**
+     * Get account
+     *
+     * @return \AppBundle\Entity\Account
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
 }

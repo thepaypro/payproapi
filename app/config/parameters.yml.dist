@@ -19,8 +19,8 @@ parameters:
     jwt_token_ttl:        3600
 
     #Apple Push Notifications certificate
-    apn_certificate_path: '%kernel.root_dir%/../var/apn/tpp_cert_key.pem'
-    apns_certificate_passphrase: thepaypro
+    apn_certificate_path: '%kernel.root_dir%/../var/apn/paypro_cert_key.pem'
+    apns_certificate_passphrase: PayProAppDevelopment23!
 
     twilio_account_id: 'AC3728b7395057e64047db32dfb6175d81'
     twilio_auth_token: '877ba70e2f95811f69586cd850fcc8fc'
