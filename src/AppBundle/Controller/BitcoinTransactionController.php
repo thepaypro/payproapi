@@ -78,7 +78,7 @@ class BitcoinTransactionController extends Controller
         $filters = $request->query->all();
 
         try {
-            $transactions = $this->get('payproapi.index_transaction_service')->execute(
+            $transactions = $this->get('payproapi.index_bitcoin_transaction_service')->execute(
                 $user->getId(),
                 isset($filters['page']) ? $filters['page'] : null,
                 isset($filters['size']) ? $filters['size'] : null

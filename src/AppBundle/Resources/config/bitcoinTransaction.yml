@@ -6,3 +6,10 @@ services:
       - "@validator"
       - "@bitcoin_wallet_api_client.transaction_service"
 #      - "@payproapi.get_balance_service"
+
+  payproapi.index_bitcoin_transaction_service:
+    class: AppBundle\Service\BitcoinTransaction\IndexTransactionService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@bitcoin_wallet_api_client.transaction_service"
+#      - "@payproapi.get_balance_service"
