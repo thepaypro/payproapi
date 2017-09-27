@@ -758,7 +758,7 @@
 			]
 		},
 		{
-			"name": "BitcoinBalance",
+			"name": "BitcoinWallet",
 			"description": "",
 			"item": [
 				{
