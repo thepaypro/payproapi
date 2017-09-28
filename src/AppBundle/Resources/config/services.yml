@@ -37,3 +37,6 @@ imports:
   - { resource: subscribers.yml }
   - { resource: transaction.yml }
   - { resource: user.yml }
+  - { resource: user.yml }
+  - { resource: bitcoinWalletApiClient.yml }
+  - { resource: bitcoinTransaction.yml }
