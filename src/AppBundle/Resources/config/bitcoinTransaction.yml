@@ -4,7 +4,7 @@ services:
     arguments:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
       - "@bitcoin_wallet_api_client.transaction_service"
-#      - "@bitcoin_wallet_api_client.wallet_service"
+      - "@bitcoin_wallet_api_client.wallet_service"
 
   payproapi.index_bitcoin_transaction_service:
     class: AppBundle\Service\BitcoinTransaction\IndexTransactionService
