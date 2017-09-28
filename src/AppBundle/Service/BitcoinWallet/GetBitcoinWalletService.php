@@ -2,9 +2,9 @@
 
 namespace AppBundle\Service\BitcoinWallet;
 
-use AppBundle\Repository\UserRepository;
-use AppBundle\Service\BitcoinWalletApiClient\Wallet;
 use AppBundle\Exception\PayProException;
+use AppBundle\Repository\UserRepository;
+use AppBundle\Service\BitcoinWalletApiClient\Interfaces\WalletInterface;
 
 /**
  * Class GetBitcoinWalletService
@@ -16,7 +16,7 @@ class GetBitcoinWalletService
 
     public function __construct(
         UserRepository $userRepository,
-        Wallet $bitcoinWalletApiClient
+        WalletInterface $bitcoinWalletApiClient
     )
     {
         $this->userRepository = $userRepository;

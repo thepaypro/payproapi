@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Wallet controller.
  * @Security("has_role('ROLE_USER')")
  *
- * @Route("/bitcoin_wallet")
+ * @Route("/bitcoin_wallets")
  */
 class BitcoinWalletController extends Controller
 {
@@ -33,13 +33,13 @@ class BitcoinWalletController extends Controller
     public function getAction(UserInterface $user): JsonResponse
     {
         try {
-            $transaction = $this->get('payproapi.get_bitcoin_wallet_service')->execute(
+            $wallet = $this->get('payproapi.get_bitcoin_wallet_service')->execute(
                 $user->getId()
             );
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
 
-        return $this->JWTResponse($user, ['transaction' => $transaction]);
+        return $this->JWTResponse($user, ['wallet' => $wallet]);
     }
 }

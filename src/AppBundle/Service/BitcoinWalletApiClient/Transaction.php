@@ -2,8 +2,7 @@
 
 namespace AppBundle\Service\BitcoinWalletApiClient;
 
-use AppBundle\Entity\Account as AccountEntity;
-use AppBundle\Exception\PayProException;
+use AppBundle\Service\BitcoinWalletApiClient\Interfaces\TransactionInterface;
 use GuzzleHttp\Client;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
@@ -11,12 +10,12 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  * Class Transaction
  * @package AppBundle\Service\BitcoinWalletApiClient
  */
-class Transaction
+class Transaction implements TransactionInterface
 {
     protected $httpClient;
     protected $bitcoinWalletRequestService;
 
-    public function __construct(string $bitcoinWalletRequestService)
+    public function __construct(RequestService $bitcoinWalletRequestService)
     {
         $this->bitcoinWalletRequestService = $bitcoinWalletRequestService;
         $this->httpClient = new Client();
@@ -29,7 +28,7 @@ class Transaction
      */
     public function create(array $transaction): array
     {
-        $response = $this->bitcoinWalletRequestService(
+        $response = $this->bitcoinWalletRequestService->call(
             'POST',
             '/transaction',
             [
@@ -51,7 +50,7 @@ class Transaction
     public function getAll(string $walletIdentification): array
     {
         try {
-            $response = $this->bitcoinWalletRequestService(
+            $response = $this->bitcoinWalletRequestService->call(
                 'GET',
                 '/transaction',
                 [

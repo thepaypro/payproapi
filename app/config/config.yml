@@ -1,7 +1,6 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: services.yml }
     - { resource: lexik_jwt.yml }
     - { resource: nelmio_cors.yml }
     - { resource: fos_user.yml }
