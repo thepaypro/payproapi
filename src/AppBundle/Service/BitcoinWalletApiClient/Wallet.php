@@ -43,4 +43,28 @@ class Wallet
 
         return $response;
     }
+
+    /**
+     * Create a bitcoin wallet for an account
+     * @param string $walletIdentification
+     * @return array $response
+     * @throws PayProException
+     */
+    public function get(string $walletIdentification, string $tenant) : array
+    {
+        try {
+            $response = $this->bitcoinWalletRequestService->call(
+                'get',
+                '/wallet',
+                [
+                    'filename' => $walletIdentification,
+                    'tenant' => $tenant
+                ]
+            );
+        } catch (Exception $exception) {
+            throw new PayProException('Bitcoin Wallet service unavailable', 500);
+        }
+
+        return $response;
+    }
 }
