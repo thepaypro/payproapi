@@ -23,21 +23,6 @@ class BitcoinTransactionController extends Controller
     use JWTResponseControllerTrait;
 
     /**
-     * Returns the information of a given transaction
-     * @param  UserInterface $user
-     * @param  Request       $request
-     * @return JsonResponse
-     *
-     * @Route("/{id}", name="transactions_show")
-     * @Method("GET")
-     */
-    public function getAction(UserInterface $user, Request $request) : JsonResponse
-    {
-        $transaction = null;
-        return $this->JWTResponse($user, ['transaction' => $transaction]);
-    }
-
-    /**
      * Create a transaction
      * @param  UserInterface $user
      * @param  Request       $request
