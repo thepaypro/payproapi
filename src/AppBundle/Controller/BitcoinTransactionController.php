@@ -49,29 +49,29 @@ class BitcoinTransactionController extends Controller
         return $this->JWTResponse($user, ['transaction' => $transaction]);
     }
 
-//    /**
-//     * Returns a list of transactions
-//     * @param  UserInterface $user
-//     * @param  Request $request
-//     * @return JsonResponse
-//     * @throws PayProException
-//     * @Route("", name="transactions_list")
-//     * @Method("GET")
-//     */
-//    public function indexAction(UserInterface $user, Request $request) : JsonResponse
-//    {
-//        $filters = $request->query->all();
-//
-//        try {
-//            $transactions = $this->get('payproapi.index_transaction_service')->execute(
-//                $user->getId(),
-//                isset($filters['page']) ? $filters['page'] : null,
-//                isset($filters['size']) ? $filters['size'] : null
-//            );
-//        } catch (PayProException $e) {
-//            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
-//        }
-//
-//        return $this->JWTResponse($user, ['transactions' => $transactions]);
-//    }
+    /**
+     * Returns a list of transactions
+     * @param  UserInterface $user
+     * @param  Request $request
+     * @return JsonResponse
+     * @throws PayProException
+     * @Route("", name="transactions_list")
+     * @Method("GET")
+     */
+    public function indexAction(UserInterface $user, Request $request) : JsonResponse
+    {
+        $filters = $request->query->all();
+
+        try {
+            $transactions = $this->get('payproapi.index_bitcoin_transaction_service')->execute(
+                $user->getId(),
+                isset($filters['page']) ? $filters['page'] : 1,
+                isset($filters['size']) ? $filters['size'] : 10
+            );
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
+        }
+
+        return $this->JWTResponse($user, ['transactions' => $transactions]);
+    }
 }
