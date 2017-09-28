@@ -12,6 +12,26 @@ class AppExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
+        $loader->load('utils.yml');
+        $loader->load('account.yml');
+        $loader->load('accountRequest.yml');
+        $loader->load('card.yml');
+        $loader->load('balance.yml');
+        $loader->load('cardHolder.yml');
+        $loader->load('contact.yml');
+        $loader->load('contis.yml');
+        $loader->load('mobileVerificationCode.yml');
+        $loader->load('notification.yml');
+        $loader->load('profile.yml');
+        $loader->load('subscribers.yml');
+        $loader->load('transaction.yml');
+        $loader->load('user.yml');
+        $loader->load('bitcoinTransaction.yml');
+        $loader->load('bitcoinWallet.yml');
+        $loader->load('bitcoinWalletApiClient.yml');
+
+        if ($container->getParameter('bitcoin_mock')) {
+            $loader->load('bitcoinWalletApiClientMock.yml');
+        }
     }
 }

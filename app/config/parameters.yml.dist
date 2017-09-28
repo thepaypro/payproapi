@@ -36,3 +36,4 @@ parameters:
     user_administrator_email: someemail@email.com
 
     bitcoin_wallet_api_host: 'http://whatever.com'
+    bitcoin_mock: true

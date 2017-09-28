@@ -4,7 +4,7 @@ namespace AppBundle\Service\BitcoinTransaction;
 
 use AppBundle\Exception\PayProException;
 use AppBundle\Repository\UserRepository;
-use AppBundle\Service\BitcoinWalletApiClient\Transaction;
+use AppBundle\Service\BitcoinWalletApiClient\Interfaces\TransactionInterface;
 
 /**
  * Class IndexBitcoinTransactionService
@@ -16,7 +16,7 @@ class IndexBitcoinTransactionService
 
     public function __construct(
         UserRepository $userRepository,
-        Transaction $bitcoinTransactionApiClient
+        TransactionInterface $bitcoinTransactionApiClient
     )
     {
         $this->userRepository = $userRepository;
@@ -40,7 +40,7 @@ class IndexBitcoinTransactionService
 
         $bitcoinTransactions = $this->bitcoinTransactionApiClient->getAll($user->getAccount()->getId());
 
-        $bitcoinTransactions = array_slice($bitcoinTransactions, $page, $size);
+        $bitcoinTransactions = array_slice($bitcoinTransactions, ($page - 1) * $size, $size);
 
         return $bitcoinTransactions;
     }
