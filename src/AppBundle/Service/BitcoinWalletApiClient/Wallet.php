@@ -4,6 +4,7 @@ namespace AppBundle\Service\BitcoinWalletApiClient;
 
 use AppBundle\Exception\PayProException;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use AppBundle\Service\BitcoinWalletApiClient\Interfaces\WalletInterface;
 use Exception;
 use GuzzleHttp\Client;
@@ -32,13 +33,19 @@ class Wallet implements WalletInterface
      */
     public function create(string $walletIdentification, string $tenant): bool
     {
-        $cmd = 'docker-compose -f /var/bitcoinWalletCLI/docker-compose.yml run';
-        $cmd = $cmd.'/var/www/bin/wallet create '.$tenant.'Wallet 1-1 /wallets/'.$walletIdentification.'.dat';
+        $tenant = str_replace(' ', '', $tenant);
+        $cmd = 'docker-compose -f /var/bitcoinWalletCLI/docker-compose.yml run node ';
+        $cmd = $cmd.'/var/www/bin/wallet create '.$tenant.'Wallet 1-1 '.$tenant.' -t -f /wallets/'.$walletIdentification.'.dat';
 
-        $process = new Process($cmd);
-        $process->run();
+        $process = new Process('docker-compose -f /var/bitcoinWalletCLI/docker-compose.yml run node /var/www/bin/wallet create TESTKWallet 1-1 TESTK -t -f /wallets/testk.dat');
 
-        dump($process->getOutput());die();
+        try {
+            $process->mustRun();
+
+            dump($process->getOutput());die();
+        } catch (ProcessFailedException $e) {
+            dump($e->getMessage());die();
+        }
     }
 
     /**
