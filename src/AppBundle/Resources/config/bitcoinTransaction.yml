@@ -1,13 +1,13 @@
 services:
   payproapi.create_bitcoin_transaction_service:
-    class: AppBundle\Service\BitcoinTransaction\CreateTransactionService
+    class: AppBundle\Service\BitcoinTransaction\CreateBitcoinTransactionService
     arguments:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
       - "@bitcoin_wallet_api_client.transaction_service"
       - "@bitcoin_wallet_api_client.wallet_service"
 
   payproapi.index_bitcoin_transaction_service:
-    class: AppBundle\Service\BitcoinTransaction\IndexTransactionService
+    class: AppBundle\Service\BitcoinTransaction\IndexBitcoinTransactionService
     arguments:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
       - "@bitcoin_wallet_api_client.transaction_service"

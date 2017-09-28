@@ -4,6 +4,7 @@ namespace AppBundle\Service\BitcoinWalletApiClient;
 
 use AppBundle\Exception\PayProException;
 use Symfony\Component\Process\Process;
+use AppBundle\Service\BitcoinWalletApiClient\Interfaces\WalletInterface;
 use Exception;
 use GuzzleHttp\Client;
 
@@ -11,12 +12,13 @@ use GuzzleHttp\Client;
  * Class Wallet
  * @package AppBundle\Service\BitcoinWalletApiClient
  */
-class Wallet
+class Wallet implements WalletInterface
 {
     protected $httpClient;
     protected $bitcoinWalletRequestService;
 
-    public function __construct(RequestService $bitcoinWalletRequestService) {
+    public function __construct(RequestService $bitcoinWalletRequestService)
+    {
         $this->bitcoinWalletRequestService = $bitcoinWalletRequestService;
         $this->httpClient = new Client();
     }
@@ -28,7 +30,7 @@ class Wallet
      * @return array $response
      * @throws PayProException
      */
-    public function create(string $walletIdentification, string $tenant) : bool
+    public function create(string $walletIdentification, string $tenant): bool
     {
         $cmd = 'docker-compose -f /var/bitcoinWalletCLI/docker-compose.yml run';
         $cmd = $cmd.'/var/www/bin/wallet create '.$tenant.'Wallet 1-1 /wallets/'.$walletIdentification.'.dat';
@@ -45,7 +47,7 @@ class Wallet
      * @return array $response
      * @throws PayProException
      */
-    public function getOne(string $walletIdentification) : array
+    public function getOne(string $walletIdentification): array
     {
         try {
             $response = $this->bitcoinWalletRequestService->call(

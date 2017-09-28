@@ -3,10 +3,9 @@
 namespace AppBundle\Service\BitcoinTransaction;
 
 use AppBundle\Exception\PayProException;
-use AppBundle\Repository\AccountRepository;
 use AppBundle\Repository\UserRepository;
-use AppBundle\Service\BitcoinWalletApiClient\Wallet;
-use AppBundle\Service\BitcoinWalletApiClient\Transaction;
+use AppBundle\Service\BitcoinWalletApiClient\Interfaces\WalletInterface;
+use AppBundle\Service\BitcoinWalletApiClient\Interfaces\TransactionInterface;
 
 /**
  * Class CreateBitcoinTransactionService
@@ -14,18 +13,18 @@ use AppBundle\Service\BitcoinWalletApiClient\Transaction;
 class CreateBitcoinTransactionService
 {
     protected $userRepository;
-    protected $bitcoinTransactionApiClient;
     protected $bitcoinWalletApiClient;
+    protected $bitcoinTransactionApiClient;
 
     public function __construct(
         UserRepository $userRepository,
-        Wallet $bitcoinWalletApiClient,
-        Transaction $bitcoinTransactionApiClient
+        TransactionInterface $bitcoinTransactionApiClient,
+        WalletInterface $bitcoinWalletApiClient
     )
     {
-        $this->$userRepository = $userRepository;
-        $this->$bitcoinWalletApiClient = $bitcoinWalletApiClient;
-        $this->$bitcoinTransactionApiClient = $bitcoinTransactionApiClient;
+        $this->userRepository = $userRepository;
+        $this->bitcoinWalletApiClient = $bitcoinWalletApiClient;
+        $this->bitcoinTransactionApiClient = $bitcoinTransactionApiClient;
     }
 
     /**

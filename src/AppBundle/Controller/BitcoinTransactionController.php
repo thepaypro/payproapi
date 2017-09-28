@@ -55,7 +55,7 @@ class BitcoinTransactionController extends Controller
      * @param  Request $request
      * @return JsonResponse
      * @throws PayProException
-     * @Route("", name="transactions_list")
+     * @Route("", name="bitcoin_transactions_list")
      * @Method("GET")
      */
     public function indexAction(UserInterface $user, Request $request) : JsonResponse
