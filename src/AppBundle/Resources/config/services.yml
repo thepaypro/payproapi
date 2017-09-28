@@ -40,3 +40,4 @@ imports:
   - { resource: user.yml }
   - { resource: bitcoinWalletApiClient.yml }
   - { resource: bitcoinTransaction.yml }
+  - { resource: bitcoinWallet.yml }
