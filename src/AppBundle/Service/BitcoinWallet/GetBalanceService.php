@@ -1,48 +1,39 @@
 <?php
 
-namespace AppBundle\Service\Balance;
+namespace AppBundle\Service\BitcoinWallet;
 
+use AppBundle\Repository\UserRepository;
+use AppBundle\Service\BitcoinWalletApiClient\Wallet;
 use AppBundle\Exception\PayProException;
-use Doctrine\Common\Persistence\ObjectRepository as ObjectRepositoryInterface;
-use AppBundle\Service\ContisApiClient\Balance;
 
 /**
- * Class GetBalanceService
- * @package AppBundle\Service\Balance
+ * Class IndexBitcoinTransactionService
  */
-class GetBalanceService
+class IndexBitcoinTransactionService
 {
     protected $userRepository;
-    protected $contisBalanceApiClient;
+    protected $bitcoinWalletApiClient;
 
-    /**
-     * GetBalanceService constructor.
-     * @param ObjectRepositoryInterface $userRepository
-     * @param Balance $contisBalanceApiClient
-     */
     public function __construct(
-        ObjectRepositoryInterface $userRepository,
-        Balance $contisBalanceApiClient)
+        UserRepository $userRepository,
+        Wallet $bitcoinWalletApiClient
+    )
     {
         $this->userRepository = $userRepository;
-        $this->contisBalanceApiClient = $contisBalanceApiClient;
+        $this->bitcoinWalletApiClient = $bitcoinWalletApiClient;
     }
 
     /**
-     * Retrieve the balance of the user's account from Contis.
-     *
-     * @param  int $userId
-     * @return float
+     * @param int $userId
+     * @return array
      * @throws PayProException
      */
-    public function execute(int $userId): float
+    public function execute(int $userId): array
     {
         $user = $this->userRepository->findOneById($userId);
 
-        if (!$account = $user->getAccount()) {
-            throw new PayProException('Account not found', 404);
-        }
+        $bitcoinTransactions = $this->bitcoinWalletApiClient->getOne($user->getAccount()->getId());
 
-        return $this->contisBalanceApiClient->get($account);
+        return $bitcoinTransactions;
     }
 }

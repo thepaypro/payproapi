@@ -1,6 +1,6 @@
 services:
   payproapi.get_bitcoin_wallet_service:
-    class: AppBundle\Service\BitcoinTransaction\CreateTransactionService
+    class: AppBundle\Service\BitcoinWallet\CreateTransactionService
     arguments:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
       - "@bitcoin_wallet_api_client.wallet_service"

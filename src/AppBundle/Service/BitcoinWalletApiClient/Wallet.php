@@ -63,15 +63,14 @@ class Wallet
      * @return array $response
      * @throws PayProException
      */
-    public function get(string $walletIdentification, string $tenant) : array
+    public function getOne(string $walletIdentification) : array
     {
         try {
             $response = $this->bitcoinWalletRequestService->call(
-                'get',
+                'GET',
                 '/wallet',
                 [
-                    'filename' => $walletIdentification,
-                    'tenant' => $tenant
+                    'filename' => $walletIdentification
                 ]
             );
         } catch (Exception $exception) {

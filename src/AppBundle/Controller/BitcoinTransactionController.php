@@ -65,8 +65,8 @@ class BitcoinTransactionController extends Controller
         try {
             $transactions = $this->get('payproapi.index_bitcoin_transaction_service')->execute(
                 $user->getId(),
-                isset($filters['page']) ? $filters['page'] : null,
-                isset($filters['size']) ? $filters['size'] : null
+                isset($filters['page']) ? $filters['page'] : 1,
+                isset($filters['size']) ? $filters['size'] : 10
             );
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());

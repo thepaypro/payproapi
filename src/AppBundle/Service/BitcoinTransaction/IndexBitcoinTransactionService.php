@@ -7,9 +7,9 @@ use AppBundle\Repository\UserRepository;
 use AppBundle\Service\BitcoinWalletApiClient\Transaction;
 
 /**
- * Class CreateBitcoinTransactionService
+ * Class IndexBitcoinTransactionService
  */
-class CreateBitcoinTransactionService
+class IndexBitcoinTransactionService
 {
     protected $userRepository;
     protected $bitcoinTransactionApiClient;

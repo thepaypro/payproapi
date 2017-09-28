@@ -29,7 +29,6 @@ class Transaction
      */
     public function create(array $transaction): array
     {
-
         $response = $this->bitcoinWalletRequestService(
             'POST',
             '/transaction',
