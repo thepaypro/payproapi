@@ -3,6 +3,7 @@
 namespace AppBundle\Service\BitcoinWalletApiClient;
 
 use AppBundle\Exception\PayProException;
+use Symfony\Component\Process\Process;
 use Exception;
 use GuzzleHttp\Client;
 
@@ -29,32 +30,13 @@ class Wallet
      */
     public function create(string $walletIdentification, string $tenant) : bool
     {
-        try {
-            $this->bitcoinWalletRequestService->call(
-                'POST',
-                '/wallet',
-                [
-                    'filename' => $walletIdentification,
-                    'tenant' => $tenant
-                ]
-            );
-        } catch (Exception $exception) {
-            throw new PayProException('Bitcoin Wallet service unavailable', 500);
-        }
+        $cmd = 'docker-compose -f /var/bitcoinWalletCLI/docker-compose.yml run';
+        $cmd = $cmd.'/var/www/bin/wallet create '.$tenant.'Wallet 1-1 /wallets/'.$walletIdentification.'.dat';
 
-        return true;
-    }
+        $process = new Process($cmd);
+        $process->run();
 
-    /**
-     * Create a bitcoin wallet for an account
-     * @param string $walletIdentification
-     * @param string $tenant
-     * @return array $response
-     * @throws PayProException
-     */
-    public function fakeCreate(string $walletIdentification, string $tenant) : bool
-    {
-        return true;
+        dump($process->getOutput());die();
     }
 
     /**
