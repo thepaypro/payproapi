@@ -2,15 +2,15 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
 use AppBundle\Exception\PayProException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Transaction controller.
@@ -25,13 +25,13 @@ class BitcoinTransactionController extends Controller
     /**
      * Create a transaction
      * @param  UserInterface $user
-     * @param  Request       $request
+     * @param  Request $request
      * @return JsonResponse
-     * 
+     *
      * @Route("", name="bitcoin_transactions_create")
      * @Method("POST")
      */
-    public function createAction(UserInterface $user, Request $request) : JsonResponse
+    public function createAction(UserInterface $user, Request $request): JsonResponse
     {
         $requestData = $request->request->all();
 
