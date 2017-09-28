@@ -1,0 +1,15 @@
+services:
+  bitcoin_wallet_api_client.request_service:
+    class: AppBundle\Service\BitcoinWalletApiClient\RequestService
+    arguments:
+      - "%bitcoin_wallet_api_host%"
+
+  bitcoin_wallet_api_client.wallet_service:
+    class: AppBundle\Service\BitcoinWalletApiClient\Wallet
+    arguments:
+      - "@bitcoin_wallet_api_client.request_service"
+
+  bitcoin_wallet_api_client.transaction_service:
+      class: AppBundle\Service\BitcoinWalletApiClient\Transaction
+      arguments:
+        - "@bitcoin_wallet_api_client.request_service"

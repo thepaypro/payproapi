@@ -23,18 +23,54 @@ class Wallet
     /**
      * Create a bitcoin wallet for an account
      * @param string $walletIdentification
+     * @param string $tenant
      * @return array $response
      * @throws PayProException
      */
-    public function create(string $walletIdentification, string $tenant) : array
+    public function create(string $walletIdentification, string $tenant) : bool
     {
         try {
-            $response = $this->bitcoinWalletRequestService->call(
+            $this->bitcoinWalletRequestService->call(
                 'POST',
                 '/wallet',
                 [
                     'filename' => $walletIdentification,
                     'tenant' => $tenant
+                ]
+            );
+        } catch (Exception $exception) {
+            throw new PayProException('Bitcoin Wallet service unavailable', 500);
+        }
+
+        return true;
+    }
+
+    /**
+     * Create a bitcoin wallet for an account
+     * @param string $walletIdentification
+     * @param string $tenant
+     * @return array $response
+     * @throws PayProException
+     */
+    public function fakeCreate(string $walletIdentification, string $tenant) : bool
+    {
+        return true;
+    }
+
+    /**
+     * Create a bitcoin wallet for an account
+     * @param string $walletIdentification
+     * @return array $response
+     * @throws PayProException
+     */
+    public function getOne(string $walletIdentification) : array
+    {
+        try {
+            $response = $this->bitcoinWalletRequestService->call(
+                'GET',
+                '/wallet',
+                [
+                    'filename' => $walletIdentification
                 ]
             );
         } catch (Exception $exception) {
