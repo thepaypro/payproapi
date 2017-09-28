@@ -54,7 +54,7 @@ class CreateBitcoinTransactionService
             throw new PayProException('Account not found', 400);
         }
 
-        $wallet = $this->bitcoinWalletApiClient->get($payer);
+        $wallet = $this->bitcoinWalletApiClient->getOne($payer->getId());
 
         if ($amount > $wallet['balance']) {
             throw new PayProException('Insufficient funds', 400);

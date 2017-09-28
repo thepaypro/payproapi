@@ -32,8 +32,8 @@ class GetBitcoinWalletService
     {
         $user = $this->userRepository->findOneById($userId);
 
-        $bitcoinTransactions = $this->bitcoinWalletApiClient->getOne($user->getAccount()->getId());
+        $bitcoinWallet = $this->bitcoinWalletApiClient->getOne($user->getAccount()->getId());
 
-        return $bitcoinTransactions;
+        return $bitcoinWallet;
     }
 }
