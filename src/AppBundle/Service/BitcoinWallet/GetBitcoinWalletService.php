@@ -7,9 +7,9 @@ use AppBundle\Service\BitcoinWalletApiClient\Wallet;
 use AppBundle\Exception\PayProException;
 
 /**
- * Class IndexBitcoinTransactionService
+ * Class GetBitcoinWalletService
  */
-class IndexBitcoinTransactionService
+class GetBitcoinWalletService
 {
     protected $userRepository;
     protected $bitcoinWalletApiClient;

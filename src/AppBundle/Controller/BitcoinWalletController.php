@@ -32,8 +32,6 @@ class BitcoinWalletController extends Controller
      */
     public function getAction(UserInterface $user): JsonResponse
     {
-
-
         try {
             $transaction = $this->get('payproapi.get_bitcoin_wallet_service')->execute(
                 $user->getId()
