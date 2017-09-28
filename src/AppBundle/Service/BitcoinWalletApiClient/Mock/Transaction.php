@@ -18,7 +18,7 @@ class Transaction implements TransactionInterface
             'transactionId' => 'alphanumericId',
             'amount' => "1",
             'subject' => 'transaction in bitcoins',
-            'destinatary' => 'Other Jhon Doe'
+            'beneficiary' => 'Other Jhon Doe'
         ];
 
 
@@ -38,13 +38,13 @@ class Transaction implements TransactionInterface
                 'transactionId' => 'alphanumericId',
                 'amount' => "1",
                 'subject' => 'transaction in bitcoins',
-                'destinatary' => 'Other Jhon Doe'
+                'beneficiary' => 'Other Jhon Doe'
             ],
             [
                 'transactionId' => 'alphanumericId2',
                 'amount' => "10",
                 'subject' => 'bigger transaction in bitcoins',
-                'destinatary' => 'Other Jhon Doe'
+                'beneficiary' => 'Other Jhon Doe'
             ]
         ];
 
