@@ -75,6 +75,7 @@ class ActivateCardService
         $response = $this->contisCardApiClient->activate($card,$pan);
         
         $card->setIsActive(true);
+        $card->setIsEnabled(true);
         $errors = $this->validationService->validate($card);
         if (count($errors) > 0) {
             foreach ($errors as $key => $error) {
