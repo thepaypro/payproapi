@@ -2,7 +2,7 @@
 
 namespace AppBundle\Service\BitcoinWalletApiClient\Interfaces;
 
-Interface TransactionInterface
+interface TransactionInterface
 {
     public function create(array $transaction): array;
 

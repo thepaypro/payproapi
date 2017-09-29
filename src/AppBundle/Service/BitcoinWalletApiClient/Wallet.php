@@ -37,14 +37,13 @@ class Wallet implements WalletInterface
         $cmd = 'docker-compose -f /var/bitcoinWalletCLI/docker-compose.yml run node ';
         $cmd = $cmd.'/var/www/bin/wallet create '.$tenant.'Wallet 1-1 '.$tenant.' -t -f /wallets/'.$walletIdentification.'.dat';
 
-        $process = new Process('docker-compose -f /var/bitcoinWalletCLI/docker-compose.yml run node /var/www/bin/wallet create TESTKWallet 1-1 TESTK -t -f /wallets/testk.dat');
+        $process = new Process($cmd);
 
         try {
             $process->mustRun();
-
-            dump($process->getOutput());die();
+            return true;
         } catch (ProcessFailedException $e) {
-            dump($e->getMessage());die();
+            throw PayProException('ERROR BitcoinApiClient,'.$e->getMessage(), 500);
         }
     }
 
