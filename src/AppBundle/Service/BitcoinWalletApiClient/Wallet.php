@@ -28,7 +28,7 @@ class Wallet implements WalletInterface
      * Create a bitcoin wallet for an account
      * @param string $walletIdentification
      * @param string $tenant
-     * @return array $response
+     * @return bool true
      * @throws PayProException
      */
     public function create(string $walletIdentification, string $tenant): bool
@@ -41,10 +41,11 @@ class Wallet implements WalletInterface
 
         try {
             $process->mustRun();
-            return true;
         } catch (ProcessFailedException $e) {
             throw PayProException('ERROR BitcoinApiClient,'.$e->getMessage(), 500);
         }
+
+        return true;
     }
 
     /**
