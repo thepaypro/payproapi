@@ -8,6 +8,59 @@
 	},
 	"item": [
 		{
+			"name": "BitcoinTransactions",
+			"description": "",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"url": "{{host}}/bitcoin-transactions",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"subject\":\"string\",\n\t\"amount\":\"100000000000\",\n\t\"beneficiary\":\"destination_hash\"\n}"
+						},
+						"description": "Create a bitcoin transaction to specified beneficiary"
+					},
+					"response": []
+				},
+				{
+					"name": "Index",
+					"request": {
+						"url": "{{host}}/bitcoin-transactions",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "No available filters"
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "AccountRequest",
 			"description": "",
 			"item": [
@@ -244,31 +297,6 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"card_activation_code\":\"376\",\n\t\"PAN\":\"1234567812345678\"\n}"
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "RequestActivationCode",
-					"request": {
-						"url": "{{host}}/cards/requestActivationCode",
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwt}}",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
 							"raw": ""
 						},
 						"description": ""
@@ -295,31 +323,6 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n\t\"enabled\":\"false\"\n}"
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "Retrive PIN",
-					"request": {
-						"url": "{{host}}/cards/retrive-pin",
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwt}}",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"cvv2\":\"123\"\n}"
 						},
 						"description": ""
 					},
@@ -755,66 +758,13 @@
 			]
 		},
 		{
-			"name": "BitcoinTransactions",
-			"description": "",
-			"item": [
-				{
-					"name": "Create",
-					"request": {
-						"url": "{{host}}/bc-transactions",
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwt}}",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"subject\":\"string\",\n\t\"amount\":\"100000000000\",\n\t\"beneficiary\":\"destination_hash\"\n}"
-						},
-						"description": "Create a bitcoin transaction to specified beneficiary"
-					},
-					"response": []
-				},
-				{
-					"name": "Index",
-					"request": {
-						"url": "{{host}}/bc-transactions",
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwt}}",
-								"description": ""
-							}
-						],
-						"body": {},
-						"description": "No available filters"
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "BitcoinWallet",
 			"description": "",
 			"item": [
 				{
 					"name": "Get",
 					"request": {
-						"url": "{{host}}/bc-balance",
+						"url": "{{host}}/bitcoin-wallets",
 						"method": "GET",
 						"header": [
 							{
