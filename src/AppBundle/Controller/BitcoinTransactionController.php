@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Transaction controller.
  * @Security("has_role('ROLE_USER')")
  *
- * @Route("/bitcoin_transactions")
+ * @Route("/bitcoin-transactions")
  */
 class BitcoinTransactionController extends Controller
 {

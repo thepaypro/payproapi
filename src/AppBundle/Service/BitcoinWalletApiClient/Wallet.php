@@ -40,7 +40,18 @@ class Wallet implements WalletInterface
         try {
             $process->mustRun();
         } catch (ProcessFailedException $e) {
-            throw PayProException('ERROR BitcoinApiClient, error creating wallet: '.$e->getMessage(), 500);
+            throw new PayProException('ERROR BitcoinApiClient, error creating wallet: '.$e->getMessage(), 500);
+        }
+
+        $cmd = 'docker-compose -f '.$this->dockerComposePath.' run node ';
+        $cmd = $cmd.'/var/www/bin/wallet address -f /wallets/'.$walletIdentification.'.dat';
+
+        $process = new Process($cmd);
+
+        try {
+            $process->mustRun();
+        } catch (ProcessFailedException $e) {
+            throw new PayProException('ERROR BitcoinApiClient, error creating address: '.$e->getMessage(), 500);
         }
 
         return true;
@@ -54,6 +65,44 @@ class Wallet implements WalletInterface
      */
     public function getOne(string $walletIdentification): array
     {
+        $cmd = 'docker-compose -f '.$this->dockerComposePath.' run node ';
+        $cmd = $cmd.'/var/www/bin/wallet status -f /wallets/'.$walletIdentification.'.dat';
 
+        $process = new Process($cmd);
+
+        try {
+            $process->mustRun();
+        } catch (ProcessFailedException $e) {
+            throw new PayProException('ERROR BitcoinApiClient, error retreiving wallet balance: '.$e->getMessage(), 500);
+        }
+
+        $outputArray = explode("*" ,$process->getOutput());
+        $balanceArray = explode(" ", end($outputArray));
+        $balance = '';
+        foreach ($balanceArray as $key => $element) {
+            if ($element == 'bit') {
+                $balance = $balanceArray[$key-1].' '.$element;
+            }
+        }
+
+        $cmd = 'docker-compose -f '.$this->dockerComposePath.' run node ';
+        $cmd = $cmd.'/var/www/bin/wallet addresses -f /wallets/'.$walletIdentification.'.dat';
+
+        $process = new Process($cmd);
+
+        try {
+            $process->mustRun();
+        } catch (ProcessFailedException $e) {
+            throw new PayProException('ERROR BitcoinApiClient, error retreiving wallet address: '.$e->getMessage(), 500);
+        }
+
+
+        $address = explode("\n", $process->getOutput())[1];
+        $address = trim($address, " ");
+
+        return [
+            'balance' => $balance,
+            'address' => $address
+        ];
     }
 }
