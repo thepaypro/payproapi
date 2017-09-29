@@ -45,7 +45,6 @@ class AccountSubscriber implements EventSubscriberInterface
 
         $this->bitcoinWalletApiClient->create(
             $event->getAccount()->getId(),
-            1,
             $event->getAccount()->getForename().' '.$event->getAccount()->getLastname()
         );
     }
