@@ -51,7 +51,8 @@ class Transaction implements TransactionInterface
             'transactionId' => $output,
             'amount' => $transaction['amount'],
             'subject' => $transaction['subject'],
-            'beneficiary' => $transaction['beneficiaryWalletAddress']
+            'beneficiary' => $transaction['beneficiaryWalletAddress'],
+            'units' => 'bit'
         ];
     }
 
@@ -63,9 +64,40 @@ class Transaction implements TransactionInterface
     public function getAll(string $walletIdentification): array
     {
         try {
-            $this->bitcoinWalletProcessService->process('history', $walletIdentification);
+            $output = $this->bitcoinWalletProcessService->process('history', $walletIdentification);
         } catch (PayProException $e) {
             throw new PayProException('ERROR creating the transaction: '.$e->getMessage(), 500);
+        }
+
+        $output = explode("\t", $output);
+        array_splice($output, 0, 1);
+
+        $transactions = [];
+        foreach ($output as $key => $transaction) {
+            $transactions[$key]['subject'] = $this->extractSubject($transaction);
+            $transactions[$key]['amount'] = $this->extractAmount($transaction);
+            $transactions[$key]['units'] = 'bit';
+        }
+
+        dump($transactions);die();
+    }
+
+    private function extractSubject(string $transactionLine) {
+        if ($transactionLine == explode("[", $transactionLine)[0]) {
+            return "";
+        }
+
+        $transactionLine = explode("[", $transactionLine);
+        $transactionLine = explode('"', $transactionLine[1]);
+        return $transactionLine[1];
+    }
+
+    private function extractAmount(string $transactionLine) {
+        $transactionLine = explode( ' ', $transactionLine);
+        foreach ($transactionLine as $key => $part) {
+            if ($part == 'bit') {
+                return $transactionLine[$key-1];
+            }
         }
     }
 }
