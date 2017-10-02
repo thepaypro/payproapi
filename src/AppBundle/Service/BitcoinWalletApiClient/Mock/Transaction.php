@@ -15,10 +15,10 @@ class Transaction implements TransactionInterface
     public function create(array $transaction): array
     {
         $response = [
-            'transactionId' => 'alphanumericId',
+            'transactionId' => 'alphanumericHash',
             'amount' => "1",
             'subject' => 'transaction in bitcoins',
-            'beneficiary' => 'Other Jhon Doe'
+            'beneficiary' => 'alphanumericHashBeneficiaryAddress'
         ];
 
 
@@ -35,16 +35,16 @@ class Transaction implements TransactionInterface
 
         $response = [
             [
-                'transactionId' => 'alphanumericId',
+                'transactionId' => 'alphanumericHash',
                 'amount' => "1",
                 'subject' => 'transaction in bitcoins',
-                'beneficiary' => 'Other Jhon Doe'
+                'beneficiary' => 'alphanumericHashBeneficiaryAddress'
             ],
             [
-                'transactionId' => 'alphanumericId2',
+                'transactionId' => 'alphanumericHash',
                 'amount' => "10",
                 'subject' => 'bigger transaction in bitcoins',
-                'beneficiary' => 'Other Jhon Doe'
+                'beneficiary' => 'alphanumericHashBeneficiaryAddress'
             ]
         ];
 
