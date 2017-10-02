@@ -38,8 +38,7 @@ class IndexBitcoinTransactionService
     {
         $user = $this->userRepository->findOneById($userId);
 
-        $bitcoinTransactions = $this->bitcoinTransactionApiClient->getAll('testnet');
-//        $bitcoinTransactions = $this->bitcoinTransactionApiClient->getAll($user->getAccount()->getId());
+        $bitcoinTransactions = $this->bitcoinTransactionApiClient->getAll($user->getAccount()->getId());
 
         $bitcoinTransactions = array_slice($bitcoinTransactions, ($page - 1) * $size, $size);
 
