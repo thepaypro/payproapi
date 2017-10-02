@@ -3,8 +3,6 @@
 namespace AppBundle\Service\BitcoinWalletApiClient;
 
 use AppBundle\Service\BitcoinWalletApiClient\Interfaces\TransactionInterface;
-use GuzzleHttp\Client;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
  * Class Transaction
@@ -12,13 +10,11 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  */
 class Transaction implements TransactionInterface
 {
-    protected $httpClient;
     protected $bitcoinWalletRequestService;
 
     public function __construct(RequestService $bitcoinWalletRequestService)
     {
         $this->bitcoinWalletRequestService = $bitcoinWalletRequestService;
-        $this->httpClient = new Client();
     }
 
     /**
@@ -28,18 +24,7 @@ class Transaction implements TransactionInterface
      */
     public function create(array $transaction): array
     {
-        $response = $this->bitcoinWalletRequestService->call(
-            'POST',
-            '/transaction',
-            [
-                'filename' => $transaction['payer'],
-                'beneficiaryWalletAddress' => $transaction['beneficiaryWalletAddress'],
-                'amount' => $transaction['amount'],
-                'subject' => $transaction['subject']
-            ]
-        );
-
-        return $response;
+        return true;
     }
 
     /**
@@ -49,18 +34,6 @@ class Transaction implements TransactionInterface
      */
     public function getAll(string $walletIdentification): array
     {
-        try {
-            $response = $this->bitcoinWalletRequestService->call(
-                'GET',
-                '/transaction',
-                [
-                    'filename' => $walletIdentification
-                ]
-            );
-        } catch (Exception $exception) {
-            throw PayProException('BitcoreWallet, service unavailable', 500);
-        }
-
-        return $response;
+        return true;
     }
 }
