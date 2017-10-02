@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Wallet controller.
  * @Security("has_role('ROLE_USER')")
  *
- * @Route("/bitcoin_wallets")
+ * @Route("/bitcoin-wallets")
  */
 class BitcoinWalletController extends Controller
 {

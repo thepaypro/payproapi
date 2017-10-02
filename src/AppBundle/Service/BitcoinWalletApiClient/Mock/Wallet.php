@@ -30,7 +30,6 @@ class Wallet implements walletInterface
      */
     public function getOne(string $walletIdentification): array
     {
-        return ['balance' => 100, 'tenant' => 'Jhon Doe'];
-
+        return ['balance' => '100.00 bit', 'address' => 'mutHtH6DbgJiKa9dVEmNhrBiNJUsDuYpdb'];
     }
 }
