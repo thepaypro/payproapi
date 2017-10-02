@@ -65,7 +65,8 @@ class Wallet implements WalletInterface
 
         foreach ($balanceArray as $key => $element) {
             if ($element == 'bit') {
-                $balance = $balanceArray[$key-1].' '.$element;
+                $balance = $balanceArray[$key-1];
+                $unit = $element;
             }
         }
 
@@ -80,7 +81,8 @@ class Wallet implements WalletInterface
 
         return [
             'balance' => $balance,
-            'address' => $address
+            'address' => $address,
+            'units' => $unit
         ];
     }
 }
