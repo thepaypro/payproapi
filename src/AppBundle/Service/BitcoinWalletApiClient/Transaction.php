@@ -62,6 +62,10 @@ class Transaction implements TransactionInterface
      */
     public function getAll(string $walletIdentification): array
     {
-        return true;
+        try {
+            $this->bitcoinWalletProcessService->process('history', $walletIdentification);
+        } catch (PayProException $e) {
+            throw new PayProException('ERROR creating the transaction: '.$e->getMessage(), 500);
+        }
     }
 }
