@@ -1,6 +1,6 @@
 services:
   bitcoin_wallet_api_client.process_service:
-    class: AppBundle\Service\BitcoinWalletApiClient\BitcoreWalletProcessService
+    class: AppBundle\Service\BitcoinWalletApiClient\BitcoinWalletProcessService
     arguments:
       - "%bitcoin_docker_compose_path%"
 

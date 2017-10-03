@@ -14,7 +14,7 @@ class Wallet implements WalletInterface
 {
     protected $bitcoreWalletProcessService;
 
-    public function __construct(BitcoreWalletProcessService $bitcoreWalletProcessService)
+    public function __construct(BitcoinWalletProcessService $bitcoreWalletProcessService)
     {
         $this->bitcoreWalletProcessService = $bitcoreWalletProcessService;
     }
@@ -54,7 +54,7 @@ class Wallet implements WalletInterface
     public function getOne(string $walletIdentification): array
     {
         try {
-            $output = $this->bitcoreWalletProcessService->process( ' status ', $walletIdentification);
+            $output = $this->bitcoreWalletProcessService->process( 'status', $walletIdentification);
         } catch (PayProException $e) {
             throw new PayProException('ERROR retrieving wallet balance: '.$e->getMessage(), 500);
         }
@@ -71,7 +71,7 @@ class Wallet implements WalletInterface
         }
 
         try {
-            $output = $this->bitcoreWalletProcessService->process( ' addresses ', $walletIdentification);
+            $output = $this->bitcoreWalletProcessService->process( 'addresses', $walletIdentification);
         } catch (PayProException $e) {
             throw new PayProException('ERROR retrieving wallet address: '.$e->getMessage(), 500);
         }

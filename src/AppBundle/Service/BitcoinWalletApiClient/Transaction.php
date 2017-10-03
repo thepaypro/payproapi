@@ -10,11 +10,11 @@ use AppBundle\Service\BitcoinWalletApiClient\Interfaces\TransactionInterface;
  */
 class Transaction implements TransactionInterface
 {
-    protected $bitcoinWalletRequestService;
+    protected $bitcoinWalletProcessService;
 
-    public function __construct(RequestService $bitcoinWalletRequestService)
+    public function __construct(BitcoinWalletProcessService $bitcoinWalletProcessService)
     {
-        $this->bitcoinWalletRequestService = $bitcoinWalletRequestService;
+        $this->bitcoinWalletProcessService = $bitcoinWalletProcessService;
     }
 
     /**
@@ -24,7 +24,35 @@ class Transaction implements TransactionInterface
      */
     public function create(array $transaction): array
     {
-        return true;
+        $cmd = 'send '.$transaction['beneficiaryWalletAddress'].' '.$transaction['amount'].'bit '.$transaction['subject'];
+
+        try {
+            $this->bitcoinWalletProcessService->process($cmd, $transaction['payer']);
+        } catch (PayProException $e) {
+            throw new PayProException('ERROR creating the transaction: '.$e->getMessage(), 500);
+        }
+
+        try {
+            $this->bitcoinWalletProcessService->process('sign', $transaction['payer']);
+        } catch (PayProException $e) {
+            throw new PayProException('ERROR signing the transaction: '.$e->getMessage(), 500);
+        }
+
+        try {
+            $output = $this->bitcoinWalletProcessService->process('broadcast', $transaction['payer']);
+        } catch (PayProException $e) {
+            throw new PayProException('ERROR broadcasting the transaction: '.$e->getMessage(), 500);
+        }
+
+        $output = explode(':', $output);
+        $output = trim(end($output), " \n");
+
+        return [
+            'transactionId' => $output,
+            'amount' => $transaction['amount'],
+            'subject' => $transaction['subject'],
+            'beneficiary' => $transaction['beneficiaryWalletAddress']
+        ];
     }
 
     /**
