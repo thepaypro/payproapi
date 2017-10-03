@@ -78,8 +78,6 @@ class Transaction implements TransactionInterface
             $transactions[$key]['amount'] = $this->extractAmount($transaction);
             $transactions[$key]['units'] = 'bit';
         }
-
-        dump($transactions);die();
     }
 
     private function extractSubject(string $transactionLine) {
