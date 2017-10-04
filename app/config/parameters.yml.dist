@@ -27,11 +27,11 @@ parameters:
     twilio_phone_number: '+16364863418'
 
     contis_api_host: 'http://34.253.132.188/ContisCardAPI.svc/rest/'
-    contis_username: 'Payprobeta'
-    contis_password: 'P@yprobeta'
-    contis_hash_pan_key: '82117C6AB41E198A'
-    contis_3des_pin_IV_key: '729B06BA0F609553'
-    contis_3des_pin_secret_key: '3F70D22CF1378D6DC8884A6855BFAA6D'
+    contis_username: 'PAYPROStaging'
+    contis_password: 'P@ypr0$t@g!ng96'
+    contis_hash_pan_key: '7B016328DCBF6384'
+    contis_3des_pin_IV_key: 'F6DF6A373D5FE34D'
+    contis_3des_pin_secret_key: 'BFF4D662DB1DF8B0442333123C964EFF'
 
     user_administrator_email: someemail@email.com
 

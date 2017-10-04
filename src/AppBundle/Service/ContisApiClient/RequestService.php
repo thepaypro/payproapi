@@ -64,6 +64,10 @@ class RequestService
 //            dump($e->getResponse()->getBody()->getContents());die();
         }
 
+        if ($endpoint = 'Login') {
+//            dump($response->getBody()->getContents());die();
+        }
+
         return json_decode($response->getBody()->getContents(), true);
     }
 }
