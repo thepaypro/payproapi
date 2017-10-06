@@ -12,10 +12,14 @@ use AppBundle\Service\BitcoinWalletApiClient\Interfaces\WalletInterface;
  */
 class Wallet implements WalletInterface
 {
+    protected $testnetMode;
     protected $bitcoreWalletProcessService;
 
-    public function __construct(BitcoinWalletProcessService $bitcoreWalletProcessService)
+    public function __construct(
+        bool $testnetMode,
+        BitcoinWalletProcessService $bitcoreWalletProcessService)
     {
+        $this->testnetMode = $testnetMode;
         $this->bitcoreWalletProcessService = $bitcoreWalletProcessService;
     }
 
@@ -30,8 +34,14 @@ class Wallet implements WalletInterface
     {
         $tenant = str_replace(' ', '', $tenant);
 
+        $testnet = ' ';
+
+        if ($this->testnetMode) {
+            $testnet = ' -t ';
+        }
+
         try {
-            $this->bitcoreWalletProcessService->process( ' create '.$tenant.'Wallet 1-1 '.$tenant.' -t ', $walletIdentification);
+            $this->bitcoreWalletProcessService->process( ' create '.$tenant.'Wallet 1-1 '.$tenant.$testnet, $walletIdentification);
         } catch (PayProException $e) {
             throw new PayProException('Creating Wallet: '.$e->getMessage(), 500);
         }

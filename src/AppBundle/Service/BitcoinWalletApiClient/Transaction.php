@@ -3,7 +3,7 @@
 namespace AppBundle\Service\BitcoinWalletApiClient;
 
 use AppBundle\Service\BitcoinWalletApiClient\Interfaces\TransactionInterface;
-
+use DateTime;
 /**
  * Class Transaction
  * @package AppBundle\Service\BitcoinWalletApiClient
@@ -77,6 +77,7 @@ class Transaction implements TransactionInterface
             $transactions[$key]['subject'] = $this->extractSubject($transaction);
             $transactions[$key]['amount'] = $this->extractAmount($transaction);
             $transactions[$key]['units'] = 'bit';
+            $transactions[$key]['createdAt'] = $this->extractTime($transaction);
         }
 
         return $transactions;
@@ -99,5 +100,13 @@ class Transaction implements TransactionInterface
                 return $transactionLine[$key-1];
             }
         }
+    }
+
+    private function extractTime(string $transactionLine) {
+        $transactionLine = explode( ' ', $transactionLine);
+        $lastInTransactionLine = array_pop($transactionLine);
+        $seconds = explode("\n", $lastInTransactionLine)[0];
+        $date = (new DateTime())->setTimestamp($seconds);
+        return $date->format("d/m/Y H:i:s");
     }
 }

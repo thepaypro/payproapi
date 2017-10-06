@@ -7,6 +7,7 @@ services:
   bitcoin_wallet_api_client.wallet_service:
     class: AppBundle\Service\BitcoinWalletApiClient\Wallet
     arguments:
+      - "%bitcoin_mode_testnet%"
       - "@bitcoin_wallet_api_client.process_service"
 
   bitcoin_wallet_api_client.transaction_service:
