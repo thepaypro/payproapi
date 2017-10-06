@@ -37,4 +37,5 @@ parameters:
 
     bitcoin_wallet_api_host: 'http://whatever.com'
     bitcoin_mock: true
+    bitcoin_mode_testnet: true
     bitcoin_docker_compose_path: '/var/bitcoinWalletCLI/docker-compose.yml'
