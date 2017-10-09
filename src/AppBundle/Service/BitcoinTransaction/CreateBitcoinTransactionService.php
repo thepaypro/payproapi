@@ -55,6 +55,7 @@ class CreateBitcoinTransactionService
 
         $wallet = $this->bitcoinWalletApiClient->getOne($payer->getId());
 
+
         if ($amount > $wallet['balance']) {
             throw new PayProException('Insufficient funds', 400);
         }

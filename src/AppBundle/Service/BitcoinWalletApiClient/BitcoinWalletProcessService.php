@@ -10,7 +10,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
  * Class ProcessService
  * @package AppBundle\Service\BitcoinWalletApiClient
  */
-class BitcoreWalletProcessService
+class BitcoinWalletProcessService
 {
     protected $dockerComposeCommand;
 
@@ -24,14 +24,14 @@ class BitcoreWalletProcessService
 
     /**
      * @param string $bitcoreWalletCommand
-     * @param int $walletIdentification
+     * @param string $walletIdentification
      * @return string
      * @throws PayProException
      */
-    public function process(string $bitcoreWalletCommand, int $walletIdentification): string
+    public function process(string $bitcoreWalletCommand, string $walletIdentification): string
     {
-        $cmd = $this->dockerComposeCommand.$bitcoreWalletCommand;
-        $cmd = $cmd.$this->walletFileSpecification($walletIdentification);
+        $cmd = $this->dockerComposeCommand.' '.$bitcoreWalletCommand;
+        $cmd = $cmd.' '.$this->walletFileSpecification($walletIdentification);
 
         $process = new Process($cmd);
 
@@ -45,10 +45,10 @@ class BitcoreWalletProcessService
     }
 
     /**
-     * @param int $walletIdentification
+     * @param string $walletIdentification
      * @return string
      */
-    private function walletFileSpecification(int $walletIdentification) : string
+    private function walletFileSpecification(string $walletIdentification) : string
     {
         return  ' -f /wallets/'.$walletIdentification.'.dat';
     }

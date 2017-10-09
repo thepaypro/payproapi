@@ -12,10 +12,14 @@ use AppBundle\Service\BitcoinWalletApiClient\Interfaces\WalletInterface;
  */
 class Wallet implements WalletInterface
 {
+    protected $testnetMode;
     protected $bitcoreWalletProcessService;
 
-    public function __construct(BitcoreWalletProcessService $bitcoreWalletProcessService)
+    public function __construct(
+        bool $testnetMode,
+        BitcoinWalletProcessService $bitcoreWalletProcessService)
     {
+        $this->testnetMode = $testnetMode;
         $this->bitcoreWalletProcessService = $bitcoreWalletProcessService;
     }
 
@@ -30,8 +34,14 @@ class Wallet implements WalletInterface
     {
         $tenant = str_replace(' ', '', $tenant);
 
+        $testnet = ' ';
+
+        if ($this->testnetMode) {
+            $testnet = ' -t ';
+        }
+
         try {
-            $this->bitcoreWalletProcessService->process( ' create '.$tenant.'Wallet 1-1 '.$tenant.' -t ', $walletIdentification);
+            $this->bitcoreWalletProcessService->process( ' create '.$tenant.'Wallet 1-1 '.$tenant.$testnet, $walletIdentification);
         } catch (PayProException $e) {
             throw new PayProException('Creating Wallet: '.$e->getMessage(), 500);
         }
@@ -54,7 +64,7 @@ class Wallet implements WalletInterface
     public function getOne(string $walletIdentification): array
     {
         try {
-            $output = $this->bitcoreWalletProcessService->process( ' status ', $walletIdentification);
+            $output = $this->bitcoreWalletProcessService->process( 'status', $walletIdentification);
         } catch (PayProException $e) {
             throw new PayProException('ERROR retrieving wallet balance: '.$e->getMessage(), 500);
         }
@@ -71,7 +81,7 @@ class Wallet implements WalletInterface
         }
 
         try {
-            $output = $this->bitcoreWalletProcessService->process( ' addresses ', $walletIdentification);
+            $output = $this->bitcoreWalletProcessService->process( 'addresses', $walletIdentification);
         } catch (PayProException $e) {
             throw new PayProException('ERROR retrieving wallet address: '.$e->getMessage(), 500);
         }
@@ -80,9 +90,25 @@ class Wallet implements WalletInterface
         $address = trim($address, " ");
 
         return [
-            'balance' => $balance,
+            'balance' => $this->stringToFloat($balance),
             'address' => $address,
             'units' => $unit
         ];
+    }
+
+    private function stringToFloat(string $num): float {
+        $dotPos = strrpos($num, '.');
+        $commaPos = strrpos($num, ',');
+        $sep = (($dotPos > $commaPos) && $dotPos) ? $dotPos :
+            ((($commaPos > $dotPos) && $commaPos) ? $commaPos : false);
+
+        if (!$sep) {
+            return floatval(preg_replace("/[^0-9]/", "", $num));
+        }
+
+        return floatval(
+            preg_replace("/[^0-9]/", "", substr($num, 0, $sep)) . '.' .
+            preg_replace("/[^0-9]/", "", substr($num, $sep+1, strlen($num)))
+        );
     }
 }
