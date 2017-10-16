@@ -55,7 +55,7 @@ class ActivateCardService
      */
     public function execute(
         int $userId,
-        string $card_activation_code,
+        string $cardActivationCode,
         int $pan
     )
     {
@@ -69,12 +69,13 @@ class ActivateCardService
         if($card->getIsActive()){
             throw new PayProException('Your card it\'s already active', 400);
         }
-        if($card_activation_code != $card->getContisCardActivationCode()){
+        if($cardActivationCode != $card->getContisCardActivationCode()){
             throw new PayProException('Your card activation code is incorrect', 400);
         }
         $response = $this->contisCardApiClient->activate($card,$pan);
         
         $card->setIsActive(true);
+        $card->setIsEnabled(true);
         $errors = $this->validationService->validate($card);
         if (count($errors) > 0) {
             foreach ($errors as $key => $error) {
@@ -82,7 +83,7 @@ class ActivateCardService
             }
         }
         $this->cardRepository->save($card);
-        return $card;
+        return true;
     }
 
     /**
