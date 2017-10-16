@@ -34,11 +34,21 @@ class BitcoinTransactionController extends Controller
     public function createAction(UserInterface $user, Request $request): JsonResponse
     {
         $requestData = $request->request->all();
+        
+
+        if(isset($requestData['beneficiaryUserID'])){
+            $wallet = $this->get('payproapi.get_bitcoin_wallet_service')->execute(
+                $user->getId()
+            );
+            $beneficiary = $wallet['address'];
+        }else if (isset($requestData['beneficiary'])){
+            $beneficiary = $requestData['beneficiary'];
+        }
 
         try {
             $transaction = $this->get('payproapi.create_bitcoin_transaction_service')->execute(
                 $user->getId(),
-                $requestData['beneficiary'],
+                $beneficiary,
                 $requestData['amount'],
                 $requestData['subject']
             );
