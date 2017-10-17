@@ -8,6 +8,8 @@ services:
     class: AppBundle\Service\ContisApiClient\HashingService
     arguments:
       - "@session"
+      - "%contis_3des_pin_IV_key%"
+      - "%contis_3des_pin_secret_key%"
 
   contis_api_client.authentication_service:
     class: AppBundle\Service\ContisApiClient\AuthenticationService

@@ -15,12 +15,18 @@ class HashingService
     const TOKEN_EXPIRY_DATE_KEY = 'payproapi.contis_token_expiry_time';
 
     protected $session;
+    protected $pin_iv_key;
+    protected $pin_secret_key;
 
     /**
      * @param Session $session
+     * @param String $pin_iv_key
+     * @param String $pin_secret_key
      */
-    public function __construct(Session $session) {
+    public function __construct(Session $session, String $pin_iv_key, String $pin_secret_key) {
         $this->session = $session;
+        $this->pin_iv_key = $pin_iv_key;
+        $this->pin_secret_key = $pin_secret_key;
     }
 
     /**
@@ -42,5 +48,11 @@ class HashingService
         $params['Hash'] = md5(mb_convert_encoding($hashDataString.$securityKey, "UCS-2LE", "JIS, eucjp-win, sjis-win"));
 
         return $params;
+    }
+
+    public function pinDecrypt(String $pin){
+        dump($this->pin_iv_key);die();
+        $decPin = openssl_decrypt( base64_decode($pin), "des3", hex2bin($this->pin_secret_key), 0, hex2bin($this->pin_iv_key));
+        return $decPin;
     }
 }
