@@ -220,6 +220,12 @@ class Card
         if ($response['Card_RetrivePINResult']['Description'] == '000') {
             return $response['Card_RetrivePINResult']['ResultObject'];
         }
+
+        $this->logger->addCritical(
+            'Call Params: '.json_encode($params).' // Call Request Params: '.json_encode($requestParams).' // Response Service: '.json_encode($response),
+            ['Card_RetrivePIN','ContisApiClient']
+        );
+        
         throw new PayProException("Bad Request", 400);
     }
 

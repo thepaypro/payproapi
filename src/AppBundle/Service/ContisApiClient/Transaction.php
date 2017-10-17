@@ -2,6 +2,7 @@
 
 namespace AppBundle\Service\ContisApiClient;
 
+use Symfony\Bridge\Monolog\Logger;
 use AppBundle\Entity\Account;
 use AppBundle\Exception\PayProException;
 use AppBundle\Entity\Transaction as TransactionEntity;
@@ -16,21 +17,25 @@ class Transaction
     protected $requestService;
     protected $hashingService;
     protected $authenticationService;
+    protected $logger;
 
     /**
      * @param RequestService $requestService
      * @param HashingService $hashingService
      * @param AuthenticationService $authenticationService
+     * @param Logger $logger
      */
     public function __construct(
         RequestService $requestService,
         HashingService $hashingService,
-        AuthenticationService $authenticationService
+        AuthenticationService $authenticationService,
+        Logger $logger
     )
     {
         $this->requestService = $requestService;
         $this->hashingService = $hashingService;
         $this->authenticationService = $authenticationService;
+        $this->logger = $logger;
     }
 
     /**
@@ -62,6 +67,10 @@ class Transaction
         $response = $this->requestService->call('Account_TransferMoney', $params, $requestParams);
 
         if ($response['Account_TransferMoneyResult']['Description'] != 'Success ') {
+            $this->logger->addCritical(
+                'Call Params: '.json_encode($params).' // Call Request Params: '.json_encode($requestParams).' // Response Service: '.json_encode($response),
+                ['Account_TransferMoney','ContisApiClient']
+            );
             throw new PayProException("Bad Request", 400);
         }
 
@@ -105,6 +114,10 @@ class Transaction
         $response = $this->requestService->call('Account_GetStatement', $params, $requestParams);
 
         if ($response['Account_GetStatementResult']['Description'] != 'Success ') {
+            $this->logger->addCritical(
+                'Call Params: '.json_encode($params).' // Call Request Params: '.json_encode($requestParams).' // Response Service: '.json_encode($response),
+                ['Account_GetStatement','ContisApiClient']
+            );
             throw new PayProException("Bad Request", 400);
         }
 
