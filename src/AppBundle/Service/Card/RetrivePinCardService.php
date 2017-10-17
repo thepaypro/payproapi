@@ -55,6 +55,8 @@ class RetrivePinCardService
             throw new PayProException("invalid cvv2 format", 400);
         }
 
-        return $this->contisCardApiClient->retrivePin($card, $cvv2);
+        $cardInfo = $this->contisCardApiClient->getInfo($card);
+
+        return $this->contisCardApiClient->retrivePin($card, $cardInfo["HashCardNumber"], $cvv2);
     }
 }
