@@ -2,6 +2,7 @@
 
 namespace AppBundle\Service\ContisApiClient;
 
+use Symfony\Bridge\Monolog\Logger;
 use AppBundle\Entity\Account as AccountEntity;
 use AppBundle\Exception\PayProException;
 use Exception;
@@ -15,6 +16,7 @@ class Account
     protected $requestService;
     protected $hashingService;
     protected $authenticationService;
+    protected $logger;
 
     const STATUS_ACTIVATED = "01";
     const STATUS_INCOMPLETED = "09";
@@ -30,15 +32,18 @@ class Account
      * @param RequestService $requestService
      * @param HashingService $hashingService
      * @param AuthenticationService $authenticationService
+     * @param Logger $logger
      */
     public function __construct(
         RequestService $requestService,
         HashingService $hashingService,
-        AuthenticationService $authenticationService
+        AuthenticationService $authenticationService,
+        Logger $logger
     ) {
         $this->requestService = $requestService;
         $this->hashingService = $hashingService;
         $this->authenticationService = $authenticationService;
+        $this->logger = $logger;
     }
 
     /**
@@ -85,6 +90,12 @@ class Account
         if ($response['CardHolder_CreateResult']['Description'] == 'Success ') {
             return $response['CardHolder_CreateResult']['ResultObject'][0];
         }
+
+        $this->logger->addCritical(
+            'Call Params: '.json_encode($params).' // Call Request Params: '.json_encode($requestParams).' // Response Service: '.json_encode($response),
+            ['CardHolder_Create','ContisApiClient']
+        );
+
         throw new PayProException("Bad Request", 400);
     }
 
@@ -130,6 +141,12 @@ class Account
         if ($response['CardHolder_UpdateResult']['Description'] == 'Success ') {
             return $response['CardHolder_UpdateResult']['ResultObject'];
         }
+
+        $this->logger->addCritical(
+            'Call Params: '.json_encode($params).' // Call Request Params: '.json_encode($requestParams).' // Response Service: '.json_encode($response),
+            ['CardHolder_Update','ContisApiClient']
+        );
+
         throw new PayProException("Bad Request", 400);
     }
 
@@ -157,6 +174,12 @@ class Account
         if ($response['CardHolder_Lookup_GetInfoResult']['Description'] == 'Success ') {
             return $response['CardHolder_Lookup_GetInfoResult']['ResultObject'][0];
         }
+
+        $this->logger->addCritical(
+            'Call Params: '.json_encode($params).' // Call Request Params: '.json_encode($requestParams).' // Response Service: '.json_encode($response),
+            ['CardHolder_Lookup_GetInfo','ContisApiClient']
+        );
+        
         throw new PayProException("Bad Request", 400);
     }
 

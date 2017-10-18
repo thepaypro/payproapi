@@ -53,20 +53,20 @@ class CardController extends Controller
      */
     public function activationAction(UserInterface $user, Request $request): JsonResponse
     {
-        $card_activation_code = $request->request->get('card_activation_code');
+        $cardActivationCode = $request->request->get('cardActivationCode');
         $PAN = $request->request->get('PAN');
 
         try {
-            $card = $this->get('payproapi.activate_card_service')->execute(
+            $success = $this->get('payproapi.activate_card_service')->execute(
                 $user->getId(),
-                $card_activation_code,
+                $cardActivationCode,
                 $PAN
                 );
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
 
-        return $this->JWTResponse($user, ['card' => $card]);
+        return $this->JWTResponse($user, ['Success' => $success]);
     }
 
     /**
@@ -134,12 +134,12 @@ class CardController extends Controller
     public function requestActivationCode(UserInterface $user, Request $request): JsonResponse
     {
         try {
-            $card = $this->get('payproapi.activate_card_service')->getActivationCode($user->getId());
+            $success = $this->get('payproapi.activate_card_service')->getActivationCode($user->getId());
             $this->get('payproapi.activate_card_service')->sendActivationCodeToUser($user->getId());
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
 
-        return $this->JWTResponse($user, ['card' => $card]);
+        return $this->JWTResponse($user, ['Success' => $success]);
     }
 }
