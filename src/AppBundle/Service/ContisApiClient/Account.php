@@ -50,6 +50,7 @@ class Account
      * Create an account (CardHolder in Contis).
      * @param  AccountEntity $account
      * @return array $response
+     * @throws PayProException
      */
     public function create(AccountEntity $account) : array
     {
@@ -102,6 +103,7 @@ class Account
      * Update an account (CardHolder in Contis)
      * @param  AccountEntity $account
      * @return array $response
+     * @throws PayProException
      */
     public function update(AccountEntity $account) : array
     {

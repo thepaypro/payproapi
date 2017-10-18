@@ -78,7 +78,8 @@ class ContactListService
                 'phoneNumber' => $actualPhoneNumber,
                 'isUser' => true,
                 'fullName' => $user->getAccount()->getForename().' '.$user->getAccount()->getLastname(),
-                'id' => $user->getAccount()->getId()
+                'accountId' => $user->getAccount()->getId(),
+                'userId' => $user->getId()
             ];
         }
         return $contactsList;

@@ -2,11 +2,98 @@
 	"variables": [],
 	"info": {
 		"name": "PayProApi",
-		"_postman_id": "a710c732-4e61-f60e-1f4b-c4fe361b5204",
+		"_postman_id": "702f25b4-2739-86fa-0a1a-e91b961ab39b",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "BitcoinTransactions",
+			"description": "",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"url": "{{host}}/bitcoin-transactions",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"subject\":\"string\",\n\t\"amount\":\"100000000000\",\n\t\"beneficiary\":\"movwDy5AwiXYQVcxrk9XBUUCU3GnTQzY5V\"\n}"
+						},
+						"description": "Create a bitcoin transaction to specified beneficiary"
+					},
+					"response": []
+				},
+				{
+					"name": "Index",
+					"request": {
+						"url": "{{host}}/bitcoin-transactions",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "No available filters"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BitcoinWallet",
+			"description": "",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"url": "{{host}}/bitcoin-wallets",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "\t"
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "AccountRequest",
 			"description": "",
@@ -86,7 +173,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"agreement\": \"1\",\n\t\"forename\": \"String\",\n\t\"lastname\": \"String\",\n\t\"birthDate\": \"08/06/1992\",\n\t\"documentType\": \"DNI\",\n\t\"documentNumber\": \"12341234K\",\n\t\"street\": \"Ametller\",\n\t\"buildingNumber\": \"6\",\n\t\"postcode\": \"08293\",\n\t\"city\": \"Barcelona\",\n\t\"country\": \"ES\",\n\t\"deviceToken\": \"deviceToken\"\n}"
+							"raw": "{\n\t\"agreement\": \"1\",\n\t\"forename\": \"String\",\n\t\"lastname\": \"String\",\n\t\"birthDate\": \"08/06/1992\",\n\t\"documentType\": \"DNI\",\n\t\"documentNumber\": \"12341234K\",\n\t\"street\": \"Ametller\",\n\t\"buildingNumber\": \"6\",\n\t\"postcode\": \"08293\",\n\t\"city\": \"Barcelona\",\n\t\"country\": \"ES\",\n\t\"deviceToken\": \"deviceToken\"\n\t\"userId\": \"1\"\n}"
 						},
 						"description": ""
 					},
@@ -295,31 +382,6 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n\t\"enabled\":\"false\"\n}"
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "Retrive PIN",
-					"request": {
-						"url": "{{host}}/cards/retrive-pin",
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwt}}",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"cvv2\":\"123\"\n}"
 						},
 						"description": ""
 					},
