@@ -33,10 +33,11 @@ class CardActivationCodeSubscriber implements EventSubscriberInterface
      */
     public function sendCardActivationCode(CardActivationCodeEvent $event)
     {    
-        
+        $message = "PayPro: your activation code is ".$event->getCardActivationCode();
+
         $this->shortMessageService->sendShortMessage(
             $event->getPhoneNumber(),
-            $event->getCardActivationCode()
+            $message
         );
     }
 }
