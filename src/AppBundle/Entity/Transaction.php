@@ -112,6 +112,22 @@ class Transaction implements \JsonSerializable
         return $publicProperties;
     }
 
+    public function jsonSerializeBasic()
+    {
+        $publicProperties = [
+            'id' => $this->id,
+            'payer' => $this->payer,
+            'beneficiary' => $this->beneficiary,
+            'amount' => $this->amount,
+            'subject' => $this->subject,
+            'title' => $this->title,
+            'transactionInvite' => $this->transactionInvite,
+            'createdAt' => $this->createdAt
+        ];
+
+        return $publicProperties;
+    }
+
     /**
      * Get id
      *

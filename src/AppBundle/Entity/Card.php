@@ -63,6 +63,27 @@ class Card implements \JsonSerializable
         return $publicProperties;
     }
 
+    public function jsonSerializeBasic()
+    {
+        $cardStatus = 0;
+
+        if ($this->isActive){
+            if ($this->isEnabled){
+                $cardStatus = 2;
+            }else{
+                $cardStatus = 3;
+            }
+        }else{
+            $cardStatus = 1;
+        }
+        $publicProperties = [
+            'id' => $this->id,
+            'cardStatus' => $cardStatus
+        ]; 
+
+        return $publicProperties;
+    }
+
     /**
      * Get id
      *

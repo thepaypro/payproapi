@@ -38,6 +38,12 @@ class User extends BaseUser implements \JsonSerializable
     private $account;
 
     /**
+     * @ORM\ManyToOne(targetEntity="BitcoinAccount", inversedBy="users")
+     * @ORM\JoinColumn(name="bitcoin_account_id", referencedColumnName="id")
+     */
+    private $bitcoinAccount;
+
+    /**
      * @ORM\OneToMany(targetEntity="Invite", mappedBy="inviter")
      */
     protected $invites;
@@ -49,14 +55,14 @@ class User extends BaseUser implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $publicProperties = [
-            'id' => $this->id,
-            'username' => $this->username,
-            'account' => $this->account,
-            'invites' => $this->invites
-        ];
+            $publicProperties = [
+                'id' => $this->id,
+                'username' => $this->username,
+                'gbpAccount' => $this->account->jsonSerializeBasic(),
+                'bitcoinAccount' => $this->bitcoinAccount->jsonSerializeBasic()
+            ];
 
-        return $publicProperties;
+            return $publicProperties;
     }
 
     /**
@@ -81,6 +87,30 @@ class User extends BaseUser implements \JsonSerializable
     public function getAccount()
     {
         return $this->account;
+    }
+
+    /**
+     * Set bitcoinAccount
+     *
+     * @param \AppBundle\Entity\BitcoinAccount $bitcoinAccount
+     *
+     * @return User
+     */
+    public function setBitcoinAccount(BitcoinAccount $bitcoinAccount = null)
+    {
+        $this->bitcoinAccount = $bitcoinAccount;
+
+        return $this;
+    }
+
+    /**
+     * Get bitcoinAccount
+     *
+     * @return \AppBundle\Entity\BitcoinAccount
+     */
+    public function getBitcoinAccount()
+    {
+        return $this->bitcoinAccount;
     }
 
     /**

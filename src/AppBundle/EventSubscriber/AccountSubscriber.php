@@ -7,18 +7,23 @@ use AppBundle\Event\AccountEvents;
 use AppBundle\Service\BitcoinWalletApiClient\Interfaces\WalletInterface;
 use AppBundle\Service\Notification\CreateNotificationService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use AppBundle\Service\BitcoinAccount\CreateBitcoinAccountService;
 
 class AccountSubscriber implements EventSubscriberInterface
 {
     protected $createNotificationService;
     protected $bitcoinWalletApiClient;
+    protected $createBitcoinAccountService;
 
     public function __construct(
         CreateNotificationService $createNotificationService,
-        WalletInterface $bitcoinWalletApiClient)
+        WalletInterface $bitcoinWalletApiClient,
+        CreateBitcoinAccountService $createBitcoinAccountService
+    )
     {
         $this->bitcoinWalletApiClient = $bitcoinWalletApiClient;
         $this->createNotificationService = $createNotificationService;
+        $this->createBitcoinAccountService = $createBitcoinAccountService;
     }
 
     public static function getSubscribedEvents()
@@ -46,6 +51,16 @@ class AccountSubscriber implements EventSubscriberInterface
         $this->bitcoinWalletApiClient->create(
             $event->getAccount()->getId(),
             $event->getAccount()->getForename().' '.$event->getAccount()->getLastname()
+        );
+
+        $wallet = $this->bitcoinWalletApiClient->getOne(
+            $event->getAccount()->getId()
+        );
+
+        $this->createBitcoinAccountService->execute(
+            $event->getUser()->getId(),
+            $wallet['address'],
+            $event->getDeviceToken()
         );
     }
 

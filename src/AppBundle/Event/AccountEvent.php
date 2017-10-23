@@ -3,17 +3,28 @@
 namespace AppBundle\Event;
 
 use AppBundle\Entity\Account;
+use AppBundle\Entity\User;
 use Symfony\Component\EventDispatcher\Event;
 
 class AccountEvent extends Event
 {
+    protected $user;
     protected $account;
-    protected $deviceId;
+    protected $deviceToken;
 
-    public function __construct(Account $account, string $deviceId)
+    public function __construct(User $user, Account $account, string $deviceToken)
     {
+        $this->user = $user;
         $this->account = $account;
-        $this->deviceId = $deviceId;
+        $this->deviceToken = $deviceToken;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
     }
 
     /**
@@ -27,8 +38,8 @@ class AccountEvent extends Event
     /**
      * @return string
      */
-    public function getDeviceId(): string
+    public function getDeviceToken(): string
     {
-        return $this->deviceId;
+        return $this->deviceToken;
     }
 }

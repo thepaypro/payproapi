@@ -165,7 +165,7 @@ class CreateAccountService
 
         $this->dispatcher->dispatch(
             AccountEvents::ACCOUNT_CREATED,
-            new AccountEvent($account, $deviceToken)
+            new AccountEvent($user, $account, $deviceToken)
         );
 
         return $account;

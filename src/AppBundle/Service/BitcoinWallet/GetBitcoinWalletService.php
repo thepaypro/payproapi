@@ -32,8 +32,12 @@ class GetBitcoinWalletService
     {
         $user = $this->userRepository->findOneById($userId);
 
-        $bitcoinWallet = $this->bitcoinWalletApiClient->getOne($user->getAccount()->getId());
+        if (!$bitcoinAccount = $user->getBitcoinAccount()) {
+            throw new PayProException('Bitcoin account not found', 404);
+        }
 
+        $bitcoinWallet = $this->bitcoinWalletApiClient->getOne($user->getAccount()->getId());
+        $user->getBitcoinAccount()->setBalance($bitcoinWallet['balance']);
         return $bitcoinWallet;
     }
 }

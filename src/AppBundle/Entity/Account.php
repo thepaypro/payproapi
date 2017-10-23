@@ -107,6 +107,11 @@ class Account implements \JsonSerializable
     protected $sortCode;
 
     /**
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    protected $balance;
+
+    /**
      * @ORM\OneToMany(targetEntity="Transaction", mappedBy="payer")
      */
     protected $sentTransactions;
@@ -246,6 +251,26 @@ class Account implements \JsonSerializable
         })->toArray();
         $publicProperties['createdAt'] = $this->createdAt;
         $publicProperties['updatedAt'] = $this->updatedAt;
+
+        return $publicProperties;
+    }
+
+    public function jsonSerializeBasic(){
+        $publicProperties['id'] = $this->id;
+        $publicProperties['Balance'] = $this->balance;
+        $publicProperties['status'] = $this->status;
+        $publicProperties['forename'] = $this->forename;
+        $publicProperties['lastname'] = $this->lastname;
+        $publicProperties['email'] = $this->email;
+        $publicProperties['accountNumber'] = $this->accountNumber;
+        $publicProperties['sortCode'] = $this->sortCode;
+        $publicProperties['card'] = $this->card->jsonSerializeBasic();
+        $publicProperties['street'] = $this->street;
+        $publicProperties['buildingNumber'] = $this->buildingNumber;
+        $publicProperties['postcode'] = $this->postcode;
+        $publicProperties['city'] = $this->city;
+        $publicProperties['country'] = $this->country->getName();
+        $publicProperties['profile'] = $this->profile;
 
         return $publicProperties;
     }
@@ -531,6 +556,30 @@ class Account implements \JsonSerializable
     public function getSortCode()
     {
         return $this->sortCode;
+    }
+
+
+    /**
+     * Set balance
+     *
+     * @param integer $balance
+     * @return integer
+     */
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
+
+        return $this;
+    }
+
+    /**
+     * Get balance
+     *
+     * @return integer
+     */
+    public function getBalance()
+    {
+        return $this->balance;
     }
 
     /**
