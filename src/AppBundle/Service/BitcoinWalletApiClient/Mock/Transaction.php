@@ -35,13 +35,13 @@ class Transaction implements TransactionInterface
 
         $response = [
             [
-                'transactionId' => 'alphanumericHash',
+                'transactionId' => '01',
                 'amount' => "1",
                 'subject' => 'transaction in bitcoins',
                 'beneficiary' => 'alphanumericHashBeneficiaryAddress'
             ],
             [
-                'transactionId' => 'alphanumericHash',
+                'transactionId' => '02',
                 'amount' => "10",
                 'subject' => 'bigger transaction in bitcoins',
                 'beneficiary' => 'alphanumericHashBeneficiaryAddress'

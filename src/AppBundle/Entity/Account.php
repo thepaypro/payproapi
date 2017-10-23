@@ -271,6 +271,12 @@ class Account implements \JsonSerializable
         $publicProperties['city'] = $this->city;
         $publicProperties['country'] = $this->country->getName();
         $publicProperties['profile'] = $this->profile;
+        $publicProperties['sentTransactions'] = $this->sentTransactions->map(function (Transaction $transaction) {
+            return $transaction->jsonSerializeBasic();
+        })->toArray();
+        $publicProperties['receivedTransactions'] = $this->receivedTransactions->map(function (Transaction $transaction) {
+            return $transaction->jsonSerializeBasic();
+        })->toArray();
 
         return $publicProperties;
     }

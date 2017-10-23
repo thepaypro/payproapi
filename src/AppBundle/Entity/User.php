@@ -58,8 +58,8 @@ class User extends BaseUser implements \JsonSerializable
             $publicProperties = [
                 'id' => $this->id,
                 'username' => $this->username,
-                'gbpAccount' => $this->account->jsonSerializeBasic(),
-                'bitcoinAccount' => $this->bitcoinAccount->jsonSerializeBasic()
+                'gbpAccount' => isset($this->account) ? $this->account->jsonSerializeBasic() : NULL,
+                'bitcoinAccount' => isset($this->bitcoinAccount) ? $this->bitcoinAccount->jsonSerializeBasic() : NULL
             ];
 
             return $publicProperties;

@@ -116,8 +116,8 @@ class Transaction implements \JsonSerializable
     {
         $publicProperties = [
             'id' => $this->id,
-            'payer' => $this->payer,
-            'beneficiary' => $this->beneficiary,
+            'payer' => isset($this->payer) ? $this->payer->getId() : $this->payer,
+            'beneficiary' => isset($this->beneficiary) ? $this->beneficiary->getId() : $this->beneficiary,
             'amount' => $this->amount,
             'subject' => $this->subject,
             'title' => $this->title,
