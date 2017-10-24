@@ -4,26 +4,35 @@ namespace AppBundle\Service\BitcoinTransaction;
 
 use AppBundle\Exception\PayProException;
 use AppBundle\Repository\UserRepository;
-use AppBundle\Service\BitcoinWalletApiClient\Interfaces\TransactionInterface;
 
 /**
  * Class IndexBitcoinTransactionService
  */
 class IndexBitcoinTransactionService
 {
+    protected $bitcoinTransactionRepository;
     protected $userRepository;
-    protected $bitcoinTransactionApiClient;
+    protected $bitcoinSyncTransactionService;
 
+    /**
+     *
+     * @param BitcoinTransactionRepository $bitcoinTransactionRepository   
+     * @param UserRepository $userRepository
+     * @param BitcoinSyncTransactionService  $bitcoinSyncTransactionService   
+     */
     public function __construct(
+        BitcoinTransactionRepository $bitcoinTransactionRepository,
         UserRepository $userRepository,
-        TransactionInterface $bitcoinTransactionApiClient
+        BitcoinSyncTransactionService $bitcoinSyncTransactionService
     )
     {
+        $this->bitcoinTransactionRepository = $bitcoinTransactionRepository;
         $this->userRepository = $userRepository;
-        $this->bitcoinTransactionApiClient = $bitcoinTransactionApiClient;
+        $this->bitcoinSyncTransactionService = $bitcoinSyncTransactionService;
     }
 
     /**
+     * This method will retrieve all the transactions from the database and from Blockchain and will merge them.
      * @param int $userId
      * @param int $page
      * @param int $size
@@ -38,9 +47,15 @@ class IndexBitcoinTransactionService
     {
         $user = $this->userRepository->findOneById($userId);
 
-        $bitcoinTransactions = $this->bitcoinTransactionApiClient->getAll($user->getAccount()->getId());
+        if (!is_int($page)) {
+            throw new PayProException("Invalid page format.", 400);
+        }
 
-        $bitcoinTransactions = array_slice($bitcoinTransactions, ($page - 1) * $size, $size);
+        if (!is_int($size)) {
+            throw new PayProException("Invalid size format.", 400);
+        }
+
+        $this->bitcoinSyncTransactionService->execute($user->getBitcoinAccount()); 
 
         return $bitcoinTransactions;
     }

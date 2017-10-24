@@ -77,8 +77,12 @@ class Transaction implements TransactionInterface
             $transactions[$key]['subject'] = $this->extractSubject($transaction);
             $transactions[$key]['amount'] = $this->extractAmount($transaction);
             $transactions[$key]['units'] = 'bit';
+            $transactions[$key]['direction'] = $this->extractDirection($transaction);
             $transactions[$key]['createdAt'] = $this->extractTime($transaction);
+            $transactions[$key] = $this->hashingService->generateHashId($transactions[$key]);
         }
+
+
 
         return $transactions;
     }
@@ -100,6 +104,11 @@ class Transaction implements TransactionInterface
                 return $transactionLine[$key-1];
             }
         }
+    }
+
+    private function extractDirection(string $transactionLine) {
+        $transactionLine = explode( ' ', $transactionLine);
+        return $transactionLine[count($transactionLine) - 2];
     }
 
     private function extractTime(string $transactionLine) {

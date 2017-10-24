@@ -41,11 +41,31 @@ class BitcoinAccount implements \JsonSerializable
      */
     protected $balance;
 
+    /**
+     * @ORM\OneToMany(targetEntity="BitcoinTransaction", mappedBy="payer")
+     */
+    protected $sentTransactions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="BitcoinTransaction", mappedBy="beneficiary")
+     */
+    protected $receivedTransactions;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="BitcoinTransaction")
+     * @ORM\JoinColumn(name="last_synced_transaction_id", referencedColumnName="id")
+     */
+    protected $lastSyncedTransaction;
+
 	public function __construct(
         User $user,
         string $address
     )
     {
+        $this->sentTransactions = new ArrayCollection();
+        $this->receivedTransactions = new ArrayCollection();
+        $this->users = new ArrayCollection();
+
     	$this->users[] = $user;
     	$this->address = $address;
     }
@@ -133,5 +153,105 @@ class BitcoinAccount implements \JsonSerializable
     public function getBalance()
     {
         return $this->balance;
+    }
+
+    /**
+     * @param mixed $sentTransactions
+     */
+    public function setSentTransactions($sentTransactions)
+    {
+        $this->sentTransactions = $sentTransactions;
+    }
+
+    /**
+     * @param mixed $receivedTransactions
+     */
+    public function setReceivedTransactions($receivedTransactions)
+    {
+        $this->receivedTransactions = $receivedTransactions;
+    }
+
+        /**
+     * Add sentTransaction
+     *
+     * @param \AppBundle\Entity\BitcoinTransaction $sentTransaction
+     *
+     * @return BitcoinAccount
+     */
+    public function addSentTransaction(Transaction $sentTransaction)
+    {
+        $this->sentTransactions[] = $sentTransaction;
+
+        return $this;
+    }
+
+    /**
+     * Remove sentTransaction
+     *
+     * @param \AppBundle\Entity\BitcoinTransaction $sentTransaction
+     */
+    public function removeSentTransaction(Transaction $sentTransaction)
+    {
+        $this->sentTransactions->removeElement($sentTransaction);
+    }
+
+    /**
+     * Get sentTransactions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSentTransactions()
+    {
+        return $this->sentTransactions;
+    }
+
+    /**
+     * Add receivedTransaction
+     *
+     * @param \AppBundle\Entity\BitcoinTransaction $receivedTransaction
+     *
+     * @return BitcoinAccount
+     */
+    public function addReceivedTransaction(Transaction $receivedTransaction)
+    {
+        $this->receivedTransactions[] = $receivedTransaction;
+
+        return $this;
+    }
+
+    /**
+     * Remove receivedTransaction
+     *
+     * @param \AppBundle\Entity\BitcoinTransaction $receivedTransaction
+     */
+    public function removeReceivedTransaction(Transaction $receivedTransaction)
+    {
+        $this->receivedTransactions->removeElement($receivedTransaction);
+    }
+
+    /**
+     * Get receivedTransactions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReceivedTransactions()
+    {
+        return $this->receivedTransactions;
+    }
+
+    /**
+     * @return BitcoinTransaction
+     */
+    public function getLastSyncedTransaction()
+    {
+        return $this->lastSyncedTransaction;
+    }
+    
+    /**
+     * @param mixed $lastSyncedTransaction
+     */
+    public function setLastSyncedTransaction($lastSyncedTransaction)
+    {
+        $this->lastSyncedTransaction = $lastSyncedTransaction;
     }
 }
