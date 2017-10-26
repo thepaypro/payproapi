@@ -22,7 +22,7 @@ class LastTransactionsService
      * @param BitcoinSyncTransactionService $bitcoinSyncTransactionService
      */
     public function __construct(
-        BitcoinTransactionRepository $bitcointransactionRepository,
+        BitcoinTransactionRepository $bitcoinTransactionRepository,
         UserRepository $userRepository,
         BitcoinSyncTransactionService $bitcoinSyncTransactionService
     )
@@ -53,11 +53,12 @@ class LastTransactionsService
         $accountIsPayer = false;
 
         $transaction = $this->bitcoinTransactionRepository->findOneById($transactionId);
+
         if (!$account) {
             throw new PayProException("invalid token", 400);
         }
         if (!$transaction || !($transaction->getPayer() || $transaction->getBeneficiary())) {
-            throw new PayProException("invalid transactionId", 400);
+            throw new PayProException("invalid bitcoinTransactionId", 400);
         }
         if ($transaction->getPayer()) {
             $accountIsPayer = ($transaction->getPayer()->getId() == $account->getId());
@@ -66,10 +67,10 @@ class LastTransactionsService
             $accountIsBeneficiary = ($transaction->getBeneficiary()->getId() == $account->getId());
         }
         if (!$accountIsBeneficiary && !$accountIsPayer) {
-            throw new PayProException("invalid transactionId", 400);
+            throw new PayProException("invalid bitcoinTransactionId", 400);
         }
 
-        $this->bitcoinSyncTransactionService->execute($account);
+        $this->bitcoinSyncTransactionService->execute($user);
 
         $payProTransactions = $this->bitcoinTransactionRepository->getTransactionsOfAccountAfterTransactionId(
             $account,

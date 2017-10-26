@@ -2,6 +2,7 @@
 
 namespace AppBundle\Service\BitcoinTransaction;
 
+use AppBundle\Entity\User;
 use AppBundle\Repository\UserRepository;
 use AppBundle\Entity\BitcoinAccount;
 use AppBundle\Entity\BitcoinTransaction;
@@ -23,12 +24,12 @@ class BitcoinSyncTransactionService
     /**
      * @param BitcoinTransactionRepository $bitcoinTransactionRepository
      * @param BitcoinAccountRepository $bitcoinAccountRepository
-     * @param BitcoinTransactionApiClient $bitcoinTransactionApiClient
+     * @param TransactionInterface $bitcoinTransactionApiClient
      */
     public function __construct(
         BitcoinTransactionRepository $bitcoinTransactionRepository,
         BitcoinAccountRepository $bitcoinAccountRepository,
-        BitcoinTransactionApiClient $bitcoinTransactionApiClient
+        TransactionInterface $bitcoinTransactionApiClient
     )
     {
         $this->bitcoinTransactionRepository = $bitcoinTransactionRepository;
@@ -38,16 +39,17 @@ class BitcoinSyncTransactionService
 
     /**
      * This method will retrieve all the transactions from the database and from Blockchain and will merge them.
-     * @param BitcoinAccount $bitcoinAccount
+     * @param User $user
      * @return void
      */
     public function execute(
-        BitcoinAccount $bitcoinAccount)
+        User $user)
     {
-        $lastSyncedTransaction = $user->getBitcoinAccount()->getLastSyncedTransaction();
+        $bitcoinAccount = $user->getBitcoinAccount();
+        $lastSyncedTransaction = $bitcoinAccount->getLastSyncedTransaction();
 
         $this->persistBitcoinTransactionsUntilLastSyncedTransactionIsFound(
-            $bitcoinAccount,
+            $user,
             $lastSyncedTransaction
         );
 
@@ -63,28 +65,26 @@ class BitcoinSyncTransactionService
     /**
      * Get all transaction from Blockchain on a date interval and persist them
      * until the last synced transaction is found (if there is last synced transaction).
-     * @param BitcoinAccount $bitcoinaccount
+     * @param User $user
      * @param BitcoinTransaction $lastSyncedTransaction
      */
     private function persistBitcoinTransactionsUntilLastSyncedTransactionIsFound(
-        BitcoinAccount $bitcoinAccount,
+        User $user,
         BitcoinTransaction $lastSyncedTransaction = null)
     {
-        do {
-            $bitcoinTransactions = $this->bitcoinTransactionApiClient->getAll($user->getAccount()->getId());
+        $bitcoinTransactions = $this->bitcoinTransactionApiClient->getAll($user->getAccount()->getId());
 
-            $lastSyncedTransactionFound = $this->persistBitcoinTransactions(
-                $bitcoinAccount,
-                $bitcoinTransactions,
-                $lastSyncedTransaction
-            );
-        };
+        $lastSyncedTransactionFound = $this->persistBitcoinTransactions(
+            $user->getBitcoinAccount(),
+            $bitcoinTransactions,
+            $lastSyncedTransaction
+        ); 
     }
 
     /**
      * Regular method for when the user has a last synced transaction, which parses
      * all the transactions until it finds the last synced one.
-     * @param Account $account
+     * @param BitcoinAccount $bitcoinAccount
      * @param array $contisTransactions
      * @param Transaction $lastSyncedTransaction
      * @return bool
@@ -97,12 +97,11 @@ class BitcoinSyncTransactionService
     {
         foreach ($blockchainTransactions as $blockchainTransaction) {
             if (!is_null($lastSyncedTransaction) &&
-                $lastSyncedTransaction->getBitcoinTransactionId() == $blockchainTransaction['TransactionID']
+                $lastSyncedTransaction->getBlockchainTransactionId() == $blockchainTransaction['HashId']
             ) {
                 return true;
             }
-
-            $transaction = $this->bitcoinTransactionRepository->findOneByBitcoinTransactionId(
+            $transaction = $this->bitcoinTransactionRepository->findOneByBlockchainTransactionId(
                 $blockchainTransaction['HashId']
             );
 
@@ -132,24 +131,24 @@ class BitcoinSyncTransactionService
         $bitcoinTransaction = new BitcoinTransaction(
             null,
             null,
-            $contisTransaction['amount'],
-            $contisTransaction['subject'],
+            $blockchainTransaction['amount'],
+            $blockchainTransaction['subject'],
             null,
             $creationDateTime
         );
         $bitcoinTransaction->setBlockchainTransactionId($blockchainTransaction['HashId']);
 
         if ($blockchainTransaction['direction'] == "sent") {
-            $transaction->setPayer($bitcoinAccount);
+            $bitcoinTransaction->setPayer($bitcoinAccount);
         }
-        else if ($contisTransaction['direction'] == "received") {
-            $transaction->setBeneficiary($bitcoinAccount);
+        else if ($blockchainTransaction['direction'] == "received") {
+            $bitcoinTransaction->setBeneficiary($bitcoinAccount);
         }
-        else if ($contisTransaction['direction'] == "moved") {
-            $transaction->setPayer($bitcoinAccount);
-            $transaction->setBeneficiary($bitcoinAccount);
+        else if ($blockchainTransaction['direction'] == "moved") {
+            $bitcoinTransaction->setPayer($bitcoinAccount);
+            $bitcoinTransaction->setBeneficiary($bitcoinAccount);
         }
 
-        $this->bitcoinTransactionRepository->save($transaction);
+        $this->bitcoinTransactionRepository->save($bitcoinTransaction);
     }
 }

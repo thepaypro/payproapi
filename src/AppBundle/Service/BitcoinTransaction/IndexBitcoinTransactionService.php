@@ -3,6 +3,7 @@
 namespace AppBundle\Service\BitcoinTransaction;
 
 use AppBundle\Exception\PayProException;
+use AppBundle\Repository\BitcoinTransactionRepository;
 use AppBundle\Repository\UserRepository;
 
 /**
@@ -55,7 +56,13 @@ class IndexBitcoinTransactionService
             throw new PayProException("Invalid size format.", 400);
         }
 
-        $this->bitcoinSyncTransactionService->execute($user->getBitcoinAccount()); 
+        $this->bitcoinSyncTransactionService->execute($user); 
+
+       $bitcoinTransactions = $this->bitcoinTransactionRepository->getTransactionsOfAccount(
+            $user->getBitcoinAccount(),
+            $page,
+            $size
+        );
 
         return $bitcoinTransactions;
     }

@@ -51,8 +51,9 @@ class LastTransactionsService
         $account = $user->getAccount();
         $accountIsBeneficiary = false;
         $accountIsPayer = false;
-
+        
         $transaction = $this->transactionRepository->findOneById($transactionId);
+        
         if (!$account) {
             throw new PayProException("invalid token", 400);
         }

@@ -4,4 +4,10 @@ services:
 
   bitcoin_wallet_api_client.transaction_service:
     class: AppBundle\Service\BitcoinWalletApiClient\Mock\Transaction
+    arguments:
+      - "@bitcoin_wallet_api_client.hashing_service"
+
+  bitcoin_wallet_api_client.hashing_service:
+    class:  AppBundle\Service\BitcoinWalletApiClient\HashingService
+
 

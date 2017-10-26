@@ -58,11 +58,6 @@ class BitcoinTransaction implements \JsonSerializable
     protected $title;
 
     /**
-     * @ORM\OneToOne(targetEntity="TransactionInvite", mappedBy="transaction")
-     */
-    protected $transactionInvite;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
@@ -98,22 +93,15 @@ class BitcoinTransaction implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $publicProperties = [
-            'id' => $this->id,
-            'payer' => $this->payer,
-            'beneficiary' => $this->beneficiary,
-            'amount' => $this->amount,
-            'subject' => $this->subject,
-            'title' => $this->title,
-            'transactionInvite' => $this->transactionInvite,
-            'createdAt' => $this->createdAt
-        ];
-
-        return $publicProperties;
-    }
-
-    public function jsonSerializeBasic()
-    {
+        // $publicProperties = [
+        //     'id' => $this->id,
+        //     'payer' => $this->payer,
+        //     'beneficiary' => $this->beneficiary,
+        //     'amount' => $this->amount,
+        //     'subject' => $this->subject,
+        //     'title' => $this->title,
+        //     'createdAt' => $this->createdAt
+        // ];
         $publicProperties = [
             'id' => $this->id,
             'payer' => isset($this->payer) ? $this->payer->getId() : $this->payer,
@@ -121,7 +109,6 @@ class BitcoinTransaction implements \JsonSerializable
             'amount' => $this->amount,
             'subject' => $this->subject,
             'title' => $this->title,
-            'transactionInvite' => $this->transactionInvite,
             'createdAt' => $this->createdAt
         ];
 
@@ -184,30 +171,6 @@ class BitcoinTransaction implements \JsonSerializable
     public function getAmount()
     {
         return $this->amount;
-    }
-
-    /**
-     * Set transactionInvite
-     *
-     * @param string $transactionInvite
-     *
-     * @return BitcoinTransaction
-     */
-    public function setTransactionInvite($transactionInvite)
-    {
-        $this->transactionInvite = $transactionInvite;
-
-        return $this;
-    }
-
-    /**
-     * Get transactionInvite
-     *
-     * @return string
-     */
-    public function getTransactionInvite()
-    {
-        return $this->transactionInvite;
     }
 
     /**

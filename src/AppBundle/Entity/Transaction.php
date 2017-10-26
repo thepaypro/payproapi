@@ -98,22 +98,16 @@ class Transaction implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $publicProperties = [
-            'id' => $this->id,
-            'payer' => $this->payer,
-            'beneficiary' => $this->beneficiary,
-            'amount' => $this->amount,
-            'subject' => $this->subject,
-            'title' => $this->title,
-            'transactionInvite' => $this->transactionInvite,
-            'createdAt' => $this->createdAt
-        ];
-
-        return $publicProperties;
-    }
-
-    public function jsonSerializeBasic()
-    {
+        // $publicProperties = [
+        //     'id' => $this->id,
+        //     'payer' => $this->payer,
+        //     'beneficiary' => $this->beneficiary,
+        //     'amount' => $this->amount,
+        //     'subject' => $this->subject,
+        //     'title' => $this->title,
+        //     'transactionInvite' => $this->transactionInvite,
+        //     'createdAt' => $this->createdAt
+        // ];
         $publicProperties = [
             'id' => $this->id,
             'payer' => isset($this->payer) ? $this->payer->getId() : $this->payer,

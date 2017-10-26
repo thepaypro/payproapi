@@ -37,11 +37,6 @@ class BitcoinAccount implements \JsonSerializable
 	protected $address;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    protected $balance;
-
-    /**
      * @ORM\OneToMany(targetEntity="BitcoinTransaction", mappedBy="payer")
      */
     protected $sentTransactions;
@@ -77,7 +72,6 @@ class BitcoinAccount implements \JsonSerializable
         })->toArray();
         $publicProperties['id'] = $this->id;
         $publicProperties['address'] = $this->address;
-        $publicProperties['balance'] = $this->balance;
 
         return $publicProperties;
     }
@@ -86,7 +80,6 @@ class BitcoinAccount implements \JsonSerializable
     {
         $publicProperties['id'] = $this->id;
         $publicProperties['address'] = $this->address;
-        $publicProperties['balance'] = $this->balance;
 
         return $publicProperties;
     }
@@ -130,29 +123,6 @@ class BitcoinAccount implements \JsonSerializable
     public function getAddress()
     {
     	return $this->address;
-    }
-
-    /**
-     * Set balance
-     *
-     * @param integer $balance
-     * @return integer
-     */
-    public function setBalance($balance)
-    {
-        $this->balance = $balance;
-
-        return $this;
-    }
-
-    /**
-     * Get balance
-     *
-     * @return integer
-     */
-    public function getBalance()
-    {
-        return $this->balance;
     }
 
     /**

@@ -11,10 +11,12 @@ use DateTime;
 class Transaction implements TransactionInterface
 {
     protected $bitcoinWalletProcessService;
+    protected $hashingService
 
-    public function __construct(BitcoinWalletProcessService $bitcoinWalletProcessService)
+    public function __construct(BitcoinWalletProcessService $bitcoinWalletProcessService, HashingService $hashingService)
     {
         $this->bitcoinWalletProcessService = $bitcoinWalletProcessService;
+        $this->hashingService = $hashingService
     }
 
     /**

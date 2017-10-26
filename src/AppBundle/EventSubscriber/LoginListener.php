@@ -34,10 +34,10 @@ class LoginListener{
     public function onSecurityInteractiveLogin( InteractiveLoginEvent $event )
     {
         try {
-            $user = $event->getAuthenticationToken()->getUser();
-            $this->logger->info('user logged in');
-            $this->balanceService->execute($user->getId());
-            $this->bitcoinWalletService->execute($user->getId());
+            // $user = $event->getAuthenticationToken()->getUser();
+            // $this->logger->info('user logged in');
+            // $this->balanceService->execute($user->getId());
+            // $this->bitcoinWalletService->execute($user->getId());
         } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }

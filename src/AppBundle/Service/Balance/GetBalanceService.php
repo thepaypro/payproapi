@@ -43,7 +43,6 @@ class GetBalanceService
             throw new PayProException('Account not found', 404);
         }
         $balance = $this->contisBalanceApiClient->get($account);
-        $account->setBalance($balance);
         return $balance;
     }
 }
