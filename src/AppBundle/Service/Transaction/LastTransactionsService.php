@@ -58,7 +58,7 @@ class LastTransactionsService
             throw new PayProException("invalid token", 400);
         }
         if (!$transaction || !($transaction->getPayer() || $transaction->getBeneficiary())) {
-            throw new PayProException("invalid transactionId", 400);
+            throw new PayProException("invalid GBPTransactionId", 400);
         }
         if ($transaction->getPayer()) {
             $accountIsPayer = ($transaction->getPayer()->getId() == $account->getId());
@@ -67,7 +67,7 @@ class LastTransactionsService
             $accountIsBeneficiary = ($transaction->getBeneficiary()->getId() == $account->getId());
         }
         if (!$accountIsBeneficiary && !$accountIsPayer) {
-            throw new PayProException("invalid transactionId", 400);
+            throw new PayProException("invalid GBPTransactionId", 400);
         }
 
         $this->contisSyncTransactionService->execute($account);
