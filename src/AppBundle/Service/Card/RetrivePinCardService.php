@@ -56,7 +56,7 @@ class RetrivePinCardService
         }
 
         $cardInfo = $this->contisCardApiClient->getInfo($card);
-
+        
         return $this->contisCardApiClient->retrivePin($card, $cardInfo["HashCardNumber"], $cvv2);
     }
 }

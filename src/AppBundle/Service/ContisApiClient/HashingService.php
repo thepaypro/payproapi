@@ -50,9 +50,22 @@ class HashingService
         return $params;
     }
 
-    public function pinDecrypt(String $pin){
-        dump($this->pin_iv_key);die();
-        $decPin = openssl_decrypt( base64_decode($pin), "des3", hex2bin($this->pin_secret_key), 0, hex2bin($this->pin_iv_key));
+    public function pinDecrypt(String $pin)
+    {
+        $decPin = $this->decrypt3DES($this->pin_secret_key, $this->pin_iv_key, $pin);
+        
         return $decPin;
+    }
+
+    public function decrypt3DES($key64,$iv64,$encText)
+    {      
+      $keybytes = pack('H*',$key64);
+      $keybytes .= substr($keybytes,0,8);
+      $ivbytes = pack('H*',$iv64);
+      
+      $decryptbytes = base64_decode($encText);
+      $decryptRaw = mcrypt_decrypt(MCRYPT_3DES, $keybytes, $decryptbytes, MCRYPT_MODE_CBC, $ivbytes);
+
+      return $decryptRaw;
     }
 }

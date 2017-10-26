@@ -115,6 +115,9 @@ class CardController extends Controller
                 $user->getId(),
                 isset($cvv2)?$cvv2:00
             );
+
+            $pin = strip_tags($pin);
+
          } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }

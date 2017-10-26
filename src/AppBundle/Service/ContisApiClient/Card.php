@@ -165,14 +165,10 @@ class Card
      * Get Pin card
      * @param  CardEntity $card
      * @param int $cvv2
-     * @return bool
+     * @return string
      */
-    public function retrivePin(CardEntity $card, string $hashCardNumber, int $cvv2) : bool
+    public function retrivePin(CardEntity $card, string $hashCardNumber, int $cvv2) : string
     {
-
-        dump($this->hashingService->pinDecrypt("s7NXVgb1/+jDGxZlzDkt1g=="));die();
-
-
         $params = [
             'HashCardNumber' => $hashCardNumber,
             'SecurityCode' => $cvv2,
@@ -191,12 +187,11 @@ class Card
         $requestParams = $this->hashingService->generateHashDataStringAndHash($requestParams);
 
         $response = $this->requestService->call('Card_RetrivePIN', $params, $requestParams);
+        
         if ($response['Card_RetrivePINResult']['ResponseCode'] == '000') {
-            if ($pin = $this->hashingService->pinDecrypt($response['Card_RetrivePINResult']['ResultObject']['Pin'])){
-                dump($pin);die();
-                return $pin;
-            }
+            return $this->hashingService->pinDecrypt($response['Card_RetrivePINResult']['ResultObject']['Pin']);
         }
+
         throw new PayProException("Bad Request", 400);
     }
 
