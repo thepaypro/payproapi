@@ -815,6 +815,37 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "AccountsInfo",
+			"description": "",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"url": "{{host}}/accounts_info",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

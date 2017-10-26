@@ -44,7 +44,7 @@ class ContisSyncTransactionService
         Account $account)
     {
         $lastSyncedTransaction = $account->getLastSyncedTransaction();
-
+        
         $fromDate = $account->getCreatedAt();
         $toDate = new DateTime();
         $toDate->add(new DateInterval('PT2H'));

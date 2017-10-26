@@ -47,14 +47,14 @@ class BitcoinSyncTransactionService
     {
         $bitcoinAccount = $user->getBitcoinAccount();
         $lastSyncedTransaction = $bitcoinAccount->getLastSyncedTransaction();
-
+        // dump($lastSyncedTransaction);die();
         $this->persistBitcoinTransactionsUntilLastSyncedTransactionIsFound(
             $user,
             $lastSyncedTransaction
         );
-
+        
         $transactions = $this->bitcoinTransactionRepository->getTransactionsOfAccount($bitcoinAccount, 1, 1);
-
+        
         if (!empty($transactions['content'])) {
             $newLastSyncedTransaction = $transactions['content'][0];
             $bitcoinAccount->setLastSyncedTransaction($newLastSyncedTransaction);

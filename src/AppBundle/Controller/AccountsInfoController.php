@@ -48,12 +48,13 @@ class AccountsInfoController extends Controller
 		            	$user->getId(),
 		            	$requestData['gbpTransactionId']
 		        	)
-		        :   $transactions = $this->get('payproapi.index_transaction_service')->execute(
+		        :   $this->get('payproapi.index_transaction_service')->execute(
                 		$user->getId(),
                 		isset($requestData['gbpPage']) ? $requestData['gbpPage'] : 1,
                 		isset($requestData['gbpSize']) ? $requestData['gbpSize'] : 10
             		)
 			: NULL;
+
 
 			$bitcoinTransactions = (null !==$user->getBitcoinAccount()) ? 
 				isset($requestData['bitcoinTransactionId']) ?
@@ -61,7 +62,7 @@ class AccountsInfoController extends Controller
 		            	$user->getId(),
 		            	$requestData['bitcoinTransactionId']
 		        	)
-		        :   $transactions = $this->get('payproapi.index_bitcoin_transaction_service')->execute(
+		        :   $this->get('payproapi.index_bitcoin_transaction_service')->execute(
                 		$user->getId(),
                 		isset($requestData['bitcoinPage']) ? $requestData['bitcoinPage'] : 1,
                 		isset($requestData['bitcoinSize']) ? $requestData['bitcoinSize'] : 10
