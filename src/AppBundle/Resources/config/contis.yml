@@ -27,6 +27,7 @@ services:
       - "@contis_api_client.request_service"
       - "@contis_api_client.hashing_service"
       - "@contis_api_client.authentication_service"
+      - "@logger"
 
   contis_api_client.transaction_service:
     class: AppBundle\Service\ContisApiClient\Transaction
@@ -34,6 +35,7 @@ services:
       - "@contis_api_client.request_service"
       - "@contis_api_client.hashing_service"
       - "@contis_api_client.authentication_service"
+      - "@logger"
 
   contis_api_client.card_service:
     class: AppBundle\Service\ContisApiClient\Card
@@ -41,6 +43,7 @@ services:
       - "@contis_api_client.request_service"
       - "@contis_api_client.hashing_service"
       - "@contis_api_client.authentication_service"
+      - "@logger"
 
   contis_api_client.balance_service:
     class: AppBundle\Service\ContisApiClient\Balance
@@ -48,3 +51,4 @@ services:
       - "@contis_api_client.request_service"
       - "@contis_api_client.hashing_service"
       - "@contis_api_client.authentication_service"
+      - "@logger"
