@@ -111,15 +111,18 @@ class CardController extends Controller
         $cvv2 = $request->request->get('cvv2');
         
         try {
-            $card = $this->get('payproapi.retrive_pin_card_service')->execute(
+            $pin = $this->get('payproapi.retrive_pin_card_service')->execute(
                 $user->getId(),
                 isset($cvv2)?$cvv2:00
             );
+
+            $pin = strip_tags($pin);
+
          } catch (PayProException $e) {
             return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
         }
 
-        return $this->JWTResponse($user, ['card' => $card]);
+        return $this->JWTResponse($user, ['pin' => $pin]);
     }
 
     /**

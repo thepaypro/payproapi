@@ -194,9 +194,9 @@ class Card
      * Get Pin card
      * @param  CardEntity $card
      * @param int $cvv2
-     * @return bool
+     * @return string
      */
-    public function retrivePin(CardEntity $card, string $hashCardNumber, int $cvv2) : bool
+    public function retrivePin(CardEntity $card, string $hashCardNumber, int $cvv2) : string
     {
         $params = [
             'HashCardNumber' => $hashCardNumber,
@@ -216,9 +216,42 @@ class Card
         $requestParams = $this->hashingService->generateHashDataStringAndHash($requestParams);
 
         $response = $this->requestService->call('Card_RetrivePIN', $params, $requestParams);
+        
+        if ($response['Card_RetrivePINResult']['ResponseCode'] == '000') {
+            return $this->hashingService->pinDecrypt($response['Card_RetrivePINResult']['ResultObject']['Pin']);
+        }
+      
+        $this->logger->addCritical(
+            'Call Params: '.json_encode($params).' // Call Request Params: '.json_encode($requestParams).' // Response Service: '.json_encode($response),
+            ['Card_RetrivePIN','ContisApiClient']
+        );
 
-        if ($response['Card_RetrivePINResult']['Description'] == '000') {
-            return $response['Card_RetrivePINResult']['ResultObject'];
+        throw new PayProException("Bad Request", 400);
+    }
+
+    public function getInfo(CardEntity $card)
+    {
+        $params = [
+            'CardHolderID' => $card->getAccount()->getCardHolderId(),
+            'AccountNumber' => $card->getAccount()->getAccountNumber(),
+            'CardID' => $card->getContisCardId(),
+            'SortCode' => $card->getAccount()->getSortCode()
+        ];
+
+        $params['Token'] = $this->authenticationService->getAuthenticationToken();
+
+        $requestParams = [
+            'Token' => $params['Token'],
+            'ClientUniqueReferenceID' => strtotime('now'),
+            'SchemeCode' => 'PAYPRO'
+        ];
+
+        $params = $this->hashingService->generateHashDataStringAndHash($params);
+        $requestParams = $this->hashingService->generateHashDataStringAndHash($requestParams);
+
+        $response = $this->requestService->call('Card_Lookup_GetInfo', $params, $requestParams);
+        if ($response['Card_Lookup_GetInfoResult']['ResponseCode'] == '000') {
+            return $response['Card_Lookup_GetInfoResult']['ResultObject'][0];
         }
 
         $this->logger->addCritical(
