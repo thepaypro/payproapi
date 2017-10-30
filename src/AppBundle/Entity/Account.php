@@ -217,35 +217,51 @@ class Account implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $publicProperties['users'] = $this->users->map(function (User $user) {
-            return $user->getId();
-        })->toArray();
         $publicProperties['id'] = $this->id;
+        $publicProperties['status'] = $this->status;
         $publicProperties['forename'] = $this->forename;
         $publicProperties['lastname'] = $this->lastname;
         $publicProperties['email'] = $this->email;
-        $publicProperties['card'] = $this->card;
-        $publicProperties['profile'] = $this->profile;
-        $publicProperties['birthDate'] = $this->birthDate;
-        $publicProperties['documentType'] = $this->documentType;
-        $publicProperties['documentNumber'] = $this->documentNumber;
-        $publicProperties['agreement'] = $this->agreement;
         $publicProperties['accountNumber'] = $this->accountNumber;
         $publicProperties['sortCode'] = $this->sortCode;
+        $publicProperties['card'] = isset($this->card) ? $this->card->jsonSerializeBasic() : NULL;
         $publicProperties['street'] = $this->street;
         $publicProperties['buildingNumber'] = $this->buildingNumber;
         $publicProperties['postcode'] = $this->postcode;
         $publicProperties['city'] = $this->city;
-        $publicProperties['country'] = $this->country;
-        $publicProperties['status'] = $this->status;
-        $publicProperties['sentTransactions'] = $this->sentTransactions->map(function (Transaction $transaction) {
-            return $transaction->getId();
-        })->toArray();
-        $publicProperties['receivedTransactions'] = $this->receivedTransactions->map(function (Transaction $transaction) {
-            return $transaction->getId();
-        })->toArray();
-        $publicProperties['createdAt'] = $this->createdAt;
-        $publicProperties['updatedAt'] = $this->updatedAt;
+        $publicProperties['country'] = $this->country->getName();
+        $publicProperties['profile'] = $this->profile;
+
+        
+        // $publicProperties['users'] = $this->users->map(function (User $user) {
+        //     return $user->getId();
+        // })->toArray();
+        // $publicProperties['id'] = $this->id;
+        // $publicProperties['forename'] = $this->forename;
+        // $publicProperties['lastname'] = $this->lastname;
+        // $publicProperties['email'] = $this->email;
+        // $publicProperties['card'] = $this->card;
+        // $publicProperties['profile'] = $this->profile;
+        // $publicProperties['birthDate'] = $this->birthDate;
+        // $publicProperties['documentType'] = $this->documentType;
+        // $publicProperties['documentNumber'] = $this->documentNumber;
+        // $publicProperties['agreement'] = $this->agreement;
+        // $publicProperties['accountNumber'] = $this->accountNumber;
+        // $publicProperties['sortCode'] = $this->sortCode;
+        // $publicProperties['street'] = $this->street;
+        // $publicProperties['buildingNumber'] = $this->buildingNumber;
+        // $publicProperties['postcode'] = $this->postcode;
+        // $publicProperties['city'] = $this->city;
+        // $publicProperties['country'] = $this->country;
+        // $publicProperties['status'] = $this->status;
+        // $publicProperties['sentTransactions'] = $this->sentTransactions->map(function (Transaction $transaction) {
+        //     return $transaction->getId();
+        // })->toArray();
+        // $publicProperties['receivedTransactions'] = $this->receivedTransactions->map(function (Transaction $transaction) {
+        //     return $transaction->getId();
+        // })->toArray();
+        // $publicProperties['createdAt'] = $this->createdAt;
+        // $publicProperties['updatedAt'] = $this->updatedAt;
 
         return $publicProperties;
     }
