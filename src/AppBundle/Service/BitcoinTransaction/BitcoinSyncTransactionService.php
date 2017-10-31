@@ -126,13 +126,16 @@ class BitcoinSyncTransactionService
         BitcoinAccount $bitcoinAccount,
         array $blockchainTransaction)
     {
-        $time = intval(trim($blockchainTransaction['createdAt'], '/Date()') / 1000);
-        $creationDateTime = (new DateTime())->setTimestamp($time);
-
+        // $time = intval(trim($blockchainTransaction['createdAt'], '/Date()') / 1000);
+        $creationDateTime = (new DateTime())->setTimestamp($blockchainTransaction['createdAt']);
+        // dump($time)
+        // dump($creationDateTime);die();
+        // dump($blockchainTransaction['amount']*1000000);die();
+        // dump((float) $blockchainTransaction['amount']);die();
         $bitcoinTransaction = new BitcoinTransaction(
             null,
             null,
-            (float) $blockchainTransaction['amount'],
+            $blockchainTransaction['amount']*1000000,
             $blockchainTransaction['subject'],
             null,
             $creationDateTime
