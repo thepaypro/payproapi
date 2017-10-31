@@ -31,7 +31,7 @@ class TransactionInvite
     protected $invite;
 
     /**
-     * @ORM\OneToOne(targetEntity="Transaction", inversedBy="transactionInvite")
+     * @ORM\OneToOne(targetEntity="BitcoinTransaction", inversedBy="transactionInvite")
      * @ORM\JoinColumn(name="transaction_id", referencedColumnName="id")
      */
     protected $transaction;
@@ -147,11 +147,11 @@ class TransactionInvite
     /**
      * Set transaction
      *
-     * @param \AppBundle\Entity\Transaction $transaction
+     * @param \AppBundle\Entity\BitcoinTransaction $transaction
      *
      * @return TransactionInvite
      */
-    public function setTransaction(\AppBundle\Entity\Transaction $transaction = null)
+    public function setTransaction(\AppBundle\Entity\BitcoinTransaction $transaction = null)
     {
         $this->transaction = $transaction;
 
@@ -161,7 +161,7 @@ class TransactionInvite
     /**
      * Get transaction
      *
-     * @return \AppBundle\Entity\Transaction
+     * @return \AppBundle\Entity\BitcoinTransaction
      */
     public function getTransaction()
     {

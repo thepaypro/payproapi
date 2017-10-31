@@ -32,12 +32,6 @@ class User extends BaseUser implements \JsonSerializable
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Account", inversedBy="users")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id")
-     */
-    private $account;
-
-    /**
      * @ORM\ManyToOne(targetEntity="BitcoinAccount", inversedBy="users")
      * @ORM\JoinColumn(name="bitcoin_account_id", referencedColumnName="id")
      */
@@ -58,35 +52,10 @@ class User extends BaseUser implements \JsonSerializable
             $publicProperties = [
                 'id' => $this->id,
                 'username' => $this->username,
-                'gbpAccount' => isset($this->account) ? $this->account->jsonSerializeBasic() : NULL,
                 'bitcoinAccount' => isset($this->bitcoinAccount) ? $this->bitcoinAccount->jsonSerializeBasic() : NULL
             ];
 
             return $publicProperties;
-    }
-
-    /**
-     * Set account
-     *
-     * @param \AppBundle\Entity\Account $account
-     *
-     * @return User
-     */
-    public function setAccount(Account $account = null)
-    {
-        $this->account = $account;
-
-        return $this;
-    }
-
-    /**
-     * Get account
-     *
-     * @return \AppBundle\Entity\Account
-     */
-    public function getAccount()
-    {
-        return $this->account;
     }
 
     /**
@@ -148,9 +117,9 @@ class User extends BaseUser implements \JsonSerializable
     }
 
     /**
-     * Get account
+     * Get username
      *
-     * @return \AppBundle\Entity\Account
+     * @return string
      */
     public function getUsername()
     {

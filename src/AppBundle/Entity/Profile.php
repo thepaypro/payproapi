@@ -24,21 +24,21 @@ class Profile implements \JsonSerializable
     protected $picture;
 
     /**
-     * @ORM\OneToOne(targetEntity="Account", inversedBy="profile")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="User", inversedBy="profile")
+     * @ORM\JoinColumn(name="id", referencedColumnName="id")
      */
-    protected $account;
+    protected $user;
 
-    public function __construct(string $base64Picture, Account $account)
+    public function __construct(string $base64Picture, User $user)
     {
-        $this->account = $account;
+        $this->user = $user;
         $this->picture = $base64Picture;
     }
 
     public function jsonSerialize()
     {
         $publicProperties['id'] = $this->id;
-        $publicProperties['account'] = $this->account->getId();
+        $publicProperties['user'] = $this->user->getId();
         $publicProperties['picture'] = $this->picture;
 
         return $publicProperties;
@@ -79,26 +79,26 @@ class Profile implements \JsonSerializable
     }
 
     /**
-     * Set account
+     * Set user
      *
-     * @param Account $account
+     * @param User $user
      *
      * @return Profile
      */
-    public function setAccount(Account $account)
+    public function setUser(User $user)
     {
-        $this->account = $account;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get account
+     * Get user
      *
-     * @return Account
+     * @return User
      */
-    public function getAccount()
+    public function getUser()
     {
-        return $this->account;
+        return $this->user;
     }
 }

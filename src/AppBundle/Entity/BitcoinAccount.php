@@ -147,7 +147,7 @@ class BitcoinAccount implements \JsonSerializable
      *
      * @return BitcoinAccount
      */
-    public function addSentTransaction(Transaction $sentTransaction)
+    public function addSentTransaction(BitcoinTransaction $sentTransaction)
     {
         $this->sentTransactions[] = $sentTransaction;
 
@@ -159,7 +159,7 @@ class BitcoinAccount implements \JsonSerializable
      *
      * @param \AppBundle\Entity\BitcoinTransaction $sentTransaction
      */
-    public function removeSentTransaction(Transaction $sentTransaction)
+    public function removeSentTransaction(BitcoinTransaction $sentTransaction)
     {
         $this->sentTransactions->removeElement($sentTransaction);
     }
@@ -181,7 +181,7 @@ class BitcoinAccount implements \JsonSerializable
      *
      * @return BitcoinAccount
      */
-    public function addReceivedTransaction(Transaction $receivedTransaction)
+    public function addReceivedTransaction(BitcoinTransaction $receivedTransaction)
     {
         $this->receivedTransactions[] = $receivedTransaction;
 
@@ -193,7 +193,7 @@ class BitcoinAccount implements \JsonSerializable
      *
      * @param \AppBundle\Entity\BitcoinTransaction $receivedTransaction
      */
-    public function removeReceivedTransaction(Transaction $receivedTransaction)
+    public function removeReceivedTransaction(BitcoinTransaction $receivedTransaction)
     {
         $this->receivedTransactions->removeElement($receivedTransaction);
     }
