@@ -72,7 +72,7 @@ class BitcoinSyncTransactionService
         User $user,
         BitcoinTransaction $lastSyncedTransaction = null)
     {
-        $bitcoinTransactions = $this->bitcoinTransactionApiClient->getAll($user->getAccount()->getId());
+        $bitcoinTransactions = $this->bitcoinTransactionApiClient->getAll($user->getBitcoinAccount()->getId());
 
         $lastSyncedTransactionFound = $this->persistBitcoinTransactions(
             $user->getBitcoinAccount(),
