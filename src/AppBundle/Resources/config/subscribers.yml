@@ -3,6 +3,8 @@ services:
     class: UserBundle\EventSubscriber\RegistrationSubscriber
     arguments: 
       - "@payproapi.user_validator_service"
+      - "@payproapi.create_bitcoin_account_service"
+      - "@bitcoin_wallet_api_client.wallet_service"
     tags:
       - { name: kernel.event_subscriber }
 

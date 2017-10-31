@@ -38,31 +38,31 @@ class AccountSubscriber implements EventSubscriberInterface
     public function accountCreated(AccountEvent $event)
     {
         $this->createNotification($event);
-        $this->createBitcoinWallet($event);
+        // $this->createBitcoinWallet($event);
     }
 
-    /**
-     * Calls the bitcoin wallet in order to create the wallet for the account.
-     * @param AccountEvent $event
-     */
-    private function createBitcoinWallet(AccountEvent $event)
-    {
+    // /**
+    //  * Calls the bitcoin wallet in order to create the wallet for the account.
+    //  * @param AccountEvent $event
+    //  */
+    // private function createBitcoinWallet(AccountEvent $event)
+    // {
 
-        $this->bitcoinWalletApiClient->create(
-            $event->getAccount()->getId(),
-            $event->getAccount()->getForename().' '.$event->getAccount()->getLastname()
-        );
+    //     $this->bitcoinWalletApiClient->create(
+    //         $event->getAccount()->getId(),
+    //         $event->getAccount()->getForename().' '.$event->getAccount()->getLastname()
+    //     );
 
-        $wallet = $this->bitcoinWalletApiClient->getOne(
-            $event->getAccount()->getId()
-        );
+    //     $wallet = $this->bitcoinWalletApiClient->getOne(
+    //         $event->getAccount()->getId()
+    //     );
 
-        $this->createBitcoinAccountService->execute(
-            $event->getUser()->getId(),
-            $wallet['address'],
-            $event->getDeviceToken()
-        );
-    }
+    //     $this->createBitcoinAccountService->execute(
+    //         $event->getUser()->getId(),
+    //         $wallet['address'],
+    //         $event->getDeviceToken()
+    //     );
+    // }
 
     /**
      * Calls the AppBundle\Service\Notification\CreateNotificationService whenever an

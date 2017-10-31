@@ -30,7 +30,7 @@ class Wallet implements WalletInterface
      * @return bool true
      * @throws PayProException
      */
-    public function create(string $walletIdentification, string $tenant): bool
+    public function create(string $walletIdentification, string $tenant): array
     {
         $tenant = str_replace(' ', '', $tenant);
 
@@ -52,7 +52,16 @@ class Wallet implements WalletInterface
             throw new PayProException('ERROR generating address: '.$e->getMessage(), 500);
         }
 
-        return true;
+        try {
+            $output = $this->bitcoreWalletProcessService->process( 'addresses', $walletIdentification);
+        } catch (PayProException $e) {
+            throw new PayProException('ERROR retrieving wallet address: '.$e->getMessage(), 500);
+        }
+
+        $address = explode("\n", $output)[1];
+        $address = trim($address, " ");
+
+        return ['address' => $address];
     }
 
     /**

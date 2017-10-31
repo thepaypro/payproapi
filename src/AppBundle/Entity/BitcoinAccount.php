@@ -32,7 +32,7 @@ class BitcoinAccount implements \JsonSerializable
     private $users;
 
 	/**
-	 * @ORM\Column(type="string", nullable=false)
+	 * @ORM\Column(type="string", nullable=true)
 	 */
 	protected $address;
 
@@ -53,8 +53,7 @@ class BitcoinAccount implements \JsonSerializable
     protected $lastSyncedTransaction;
 
 	public function __construct(
-        User $user,
-        string $address
+        User $user
     )
     {
         $this->sentTransactions = new ArrayCollection();
@@ -62,7 +61,6 @@ class BitcoinAccount implements \JsonSerializable
         $this->users = new ArrayCollection();
 
     	$this->users[] = $user;
-    	$this->address = $address;
     }
 
     public function jsonSerialize()
@@ -113,6 +111,7 @@ class BitcoinAccount implements \JsonSerializable
 	public function setAddress($address)
 	{
 		$this->address = $address;
+        // dump($this->address);dump($address);die();
 	}
 
     /**

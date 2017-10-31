@@ -8,7 +8,7 @@ namespace AppBundle\Service\BitcoinWalletApiClient\Interfaces;
  */
 interface WalletInterface
 {
-    public function create(string $walletIdentification, string $tenant): bool;
+    public function create(string $walletIdentification, string $tenant): array;
 
     public function getOne(string $walletIdentification): array;
 }

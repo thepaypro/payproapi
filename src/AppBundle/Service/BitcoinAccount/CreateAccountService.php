@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * Class CreateAccountService
  */
-class CreateBitcoinAccountService
+class CreateAccountService
 {
     protected $bitcoinAccountRepository;
     protected $userRepository;
@@ -38,14 +38,11 @@ class CreateBitcoinAccountService
     /**
      * @param  int $userId
      * @param  string $address
-     * @param  string $deviceToken
      * @return BitcoinAccount
      * @throws PayProException
      */
     public function execute(
-        int $userId,
-        string $address,
-        string $deviceToken
+        int $userId
     ): BitcoinAccount
     {
         $user = $this->userRepository->findOneById($userId);
@@ -54,13 +51,8 @@ class CreateBitcoinAccountService
             throw new PayProException("You already have a bitcoin account", 400);
         }
 
-        if (!is_string($deviceToken) || strlen($deviceToken) > 255){
-            throw new PayProException("invalid deviceToken format", 400);
-        }
-
         $bitcoinAccount = new BitcoinAccount(
-            $user,
-            $address
+            $user
         );
 
         $errors = $this->validationService->validate($bitcoinAccount);
@@ -77,4 +69,5 @@ class CreateBitcoinAccountService
 
         return $bitcoinAccount;
     }
+
 }

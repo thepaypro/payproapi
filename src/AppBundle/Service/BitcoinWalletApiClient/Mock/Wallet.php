@@ -17,9 +17,9 @@ class Wallet implements walletInterface
      * @return array $response
      * @throws PayProException
      */
-    public function create(string $walletIdentification, string $tenant): bool
+    public function create(string $walletIdentification, string $tenant): array
     {
-        return true;
+        return ['address' => 'mutHtH6DbgJiKa9dVEmNhrBiNJUsDuYpdb'];
     }
 
     /**
