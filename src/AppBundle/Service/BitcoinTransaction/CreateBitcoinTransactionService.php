@@ -47,7 +47,7 @@ class CreateBitcoinTransactionService
         }
 
         $user = $this->userRepository->findOneById($userId);
-        $payer = $user->getAccount();
+        $payer = $user->getBitcoinAccount();
 
         if (!$payer) {
             throw new PayProException('Account not found', 400);

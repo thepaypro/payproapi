@@ -38,7 +38,7 @@ class BitcoinTransactionController extends Controller
 
         if(isset($requestData['beneficiaryUserID'])){
             $wallet = $this->get('payproapi.get_bitcoin_wallet_service')->execute(
-                $user->getId()
+                $requestData['beneficiaryUserID']
             );
             $beneficiary = $wallet['address'];
         }else if (isset($requestData['beneficiary'])){
