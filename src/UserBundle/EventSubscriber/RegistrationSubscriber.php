@@ -21,18 +21,27 @@ class RegistrationSubscriber implements EventSubscriberInterface
 {
     private $userValidatorService;
     protected $createBitcoinAccountService;
+    protected $bitcoinAccountRepository;
     protected $bitcoinWalletApiClient;
-    
 
+    
+    /**
+     * @param UserValidatorService $userValidatorService
+     * @param CreateAccountService $createBitcoinAccountService
+     * @param BitcoinAccountRepository $bitcoinAccountRepository
+     * @param WalletInterface $bitcoinWalletApiClient
+     */
     public function __construct
     (
         UserValidatorService $userValidatorService,
         CreateAccountService $createBitcoinAccountService,
+        BitcoinAccountRepository $bitcoinAccountRepository,
         WalletInterface $bitcoinWalletApiClient
     )
     {
         $this->userValidatorService = $userValidatorService;
         $this->createBitcoinAccountService = $createBitcoinAccountService;
+        $this->bitcoinAccountRepository = $bitcoinAccountRepository;
         $this->bitcoinWalletApiClient = $bitcoinWalletApiClient;
     }
 
@@ -96,9 +105,10 @@ class RegistrationSubscriber implements EventSubscriberInterface
             $bitcoinAccount->getId(),
             $username
         );
-        // dump($wallet['address']);die();
+        
         $bitcoinAccount->setAddress($wallet['address']);
-        // dump($wallet['address']);dump($wallet);dump($bitcoinAccount);dump($bitcoinAccount->getId());die(); 
+
+        $this->bitcoinAccountRepository->save($bitcoinAccount);
          
     }
 
