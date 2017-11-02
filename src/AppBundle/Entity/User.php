@@ -4,6 +4,10 @@ namespace AppBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
@@ -42,6 +46,65 @@ class User extends BaseUser implements \JsonSerializable
      */
     protected $invites;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Profile", mappedBy="user")
+     */
+    protected $profile;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
+     */
+    protected $forename;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
+     */
+    protected $lastname;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\DateTime(format="d/m/Y")
+     */
+    protected $birthDate;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
+     */
+    protected $documentNumber;
+
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     * @Assert\NotBlank()
+     */
+    protected $street;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $buildingNumber;
+
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     * @Assert\NotBlank()
+     */
+    protected $postcode;
+
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     * @Assert\NotBlank()
+     */
+    protected $city;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Country", inversedBy="users", cascade={"all"})
+     * @ORM\JoinColumn(name="country_id", referencedColumnName="id", nullable=true)
+     * @Assert\NotBlank()
+     */
+    protected $country;
+
     public function __construct()
     {
         parent::__construct();
@@ -52,6 +115,10 @@ class User extends BaseUser implements \JsonSerializable
             $publicProperties = [
                 'id' => $this->id,
                 'username' => $this->username,
+                'forename' => $this->forename,
+                'lastname' => $this->lastname,
+                'birth_date' => $this->birthDate,
+                
                 'bitcoinAccount' => isset($this->bitcoinAccount) ? $this->bitcoinAccount->jsonSerializeBasic() : NULL
             ];
 
