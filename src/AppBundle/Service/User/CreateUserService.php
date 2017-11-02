@@ -33,11 +33,11 @@ class CreateUserService
     {
         $requesterUser = $this->userRepository->findOneById($requesterUserId);
 
-        if (!$account = $requesterUser->getAccount()) {
+        if (!$account = $requesterUser->getBitcoinAccount()) {
             throw new PayProException('User could not be created', 400);
         }
 
-        if ($requesterUser->getAccount()->getUsers()->count() == 2) {
+        if ($requesterUser->getBitcoinAccount()->getUsers()->count() == 2) {
             throw new PayProException('Too many users, user could not be created', 400);
         }
 

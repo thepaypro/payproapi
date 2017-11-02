@@ -1,7 +1,0 @@
-services:
-  payproapi.create_bitcoin_account_service:
-    class: AppBundle\Service\BitcoinAccount\CreateAccountService
-    arguments:
-      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:BitcoinAccount')"
-      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
-      - "@validator"

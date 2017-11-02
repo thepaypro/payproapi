@@ -1,6 +1,0 @@
-services:
-  payproapi.get_balance_service:
-    class: AppBundle\Service\Balance\GetBalanceService
-    arguments:
-      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
-      - "@contis_api_client.balance_service"

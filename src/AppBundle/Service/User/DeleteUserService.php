@@ -33,11 +33,11 @@ class DeleteUserService
         $userToBeDeleted = $this->userRepository->findOneById($userId);
         $requesterUser = $this->userRepository->findOneById($requesterUserId);
 
-        if (!$account = $requesterUser->getAccount()) {
+        if (!$account = $requesterUser->getBitcoinAccount()) {
             throw new PayProException("User could not be deleted", 400);
         }
 
-        $ownedUsers = $requesterUser->getAccount()->getUsers();
+        $ownedUsers = $requesterUser->getBitcoinAccount()->getUsers();
 
         if (!$ownedUsers->contains($userToBeDeleted)) {
             throw new PayProException("User could not be found", 404);

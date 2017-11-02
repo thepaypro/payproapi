@@ -13,18 +13,10 @@ class AppExtension extends Extension
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('utils.yml');
-        $loader->load('account.yml');
-        $loader->load('accountRequest.yml');
-        $loader->load('card.yml');
-        $loader->load('balance.yml');
-        $loader->load('cardHolder.yml');
         $loader->load('contact.yml');
-        $loader->load('contis.yml');
         $loader->load('mobileVerificationCode.yml');
         $loader->load('notification.yml');
-        $loader->load('profile.yml');
         $loader->load('subscribers.yml');
-        $loader->load('transaction.yml');
         $loader->load('user.yml');
         $loader->load('bitcoinTransaction.yml');
         $loader->load('bitcoinWallet.yml');
