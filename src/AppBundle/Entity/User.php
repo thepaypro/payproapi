@@ -42,68 +42,9 @@ class User extends BaseUser implements \JsonSerializable
     private $bitcoinAccount;
 
     /**
-     * @ORM\OneToMany(targetEntity="Invite", mappedBy="inviter")
-     */
-    protected $invites;
-
-    /**
-     * @ORM\OneToOne(targetEntity="Profile", mappedBy="user")
-     */
-    protected $profile;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank()
-     */
-    protected $forename;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank()
-     */
-    protected $lastname;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Assert\DateTime(format="d/m/Y")
-     */
-    protected $birthDate;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank()
-     */
-    protected $documentNumber;
-
-    /**
-     * @ORM\Column(type="string", nullable=false)
-     * @Assert\NotBlank()
-     */
-    protected $street;
-
-    /**
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $buildingNumber;
-
-    /**
-     * @ORM\Column(type="string", nullable=false)
-     * @Assert\NotBlank()
-     */
-    protected $postcode;
-
-    /**
-     * @ORM\Column(type="string", nullable=false)
-     * @Assert\NotBlank()
-     */
-    protected $city;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Country", inversedBy="users", cascade={"all"})
-     * @ORM\JoinColumn(name="country_id", referencedColumnName="id", nullable=true)
-     * @Assert\NotBlank()
-     */
-    protected $country;
+    protected $nickname;
 
     public function __construct()
     {
@@ -115,10 +56,7 @@ class User extends BaseUser implements \JsonSerializable
             $publicProperties = [
                 'id' => $this->id,
                 'username' => $this->username,
-                'forename' => $this->forename,
-                'lastname' => $this->lastname,
-                'birth_date' => $this->birthDate,
-                
+                'nickname' => $this->nickname,
                 'bitcoinAccount' => isset($this->bitcoinAccount) ? $this->bitcoinAccount->jsonSerializeBasic() : NULL
             ];
 
@@ -150,37 +88,25 @@ class User extends BaseUser implements \JsonSerializable
     }
 
     /**
-     * Add invite
-     *
-     * @param \AppBundle\Entity\Invite $invite
+     * Set nickname
      *
      * @return User
      */
-    public function addInvite(Invite $invite)
+    public function setNickname($nickname)
     {
-        $this->invites[] = $invite;
+        $this->nickname = $nickname;
 
         return $this;
     }
 
     /**
-     * Remove invite
+     * Get nickname
      *
-     * @param \AppBundle\Entity\Invite $invite
+     * @return string
      */
-    public function removeInvite(Invite $invite)
+    public function getNickname()
     {
-        $this->invites->removeElement($invite);
-    }
-
-    /**
-     * Get invites
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getInvites()
-    {
-        return $this->invites;
+        return $this->nickname;
     }
 
     /**
