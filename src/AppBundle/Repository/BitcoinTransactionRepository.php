@@ -36,6 +36,31 @@ class BitcoinTransactionRepository extends BaseEntityRepository
         ];
     }
 
+    public function getAllTransactionsOfAccount(
+        BitcoinAccount $bitcoinAccount)
+    {
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb = $qb->select('t')->from('AppBundle\Entity\BitcoinTransaction', 't');
+
+        $qb->setParameter('bitcoinAccount', $bitcoinAccount);
+
+        $query = $qb->expr()->orX()->addMultiple([
+            $qb->expr()->eq('t.payer', ':bitcoinAccount'),
+            $qb->expr()->eq('t.beneficiary', ':bitcoinAccount')
+        ]);
+
+        $qb = $qb->where($query);
+        $qb->addOrderBy('t.createdAt', 'DESC');
+        $content = $qb->getQuery()->getResult();
+
+        return [
+            'content' => $content
+        ];
+    }
+
+
+
     public function getTransactionsOfAccountAfterTransactionId(
         BitcoinAccount $bitcoinAccount,
         int $transactionId)

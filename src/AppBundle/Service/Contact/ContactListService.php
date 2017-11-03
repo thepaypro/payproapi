@@ -65,7 +65,7 @@ class ContactListService
 
             $user = $this->userRepository->findOneByUsername($actualPhoneNumber);
 
-            if (!$user || !$user->getAccount()) {
+            if (!$user || !$user->getBitcoinAccount()) {
                 $contactsList[$phoneNumber] = [
                     'phoneNumber' => $actualPhoneNumber,
                     'isUser' => false,
@@ -77,8 +77,8 @@ class ContactListService
             $contactsList[$phoneNumber] = [
                 'phoneNumber' => $actualPhoneNumber,
                 'isUser' => true,
-                'fullName' => $user->getAccount()->getForename().' '.$user->getAccount()->getLastname(),
-                'accountId' => $user->getAccount()->getId(),
+                'fullName' => ($user->getNickname() !== NULL ) ? $user->getNickname() : "",
+                'accountId' => $user->getBitcoinAccount()->getId(),
                 'userId' => $user->getId()
             ];
         }

@@ -10,6 +10,7 @@ use FOS\UserBundle\Event\FilterUserResponseEvent;
 use AppBundle\Service\BitcoinAccount\CreateAccountService;
 use AppBundle\Service\BitcoinWalletApiClient\Interfaces\WalletInterface;
 use AppBundle\Entity\BitcoinAccount;
+use AppBundle\Repository\BitcoinAccountRepository;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;

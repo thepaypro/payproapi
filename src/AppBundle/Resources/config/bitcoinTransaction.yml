@@ -13,6 +13,13 @@ services:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
       - "@payproapi.bitcoin_sync_transaction_service"
 
+  payproapi.bitcoin_transaction_service:
+    class: AppBundle\Service\BitcoinTransaction\BitcoinTransactionService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:BitcoinTransaction')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@payproapi.bitcoin_sync_transaction_service"
+
   payproapi.bitcoin_sync_transaction_service:
     class: AppBundle\Service\BitcoinTransaction\BitcoinSyncTransactionService
     arguments:

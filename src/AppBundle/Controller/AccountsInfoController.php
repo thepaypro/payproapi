@@ -36,25 +36,9 @@ class AccountsInfoController extends Controller
 		$requestData = $request->query->all();
 
 		try {
-			// $gbpBalance = (null !== $user->getAccount()) ? $this->get('payproapi.get_balance_service')->execute(
-			// 	$user->getId()
-			// 	) : NULL;
 			$bitcoinBalance = (null !==$user->getBitcoinAccount()) ? $this->get('payproapi.get_bitcoin_wallet_service')->execute(
                 $user->getId()
             	)['balance'] : NULL;
-			// $gbpTransactions = (null !==$user->getAccount()) ? 
-			// 	isset($requestData['gbpTransactionId']) ? 
-			// 		$this->get('payproapi.last_transactions_service')->execute(
-		 //            	$user->getId(),
-		 //            	$requestData['gbpTransactionId']
-		 //        	)
-		 //        :   $this->get('payproapi.index_transaction_service')->execute(
-   //              		$user->getId(),
-   //              		isset($requestData['gbpPage']) ? $requestData['gbpPage'] : 1,
-   //              		isset($requestData['gbpSize']) ? $requestData['gbpSize'] : 10
-   //          		)
-			// : NULL;
-
 
 			$bitcoinTransactions = (null !==$user->getBitcoinAccount()) ? 
 				isset($requestData['bitcoinTransactionId']) ?
@@ -62,17 +46,13 @@ class AccountsInfoController extends Controller
 		            	$user->getId(),
 		            	$requestData['bitcoinTransactionId']
 		        	)
-		        :   $this->get('payproapi.index_bitcoin_transaction_service')->execute(
-                		$user->getId(),
-                		isset($requestData['bitcoinPage']) ? $requestData['bitcoinPage'] : 1,
-                		isset($requestData['bitcoinSize']) ? $requestData['bitcoinSize'] : 10
+		        :   $this->get('payproapi.bitcoin_transaction_service')->execute(
+                		$user->getId()
             		)
 			: NULL;
 
 			$info = [
                 'userId' => $user->getId(),
-                // 'gbpBalance' => $gbpBalance,
-                // 'gbpTransactions' => $gbpTransactions,
                 'bitcoinBalance' => $bitcoinBalance,
                 'bitcoinTransactions' =>$bitcoinTransactions
             ];
