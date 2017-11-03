@@ -19,3 +19,10 @@ services:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:MobileVerificationCode')"
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
       - "@payproapi.phone_number_validation_service"
+
+  payproapi.update_user_service:
+    class: AppBundle\Service\User\UpdateUserService
+    arguments:
+      - "@payproapi.user_validator_service"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@fos_user.user_manager"

@@ -146,6 +146,33 @@ class UserController extends Controller
     }
 
     /**
+     * Update the information of the user
+     * @param  UserInterface $user
+     * @param  Request       $request
+     * @return JsonResponse
+     *
+     * @Security("has_role('ROLE_USER')")
+     * @Route("/profile/{id}", name="user_profile_update")
+     * @Method("PUT")
+     */
+    public function updateProfileAction(UserInterface $user, Request $request) : JsonResponse
+    {
+        try{
+            $nickname = $request->request->get('nickname');
+
+            $user = $this->get('payproapi.update_user_service')->execute(
+                $user->getId(),
+                $nickname
+                );
+
+        } catch (PayProException $e) {
+            return $this->JWTResponse($user, ['errorMessage' => $e->getMessage()], $e->getCode());
+        }
+
+        return $this->JWTResponse($user, ['user' => $user]);
+    }
+
+    /**
      * Delete the user with the given id.
      * @param  UserInterface $user
      * @param  Request       $request
