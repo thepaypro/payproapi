@@ -5,6 +5,7 @@ services:
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:BitcoinAccount')"
       - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
       - "@validator"
+      - "@bitcoin_wallet_api_client.wallet_service"
   payproapi.get_bitcoin_wallet_service:
     class: AppBundle\Service\BitcoinWallet\GetBitcoinWalletService
     arguments:

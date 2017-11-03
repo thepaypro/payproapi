@@ -104,7 +104,7 @@ class Transaction implements TransactionInterface
         $transactionLine = explode( ' ', $transactionLine);
         foreach ($transactionLine as $key => $part) {
             if ($part == 'bit') {
-                return $transactionLine[$key-1];
+                return str_replace(",", "", $transactionLine[$key-1]);
             }
         }
     }

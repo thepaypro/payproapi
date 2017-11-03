@@ -33,16 +33,10 @@ class RegistrationSubscriber implements EventSubscriberInterface
      */
     public function __construct
     (
-        UserValidatorService $userValidatorService,
-        CreateAccountService $createBitcoinAccountService,
-        BitcoinAccountRepository $bitcoinAccountRepository,
-        WalletInterface $bitcoinWalletApiClient
+        UserValidatorService $userValidatorService
     )
     {
         $this->userValidatorService = $userValidatorService;
-        $this->createBitcoinAccountService = $createBitcoinAccountService;
-        $this->bitcoinAccountRepository = $bitcoinAccountRepository;
-        $this->bitcoinWalletApiClient = $bitcoinWalletApiClient;
     }
 
     /**
@@ -56,9 +50,6 @@ class RegistrationSubscriber implements EventSubscriberInterface
             ],
             FOSUserEvents::REGISTRATION_FAILURE => [
                 ['onRegistrationFailed', 0],
-            ],
-            FOSUserEvents::REGISTRATION_COMPLETED => [
-                ['onRegistrationCompleted', 0],
             ],
         ];
     }
@@ -77,39 +68,6 @@ class RegistrationSubscriber implements EventSubscriberInterface
         }
 
         $this->userValidatorService->validate($data['username'], $data['mobileVerificationCode']);
-    }
-
-
-    /**
-     * Occurs after saving the user in the registration process.
-     * @param FilterUserResponseEvent $event
-     */
-    public function onRegistrationCompleted(FilterUserResponseEvent $event)
-    {
-        $responseUser=json_decode($event->getResponse()->getContent())->user;
-        $this->createBitcoinWallet($responseUser->id,$responseUser->username);  
-    }
-
-    /**
-     * Calls the bitcoin wallet in order to create the wallet for the account.
-     * @param Int $userId
-     * @param string $username
-     */
-    private function createBitcoinWallet(Int $userId, string $username)
-    {
-        $bitcoinAccount = $this->createBitcoinAccountService->execute(
-            $userId
-        );
-
-        $wallet = $this->bitcoinWalletApiClient->create(
-            $bitcoinAccount->getId(),
-            $username
-        );
-        
-        $bitcoinAccount->setAddress($wallet['address']);
-
-        $this->bitcoinAccountRepository->save($bitcoinAccount);
-         
     }
 
     /**

@@ -8,6 +8,7 @@ use AppBundle\Repository\BitcoinAccountRepository;
 use AppBundle\Repository\UserRepository;
 use DateTime;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use AppBundle\Service\BitcoinWalletApiClient\Interfaces\WalletInterface;
 
 /**
  * Class CreateAccountService
@@ -17,22 +18,26 @@ class CreateAccountService
     protected $bitcoinAccountRepository;
     protected $userRepository;
     protected $validationService;
+    protected $bitcoinWalletApiClient;
 
     /**
      * CreateAccountService constructor.
      * @param BitcoinAccountRepository $bitcoinAccountRepository
      * @param UserRepository $userRepository
      * @param ValidatorInterface $validationService
+     * @param WalletInterface $bitcoinWalletApiClient
      */
     public function __construct(
         BitcoinAccountRepository $bitcoinAccountRepository,
         UserRepository $userRepository,
-        ValidatorInterface $validationService
+        ValidatorInterface $validationService,
+        WalletInterface $bitcoinWalletApiClient
     )
     {
         $this->bitcoinAccountRepository = $bitcoinAccountRepository;
         $this->userRepository = $userRepository;
         $this->validationService = $validationService;
+        $this->bitcoinWalletApiClient = $bitcoinWalletApiClient;
     }
 
     /**
@@ -64,6 +69,15 @@ class CreateAccountService
         }
 
         $user->setBitcoinAccount($bitcoinAccount);
+
+        $this->bitcoinAccountRepository->save($bitcoinAccount);
+
+        $wallet = $this->bitcoinWalletApiClient->create(
+            $bitcoinAccount->getId(),
+            $user->getUsername()
+        );
+        
+        $bitcoinAccount->setAddress($wallet['address']);
 
         $this->bitcoinAccountRepository->save($bitcoinAccount);
 

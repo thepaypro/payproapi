@@ -96,7 +96,6 @@ class BitcoinSyncTransactionService
     ): bool
     {
         foreach ($blockchainTransactions as $blockchainTransaction) {
-            // dump($blockchainTransaction);die();
             if (!is_null($lastSyncedTransaction) &&
                 $lastSyncedTransaction->getBlockchainTransactionId() == $blockchainTransaction['HashId']
             ) {
@@ -126,16 +125,12 @@ class BitcoinSyncTransactionService
         BitcoinAccount $bitcoinAccount,
         array $blockchainTransaction)
     {
-        // $time = intval(trim($blockchainTransaction['createdAt'], '/Date()') / 1000);
         $creationDateTime = (new DateTime())->setTimestamp($blockchainTransaction['createdAt']);
-        // dump($time)
-        // dump($creationDateTime);die();
-        // dump($blockchainTransaction['amount']*1000000);die();
-        // dump((float) $blockchainTransaction['amount']);die();
+        
         $bitcoinTransaction = new BitcoinTransaction(
             null,
             null,
-            $blockchainTransaction['amount']*1000000,
+            floatval($blockchainTransaction['amount']),
             $blockchainTransaction['subject'],
             null,
             $creationDateTime

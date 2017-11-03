@@ -41,7 +41,7 @@ class BitcoinTransaction implements \JsonSerializable
     protected $blockchainTransactionId;
 
     /**
-     * @ORM\Column(type="bigint", nullable=false)
+     * @ORM\Column(type="decimal", nullable=false, precision=20, scale=2)
      * @Assert\NotBlank()
      */
     protected $amount;
@@ -76,7 +76,7 @@ class BitcoinTransaction implements \JsonSerializable
     public function __construct(
         Account $payer = null,
         Account $beneficiary = null,
-        int $amount,
+        float $amount,
         string $subject,
         string $title = null,
         DateTime $creationDate = null
@@ -152,7 +152,7 @@ class BitcoinTransaction implements \JsonSerializable
     /**
      * Set amount
      *
-     * @param int $amount
+     * @param decimal $amount
      *
      * @return BitcoinTransaction
      */
@@ -166,7 +166,7 @@ class BitcoinTransaction implements \JsonSerializable
     /**
      * Get amount
      *
-     * @return int
+     * @return decimal
      */
     public function getAmount()
     {
