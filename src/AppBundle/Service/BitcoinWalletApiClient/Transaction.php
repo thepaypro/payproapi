@@ -71,12 +71,13 @@ class Transaction implements TransactionInterface
             throw new PayProException('ERROR creating the transaction: '.$e->getMessage(), 500);
         }
         // dump($output);die();
+
         $output = explode("\t", $output);
         array_splice($output, 0, 1);
 
         $transactions = [];
         foreach ($output as $key => $transaction) {
-            // dump($transaction);die();
+            
             $transactions[$key]['subject'] = $this->extractSubject($transaction);
             $transactions[$key]['amount'] = $this->extractAmount($transaction);
             $transactions[$key]['units'] = 'bit';
@@ -85,7 +86,7 @@ class Transaction implements TransactionInterface
             $transactions[$key] = $this->hashingService->generateHashId($transactions[$key]);
         }
 
-
+        // dump($transactions);die();
 
         return $transactions;
     }
@@ -111,7 +112,12 @@ class Transaction implements TransactionInterface
 
     private function extractDirection(string $transactionLine) {
         $transactionLine = explode( ' ', $transactionLine);
-        return $transactionLine[count($transactionLine) - 6];
+        foreach ($transactionLine as $key => $part) {
+            if ($part == '=>' || $part == '=>' || $part == '==') {
+                return $transactionLine[$key+1];
+            }
+        }
+        return $transactionLine[4];
     }
 
     private function extractTime(string $transactionLine) {

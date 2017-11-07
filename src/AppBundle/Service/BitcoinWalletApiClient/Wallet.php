@@ -77,18 +77,20 @@ class Wallet implements WalletInterface
         } catch (PayProException $e) {
             throw new PayProException('ERROR retrieving wallet balance: '.$e->getMessage(), 500);
         }
-
+        dump($output);die();
         $outputArray = explode("*" , $output);
-        $balanceArray = explode(" ", end($outputArray));
+
         $balance = '';
 
-        foreach ($balanceArray as $key => $element) {
-            if ($element == 'bit') {
-                $balance = $balanceArray[$key-1];
-                $unit = $element;
+        foreach ($outputArray as $key => $element) {
+            $balanceArray = explode(" ", $outputArray[$key]);
+            foreach ($balanceArray as $key => $element) {
+                if ($element == 'Balance') {
+                    $balance = $balanceArray[$key+1];
+                }
             }
         }
-
+        
         try {
             $output = $this->bitcoreWalletProcessService->process( 'addresses', $walletIdentification);
         } catch (PayProException $e) {
@@ -101,7 +103,7 @@ class Wallet implements WalletInterface
         return [
             'balance' => $this->stringToFloat($balance),
             'address' => $address,
-            'units' => $unit
+            'units' => 'bit'
         ];
     }
 

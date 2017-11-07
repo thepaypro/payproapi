@@ -37,7 +37,7 @@ class GetBitcoinWalletService
         }
 
         $bitcoinWallet = $this->bitcoinWalletApiClient->getOne($user->getBitcoinAccount()->getId());
-        $user->getBitcoinAccount()->setAddress($bitcoinWallet['address']);
+        
         return $bitcoinWallet;
     }
 }
