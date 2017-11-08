@@ -50,6 +50,8 @@ class BitcoinTransactionService
             $user->getBitcoinAccount()
         );
 
+       // dump($bitcoinTransactions);die();
+
         return $bitcoinTransactions;
     }
 }

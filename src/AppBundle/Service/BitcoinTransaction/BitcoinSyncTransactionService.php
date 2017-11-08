@@ -74,6 +74,8 @@ class BitcoinSyncTransactionService
     {
         $bitcoinTransactions = $this->bitcoinTransactionApiClient->getAll($user->getBitcoinAccount()->getId());
 
+        // dump($bitcoinTransactions);die();
+
         $lastSyncedTransactionFound = $this->persistBitcoinTransactions(
             $user->getBitcoinAccount(),
             $bitcoinTransactions,
@@ -100,6 +102,9 @@ class BitcoinSyncTransactionService
             if (!is_null($lastSyncedTransaction) &&
                 $lastSyncedTransaction->getBlockchainTransactionId() == $blockchainTransaction['HashId']
             ) {
+                // dump($lastSyncedTransaction);
+                // dump($blockchainTransactions);
+
                 return true;
             }
             $transaction = $this->bitcoinTransactionRepository->findOneByBlockchainTransactionId(
@@ -107,6 +112,7 @@ class BitcoinSyncTransactionService
             );
 
             if ($transaction) {
+                // dump($transaction);
                 continue;
             }
 
@@ -126,6 +132,7 @@ class BitcoinSyncTransactionService
         BitcoinAccount $bitcoinAccount,
         array $blockchainTransaction)
     {
+        // dump($blockchainTransaction);
         $creationDateTime = (new DateTime())->setTimestamp($blockchainTransaction['createdAt']);
         
         $bitcoinTransaction = new BitcoinTransaction(
@@ -136,6 +143,7 @@ class BitcoinSyncTransactionService
             $blockchainTransaction['addressTo'],
             $creationDateTime
         );
+
         $bitcoinTransaction->setBlockchainTransactionId($blockchainTransaction['HashId']);
 
         if ($blockchainTransaction['direction'] == "sent") {
@@ -148,7 +156,7 @@ class BitcoinSyncTransactionService
             $bitcoinTransaction->setPayer($bitcoinAccount);
             $bitcoinTransaction->setBeneficiary($bitcoinAccount);
         }
-
+        // dump($bitcoinTransaction);
         $this->bitcoinTransactionRepository->save($bitcoinTransaction);
     }
 }

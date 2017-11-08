@@ -54,6 +54,7 @@ class BitcoinTransactionRepository extends BaseEntityRepository
         $qb->addOrderBy('t.createdAt', 'DESC');
         $content = $qb->getQuery()->getResult();
 
+        // dump($content);die();
         return [
             'content' => $content
         ];

@@ -97,11 +97,12 @@ class BitcoinTransaction implements \JsonSerializable
             'id' => $this->id,
             'payer' => isset($this->payer) ? $this->payer->getId() : $this->payer,
             'beneficiary' => isset($this->beneficiary) ? $this->beneficiary->getId() : $this->beneficiary,
-            'amount' => $this->amount,
+            'amount' => $this->getAmount(),
             'subject' => $this->subject,
             'addressTo' => $this->addressTo,
             'createdAt' => $this->createdAt
         ];
+        // dump($publicProperties);die();
 
         return $publicProperties;
     }
@@ -157,11 +158,11 @@ class BitcoinTransaction implements \JsonSerializable
     /**
      * Get amount
      *
-     * @return decimal
+     * @return float
      */
     public function getAmount()
     {
-        return $this->amount;
+        return (float) $this->amount;
     }
 
     /**
