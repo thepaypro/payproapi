@@ -77,7 +77,7 @@ class Wallet implements WalletInterface
         } catch (PayProException $e) {
             throw new PayProException('ERROR retrieving wallet balance: '.$e->getMessage(), 500);
         }
-        dump($output);die();
+        // dump($output);die();
         $outputArray = explode("*" , $output);
 
         $balance = '';
