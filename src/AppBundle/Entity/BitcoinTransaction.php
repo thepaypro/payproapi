@@ -55,7 +55,7 @@ class BitcoinTransaction implements \JsonSerializable
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $title;
+    protected $addressTo;
 
     /**
      * @var \DateTime
@@ -78,7 +78,7 @@ class BitcoinTransaction implements \JsonSerializable
         Account $beneficiary = null,
         float $amount,
         string $subject,
-        string $title = null,
+        string $addressTo = null,
         DateTime $creationDate = null
     )
     {
@@ -86,29 +86,20 @@ class BitcoinTransaction implements \JsonSerializable
         $this->beneficiary = $beneficiary;
         $this->amount = $amount;
         $this->subject = $subject;
-        $this->title = $title;
+        $this->addressTo = $addressTo;
         $this->createdAt = $creationDate;
         $this->updatedAt = $creationDate;
     }
 
     public function jsonSerialize()
     {
-        // $publicProperties = [
-        //     'id' => $this->id,
-        //     'payer' => $this->payer,
-        //     'beneficiary' => $this->beneficiary,
-        //     'amount' => $this->amount,
-        //     'subject' => $this->subject,
-        //     'title' => $this->title,
-        //     'createdAt' => $this->createdAt
-        // ];
         $publicProperties = [
             'id' => $this->id,
             'payer' => isset($this->payer) ? $this->payer->getId() : $this->payer,
             'beneficiary' => isset($this->beneficiary) ? $this->beneficiary->getId() : $this->beneficiary,
             'amount' => $this->amount,
             'subject' => $this->subject,
-            'title' => $this->title,
+            'addressTo' => $this->addressTo,
             'createdAt' => $this->createdAt
         ];
 
@@ -246,19 +237,19 @@ class BitcoinTransaction implements \JsonSerializable
     }
 
     /**
-     * @param mixed $title
+     * @param mixed $addressTo
      */
-    public function setTitle($title)
+    public function setAddressTo($addressTo)
     {
-        $this->title = $title;
+        $this->addressTo = $addressTo;
     }
 
     /**
      * @return string
      */
-    public function getTitle()
+    public function getAddressTo()
     {
-        return $this->title;
+        return $this->addressTo;
     }
 
    /**

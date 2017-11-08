@@ -133,7 +133,7 @@ class BitcoinSyncTransactionService
             null,
             floatval($blockchainTransaction['amount']),
             $blockchainTransaction['subject'],
-            null,
+            $blockchainTransaction['addressTo'],
             $creationDateTime
         );
         $bitcoinTransaction->setBlockchainTransactionId($blockchainTransaction['HashId']);
