@@ -77,7 +77,7 @@ class LastTransactionsService
             $transaction->getId()
         );
 
-        dump($payProTransactions);die();
+        // dump($payProTransactions);die();
 
         return $payProTransactions;
     }
