@@ -18,6 +18,7 @@ class AppExtension extends Extension
         $loader->load('notification.yml');
         $loader->load('subscribers.yml');
         $loader->load('user.yml');
+        $loader->load('ethereum.yml');
         $loader->load('bitcoinTransaction.yml');
         $loader->load('bitcoinWallet.yml');
         $loader->load('bitcoinWalletApiClient.yml');
