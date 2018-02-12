@@ -42,6 +42,7 @@ class AppVersionController extends Controller
 	 * Returns the android app version
 	 * @return JsonResponse
 	 * 
+	 * @Security("has_role('ROLE_USER')")
 	 * @Route("/android", name="app_version_get_android")
 	 * @Method("GET")
 	 */
@@ -74,6 +75,7 @@ class AppVersionController extends Controller
 	 * Returns the ios app version
 	 * @return JsonResponse
 	 * 
+	 * @Security("has_role('ROLE_USER')")
 	 * @Route("/ios", name="app_version_get_ios")
 	 * @Method("GET")
 	 */

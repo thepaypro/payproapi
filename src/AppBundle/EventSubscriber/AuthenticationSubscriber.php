@@ -8,6 +8,12 @@ use Lexik\Bundle\JWTAuthenticationBundle\Events;
 
 class AuthenticationSubscriber implements EventSubscriberInterface
 {
+    private $appVersionGetAllService;
+
+    public function __construct($appVersionGetAllService) {
+        $this->appVersionGetAllService = $appVersionGetAllService;
+    }
+
     public static function getSubscribedEvents()
     {
         return [
@@ -24,7 +30,8 @@ class AuthenticationSubscriber implements EventSubscriberInterface
         $event->setData(
             array_merge(
                 $event->getData(),
-                ['user' => $user->jsonSerialize()]
+                ['user' => $user->jsonSerialize()],
+                ['version' => $this->appVersionGetAllService->execute()]
             )
         );
     }

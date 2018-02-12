@@ -20,5 +20,7 @@ services:
 
   payproapi.authentication_subscriber:
     class: AppBundle\EventSubscriber\AuthenticationSubscriber
+    arguments:
+      - "@payproapi.app_version.get_all_service"
     tags:
       - { name: kernel.event_subscriber }
