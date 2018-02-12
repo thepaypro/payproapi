@@ -26,6 +26,7 @@ class AppVersionController extends Controller
 	 * Returns the avaliable apps versions
 	 * @return JsonResponse
 	 * 
+	 * @Security("has_role('ROLE_USER')")
 	 * @Route("", name="app_version_get_all")
 	 * @Method("GET")
 	 */
@@ -51,6 +52,23 @@ class AppVersionController extends Controller
 		return $this->JWTResponse($user,['AndroidAppVersion' => $version]);
 	}
 
+	/**
+	 * Sets the android app version
+	 * @return JsonResponse
+	 * 
+	 * @Security("has_role('ROLE_ADMIN')")
+	 * @Route("/android", name="app_version_set_android")
+	 * @Method("POST")
+	 */
+	public function setAndroid(UserInterface $user, Request $request): JsonResponse
+	{
+		$payload = $request->request->all();
+
+		$version = $this->get('payproapi.app_version.set_android_service')->execute($payload['lastVersion'], $payload['oldestSupportedVersion']);
+
+		return $this->JWTResponse($user,['AndroidAppVersion' => $version]);
+	}
+
 
 	/**
 	 * Returns the ios app version
@@ -65,6 +83,28 @@ class AppVersionController extends Controller
 
 		return $this->JWTResponse($user,['IOSAppVersion' => $version]);
 	}
+
+	/**
+	 * Sets the ios app version
+	 * @return JsonResponse
+	 * 
+	 * @Security("has_role('ROLE_ADMIN')")
+	 * @Route("/ios", name="app_version_set_ios")
+	 * @Method("POST")
+	 */
+	public function setIOS(UserInterface $user, Request $request): JsonResponse
+	{
+
+		$payload = $request->request->all();
+
+		$version = $this->get('payproapi.app_version.set_ios_service')->execute($payload['lastVersion'], $payload['oldestSupportedVersion']);
+
+		return $this->JWTResponse($user,['IOSAppVersion' => $version]);
+	}
+
+
+	
+
 
 
 }

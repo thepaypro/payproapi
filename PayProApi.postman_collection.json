@@ -487,6 +487,31 @@
 					"response": []
 				},
 				{
+					"name": "SetAndroid",
+					"request": {
+						"url": "{{host}}/app_version/android",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"lastVersion\": \"0.1\",\n\t\"oldestSupportedVersion\": \"0.1\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
 					"name": "GetIOS",
 					"request": {
 						"url": "{{host}}/app_version/ios",
@@ -506,6 +531,31 @@
 						"body": {
 							"mode": "raw",
 							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "SetIOS",
+					"request": {
+						"url": "{{host}}/app_version/ios",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"lastVersion\": \"0.1\",\n\t\"oldestSupportedVersion\": \"0.1\"\n}"
 						},
 						"description": ""
 					},
