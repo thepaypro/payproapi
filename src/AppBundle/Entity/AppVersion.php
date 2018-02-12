@@ -30,18 +30,25 @@ class AppVersion implements \JsonSerializable
     /**
      * @ORM\Column(type="string", nullable=false)
      */
-    protected $version;
+    protected $lastVersion;
+
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     */
+    protected $oldestSupportedVersion;
 
 
-	public function __construct($os, $version)
+	public function __construct($os, $lastversion, $oldestSupportedVersion)
     {
         $this->os = $os;
-        $this->version = $version;
+        $this->lastversion = $lastversion;
+        $this->oldestSupportedVersion = $oldestSupportedVersion;
     }
 
     public function jsonSerialize(){
     	$publicProperties['os'] = $this->os;
-    	$publicProperties['version'] = $this->version;
+    	$publicProperties['lastVersion'] = $this->lastVersion;
+    	$publicProperties['oldestSupportedVersion'] = $this->oldestSupportedVersion;
 
     	return $publicProperties;
     }
@@ -56,24 +63,45 @@ class AppVersion implements \JsonSerializable
 	}
 
 	/**
-	 * Get version
+	 * Get last version
 	 * 
 	 * @return string
 	 */
-	public function getVersion(){
-		return $this->version;
+	public function getLastVersion(){
+		return $this->lastVersion;
 	}
 
-
 	/**
-	 * Set version
+	 * Set last version
 	 * 
 	 * @param string
 	 * 
 	 * @return AppVersion
 	 */
-	public function setVersion($version) {
-		$this->version = $version;
+	public function setLastVersion($lastVersion) {
+		$this->lastVersion = $lastVersion;
+
+		return $this;
+	}
+
+	/**
+	 * Get oldest supported version
+	 * 
+	 * @return string
+	 */
+	public function getOldestSupportedVersion(){
+		return $this->oldestSupportedVersion;
+	}
+
+	/**
+	 * Set oldest supported version
+	 * 
+	 * @param string
+	 * 
+	 * @return AppVersion
+	 */
+	public function setOldestSupportedVersion($oldestSupportedVersion) {
+		$this->oldestSupportedVersion = $oldestSupportedVersion;
 
 		return $this;
 	}

@@ -7,14 +7,14 @@ use AppBundle\Exception\PayProException;
 use AppBundle\Repository\AppVersionRepository;
 
 /**
- * Class GetAllAppVersionsService
+ * Class GetAndroidAppVersionService
  */
-class GetAllAppVersionsService
+class GetAndroidAppVersionService
 {
 	protected $appVersionRepository;
 
 	/**
-	 * GetAllAppVersionsService constructor.
+	 * GetAndroidAppVersionService constructor.
 	 * @param AppVersionRepository $appVersionRepository
 	 */
 	public function __construct(
@@ -27,10 +27,10 @@ class GetAllAppVersionsService
 	/**
 	 * @throws PayProException
 	 */
-	public function execute(): array
+	public function execute(): AppVersion
 	{
-		$versions = $this->appVersionRepository->findAll();
+		$version = $this->appVersionRepository->findOneByOs("android");
 
-		return $versions;
+		return $version;
 	}
 }

@@ -36,4 +36,35 @@ class AppVersionController extends Controller
 		return $this->JWTResponse($user,['AppVersions' => $versions]);
 	}
 
+
+	/**
+	 * Returns the android app version
+	 * @return JsonResponse
+	 * 
+	 * @Route("/android", name="app_version_get_android")
+	 * @Method("GET")
+	 */
+	public function getAndroid(UserInterface $user, Request $request): JsonResponse
+	{
+		$version = $this->get('payproapi.app_version.get_android_service')->execute();
+
+		return $this->JWTResponse($user,['AndroidAppVersion' => $version]);
+	}
+
+
+	/**
+	 * Returns the ios app version
+	 * @return JsonResponse
+	 * 
+	 * @Route("/ios", name="app_version_get_ios")
+	 * @Method("GET")
+	 */
+	public function getIOS(UserInterface $user, Request $request): JsonResponse
+	{
+		$version = $this->get('payproapi.app_version.get_ios_service')->execute();
+
+		return $this->JWTResponse($user,['IOSAppVersion' => $version]);
+	}
+
+
 }
