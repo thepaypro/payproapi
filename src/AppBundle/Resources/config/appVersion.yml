@@ -1,0 +1,5 @@
+services:
+  payproapi.app_version.get_all_service:
+    class: AppBundle\Service\AppVersion\GetAllAppVersionsService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:AppVersion')"
