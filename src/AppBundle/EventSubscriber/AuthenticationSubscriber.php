@@ -10,8 +10,7 @@ class AuthenticationSubscriber implements EventSubscriberInterface
 {
     private $appVersionGetAllService;
 
-    public function __construct($appVersionGetAllService) {
-        $this->appVersionGetAllService = $appVersionGetAllService;
+    public function __construct() {
     }
 
     public static function getSubscribedEvents()
