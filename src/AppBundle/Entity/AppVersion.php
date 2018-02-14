@@ -28,12 +28,7 @@ class AppVersion implements \JsonSerializable
 	protected $os;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    protected $lastVersion;
-
-    /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="string", nullable=false)
      */
     protected $oldestSupportedVersion;
 
@@ -60,28 +55,6 @@ class AppVersion implements \JsonSerializable
 	 */
 	public function getOs(){
 		return $this->os;
-	}
-
-	/**
-	 * Get last version
-	 * 
-	 * @return int
-	 */
-	public function getLastVersion(){
-		return $this->lastVersion;
-	}
-
-	/**
-	 * Set last version
-	 * 
-	 * @param int
-	 * 
-	 * @return AppVersion
-	 */
-	public function setLastVersion($lastVersion) {
-		$this->lastVersion = $lastVersion;
-
-		return $this;
 	}
 
 	/**

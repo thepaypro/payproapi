@@ -1,25 +1,10 @@
 services:
-  payproapi.app_version.get_all_service:
-    class: AppBundle\Service\AppVersion\GetAllAppVersionsService
-    arguments:
-      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:AppVersion')"
-
-  payproapi.app_version.get_android_service:
-    class: AppBundle\Service\AppVersion\GetAndroidAppVersionService
+  payproapi.app_version.check_android_service:
+    class: AppBundle\Service\AppVersion\CheckAndroidAppVersionService
     arguments:
     - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:AppVersion')"
 
-  payproapi.app_version.set_android_service:
-    class: AppBundle\Service\AppVersion\SetAndroidAppVersionService
-    arguments:
-    - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:AppVersion')"
-
-  payproapi.app_version.get_ios_service:
-    class: AppBundle\Service\AppVersion\GetIOSAppVersionService
-    arguments:
-    - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:AppVersion')"
-
-  payproapi.app_version.set_ios_service:
-    class: AppBundle\Service\AppVersion\SetIOSAppVersionService
+  payproapi.app_version.check_ios_service:
+    class: AppBundle\Service\AppVersion\CheckIOSAppVersionService
     arguments:
     - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:AppVersion')"

@@ -7,14 +7,14 @@ use AppBundle\Exception\PayProException;
 use AppBundle\Repository\AppVersionRepository;
 
 /**
- * Class GetAndroidAppVersionService
+ * Class CheckAndroidAppVersionService
  */
-class GetAndroidAppVersionService
+class CheckAndroidAppVersionService
 {
 	protected $appVersionRepository;
 
 	/**
-	 * GetAndroidAppVersionService constructor.
+	 * CheckAndroidAppVersionService constructor.
 	 * @param AppVersionRepository $appVersionRepository
 	 */
 	public function __construct(
@@ -27,10 +27,14 @@ class GetAndroidAppVersionService
 	/**
 	 * @throws PayProException
 	 */
-	public function execute(): AppVersion
+	public function execute($app_version): bool
 	{
-		$version = $this->appVersionRepository->findOneByOs("android");
+		if(!isset($app_version)){
+			throw new PayProException("need_to_specify_an_app_version", 400);
+		}
 
-		return $version;
+		$oldest_supported_version = $this->appVersionRepository->findOneByOs("android")->getOldestSupportedVersion();
+
+		return $app_version < $oldest_supported_version;
 	}
 }

@@ -30,8 +30,7 @@ class AuthenticationSubscriber implements EventSubscriberInterface
         $event->setData(
             array_merge(
                 $event->getData(),
-                ['user' => $user->jsonSerialize()],
-                ['version' => $this->appVersionGetAllService->execute()]
+                ['user' => $user->jsonSerialize()]
             )
         );
     }

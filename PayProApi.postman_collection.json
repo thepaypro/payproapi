@@ -437,57 +437,7 @@
 			"description": "",
 			"item": [
 				{
-					"name": "GetAll",
-					"request": {
-						"url": "{{host}}/app_version",
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwt}}",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "GetAndroid",
-					"request": {
-						"url": "{{host}}/app_version/android",
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwt}}",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "SetAndroid",
+					"name": "CheckAndroid",
 					"request": {
 						"url": "{{host}}/app_version/android",
 						"method": "POST",
@@ -496,48 +446,18 @@
 								"key": "Content-Type",
 								"value": "application/json",
 								"description": ""
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwt}}",
-								"description": ""
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"lastVersion\": \"0.1\",\n\t\"oldestSupportedVersion\": \"0.1\"\n}"
+							"raw": "{\n\t\"app_version\": \"0.0.8\"\n}"
 						},
 						"description": ""
 					},
 					"response": []
 				},
 				{
-					"name": "GetIOS",
-					"request": {
-						"url": "{{host}}/app_version/ios",
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwt}}",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "SetIOS",
+					"name": "CheckIOS",
 					"request": {
 						"url": "{{host}}/app_version/ios",
 						"method": "POST",
@@ -546,16 +466,11 @@
 								"key": "Content-Type",
 								"value": "application/json",
 								"description": ""
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwt}}",
-								"description": ""
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"lastVersion\": \"0.1\",\n\t\"oldestSupportedVersion\": \"0.1\"\n}"
+							"raw": "{\n\t\"app_version\": \"0.0.8\"\n}"
 						},
 						"description": ""
 					},

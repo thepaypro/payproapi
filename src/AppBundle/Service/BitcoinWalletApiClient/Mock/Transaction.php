@@ -23,10 +23,7 @@ class Transaction implements TransactionInterface
     public function create(array $transaction): array
     {
         $response = [
-            'transactionId' => 'alphanumericHash',
-            'amount' => "1",
-            'subject' => 'transaction in bitcoins',
-            'beneficiary' => 'alphanumericHashBeneficiaryAddress'
+            ""
         ];
 
 
@@ -40,16 +37,8 @@ class Transaction implements TransactionInterface
      */
     public function getAll(string $walletIdentification): array
     {
-        $transaction = [
-            [
-                'subject' => 'testSubject',
-                'amount' => '1',
-                'units' => 'bit',
-                'direction' => 'received',
-                'createdAt' => '2017-12-19 12:24:00'
-            ]
-        ];
-        $transaction[0] = $this->hashingService->generateHashId($transaction[0]);
+        $transaction = [];
+        // $transaction[0] = $this->hashingService->generateHashId($transaction[0]);
 
         // $response = [
         //     [

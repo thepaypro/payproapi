@@ -24,6 +24,11 @@ security:
             pattern: ^/mobile-verification-code
             security: false
 
+        app_version:
+            methods: [POST]
+            pattern: ^/app_version
+            security: false
+
         register:
             pattern:  ^/register
             methods: [POST]
