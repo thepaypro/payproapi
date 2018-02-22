@@ -54,7 +54,7 @@ Vagrant.configure("2") do |config|
   # Example for VirtualBox:
   #
   config.vm.provider "virtualbox" do |vb|
-    vb.name = "payproapp-admin-backend-dev"
+    vb.name = "PayProApi"
 
     # Display the VirtualBox GUI when booting the machine
     vb.gui = false
@@ -89,9 +89,9 @@ Vagrant.configure("2") do |config|
   config.vm.provision "ansible" do |ansible|
     ansible.verbose = "vvv"
     ansible.inventory_path = $ansible_path+"hosts"
-    ansible.limit= "development-admin-back"
-    ansible.playbook = $ansible_path+"PayProAppAdminBackend.yml"
-    ansible.extra_vars = $ansible_path+"group_vars/PayProApp-admin-backend/dev.yml"
+    ansible.limit= "development-payproapi"
+    ansible.playbook = $ansible_path+"PayProApi.yml"
+    ansible.extra_vars = $ansible_path+"group_vars/PayProApi/dev.yml"
     ansible.skip_tags = "production"
   end
 end

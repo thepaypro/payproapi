@@ -1,33 +1,41 @@
-# This file is a "template" of what your parameters.yml file should look like
-# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
-# http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+# This file is auto-generated during the composer install
 parameters:
     database_host: 127.0.0.1
     database_port: 3306
     database_name: payproapi
     database_user: ubuntu
     database_password: aHGajkASgfdkJASHd7823ajdgJHGSW
-    # You should uncomment this if you want to use pdo_sqlite
-    #database_path: '%kernel.root_dir%/../var/data/data.sqlite'
-
     mailer_transport: gmail
     mailer_host: null
-    mailer_user: kilian@thepaypro.com
+    mailer_user: someemail@email.com
     mailer_password:
-
-    # A secret key that's used to generate certain security-related tokens
-    secret: ThisTokenIsNotSoSecretChangeIt
+    secret: 98996e818bd6b7910999bffc5e43133092f983a9
 
     # public and private keys for jwt.
     # https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md#configuration
     jwt_private_key_path: '%kernel.root_dir%/../var/jwt/private.pem' # ssh private key path
     jwt_public_key_path:  '%kernel.root_dir%/../var/jwt/public.pem'  # ssh public key path
-    jwt_key_pass_phrase:  ''                                         # ssh key pass phrase
+    jwt_key_pass_phrase: dev-jwt                                     # ssh key pass phrase
     jwt_token_ttl:        3600
 
-    #Push notification credentials
-    push_notifications_config:
-        app_id: "345998"
-        key: "b5aacd4973b629bb7366"
-        secret: "21e0ca5a8cce30c454aa"
-        cluster: "eu"
+    #Apple Push Notifications certificate
+    apn_certificate_path: '%kernel.root_dir%/../var/apn/paypro_cert_key.pem'
+    apns_certificate_passphrase: PayProAppDevelopment23!
+
+    twilio_account_id: 'AC3728b7395057e64047db32dfb6175d81'
+    twilio_auth_token: '877ba70e2f95811f69586cd850fcc8fc'
+    twilio_phone_number: '+16364863418'
+
+    contis_api_host: 'http://34.253.132.188/ContisCardAPI.svc/rest/'
+    contis_username: 'PAYPROStaging'
+    contis_password: 'P@ypr0$t@g!ng96'
+    contis_hash_pan_key: '7B016328DCBF6384'
+    contis_3des_pin_IV_key: 'F6DF6A373D5FE34D'
+    contis_3des_pin_secret_key: 'BFF4D662DB1DF8B0442333123C964EFF'
+
+    user_administrator_email: someemail@email.com
+
+    bitcoin_wallet_api_host: 'http://whatever.com'
+    bitcoin_mock: true
+    bitcoin_mode_testnet: true
+    bitcoin_docker_compose_path: '/var/bitcoinWalletCLI/docker-compose.yml'

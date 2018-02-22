@@ -1,0 +1,16 @@
+services:
+  ethereum.client:
+    class: AppBundle\Service\Ethereum\EthereumClient
+    arguments:
+      - "@ethereum.methods.eth"
+      - "@ethereum.methods.web3"
+
+  ethereum.methods.web3:
+    class: AppBundle\Service\Ethereum\Methods\Web3
+    arguments:
+      - "%ethereum_host%"
+
+  ethereum.methods.eth:
+    class: AppBundle\Service\Ethereum\Methods\Eth
+    arguments:
+      - "%ethereum_host%"

@@ -3,10 +3,9 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\User;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
-class UserRepository extends EntityRepository
+class UserRepository extends BaseEntityRepository
 {
     public function findUsersWithUsernameIn(array $usernames = []) : array
     {

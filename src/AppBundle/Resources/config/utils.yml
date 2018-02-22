@@ -1,0 +1,24 @@
+services:
+  payproapi.registration_form:
+    class: UserBundle\Form\Type\RegistrationFormType
+    arguments:
+      - AppBundle\Entity\User
+    tags:
+      - { name: form.type, alias: app_user_registration }
+
+  payproapi.twilio_short_message_service:
+    class: AppBundle\Service\TwilioShortMessageService
+    arguments:
+      - "%twilio_account_id%"
+      - "%twilio_auth_token%"
+      - "%twilio_phone_number%"
+
+  payproapi.phone_number_validation_service:
+    class: AppBundle\Service\PhoneNumberValidatorService
+
+  payproapi.mailing_service:
+    class: AppBundle\Service\MailingService
+    arguments:
+      - "%mailer_user%"
+      - "%user_administrator_email%"
+      - "@mailer"

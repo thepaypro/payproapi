@@ -1,0 +1,35 @@
+services:
+  payproapi.create_bitcoin_transaction_service:
+    class: AppBundle\Service\BitcoinTransaction\CreateBitcoinTransactionService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@bitcoin_wallet_api_client.transaction_service"
+      - "@bitcoin_wallet_api_client.wallet_service"
+
+  payproapi.index_bitcoin_transaction_service:
+    class: AppBundle\Service\BitcoinTransaction\IndexBitcoinTransactionService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:BitcoinTransaction')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@payproapi.bitcoin_sync_transaction_service"
+
+  payproapi.bitcoin_transaction_service:
+    class: AppBundle\Service\BitcoinTransaction\BitcoinTransactionService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:BitcoinTransaction')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@payproapi.bitcoin_sync_transaction_service"
+
+  payproapi.bitcoin_sync_transaction_service:
+    class: AppBundle\Service\BitcoinTransaction\BitcoinSyncTransactionService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:BitcoinTransaction')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:BitcoinAccount')"
+      - "@bitcoin_wallet_api_client.transaction_service"
+
+  payproapi.bitcoin_last_transactions_service:
+    class: AppBundle\Service\BitcoinTransaction\LastTransactionsService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:BitcoinTransaction')"
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+      - "@payproapi.bitcoin_sync_transaction_service"

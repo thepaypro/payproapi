@@ -16,6 +16,7 @@ class RegistrationFormType extends FosUserRegistrationFormType
     {
         Parent::buildForm($builder, $options);
         $builder->remove('email');
+        $builder->add('mobileVerificationCode', null, ['mapped' => false]);
     }
 
     /**
