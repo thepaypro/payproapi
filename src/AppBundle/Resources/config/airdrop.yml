@@ -1,0 +1,5 @@
+services:
+  payproapi.airdrop_service:
+    class: AppBundle\Service\Airdrop\AirdropService
+    arguments:
+      - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Airdrop')"
