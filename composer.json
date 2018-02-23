@@ -44,7 +44,7 @@
         "symfony/symfony": "3.2.*",
         "twig/twig": "^1.0||^2.0",
         "twilio/sdk": "^5.11",
-        "paypro/ethereum": "dev-master"
+        "paypro/ethereum": "dev-develop"
     },
     "require-dev": {
         "phploc/phploc": "^4.0",
@@ -89,11 +89,5 @@
             "type": "vcs",
             "url":  "git@bitbucket.org:ottegu/ethereum.git"
         }
-    ],
-    "http-basic": {
-        "bitbucket.org": {
-            "username": "ottegu",
-            "password": "Ottozoulalori!14"
-        }
-    }
+    ]
 }

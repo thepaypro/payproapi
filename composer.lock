@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1f8d21d77fd768849b5448e3f0d9f8a9",
+    "content-hash": "2dcf3c551fbe990d2750f335795723ea",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -2010,11 +2010,11 @@
         },
         {
             "name": "paypro/ethereum",
-            "version": "dev-master",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:ottegu/ethereum.git",
-                "reference": "c9482be2f3683f2927aa2492a028fecdd29fe8de"
+                "reference": "7e909d794c0f89079899db9c0622c6f4b2903722"
             },
             "require": {
                 "graze/guzzle-jsonrpc": "^3.2"
@@ -2039,7 +2039,7 @@
                     "email": "enric.giribet@gmail.com"
                 }
             ],
-            "time": "2018-02-20T11:14:00+00:00"
+            "time": "2018-02-23T12:31:32+00:00"
         },
         {
             "name": "psr/cache",
