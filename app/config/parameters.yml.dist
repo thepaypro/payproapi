@@ -39,3 +39,5 @@ parameters:
     bitcoin_mock: true
     bitcoin_mode_testnet: true
     bitcoin_docker_compose_path: '/var/bitcoinWalletCLI/docker-compose.yml'
+
+    ethereum_host: http://192.168.1.110:7545

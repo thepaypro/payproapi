@@ -1,5 +1,5 @@
 {
-    "name": "kilianmartin/payproapi",
+    "name": "Paypro API",
     "license": "proprietary",
     "type": "project",
     "autoload": {
@@ -43,7 +43,8 @@
         "symfony/swiftmailer-bundle": "^2.3.10",
         "symfony/symfony": "3.2.*",
         "twig/twig": "^1.0||^2.0",
-        "twilio/sdk": "^5.11"
+        "twilio/sdk": "^5.11",
+        "paypro/ethereum": "dev-master"
     },
     "require-dev": {
         "phploc/phploc": "^4.0",
@@ -82,5 +83,17 @@
             "file": "app/config/parameters.yml"
         },
         "branch-alias": null
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "git@bitbucket.org:ottegu/ethereum.git"
+        }
+    ],
+    "http-basic": {
+        "bitbucket.org": {
+            "username": "ottegu",
+            "password": "Ottozoulalori!14"
+        }
     }
 }
