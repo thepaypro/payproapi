@@ -41,7 +41,11 @@ class Airdrop implements \JsonSerializable
 
     public function jsonSerialize()
     {
-    	
+    	$publicProperties['walletAddr'] = $this->walletAddr;
+    	$publicProperties['pips'] = $this->pips;
+    	$publicProperties['transactionHash'] = $this->transactionHash;
+
+    	return $publicProperties;
     }
 
     public function getWalletAddr()
@@ -52,6 +56,11 @@ class Airdrop implements \JsonSerializable
     public function getPips()
     {
     	return $this->pips;
+    }
+
+    public function getTransactionHash()
+    {
+    	return $this->transactionHash;
     }
 
     public function setTransactionHash($transactionHash)

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use AppBundle\Controller\Traits\JWTResponseControllerTrait;
 use AppBundle\Exception\PayProException;
+use PayPro\Ethereum\Exception\EthereumException;
 
 /**
  * AirdropController
@@ -33,9 +34,16 @@ class AirdropController extends Controller
 	 */
 	public function getAction(UserInterface $user, Request $request): JsonResponse
 	{
-		 $this->get('payproapi.airdrop_service')->execute();
+		try{
 
-		 return $this->JWTResponse($user, ['result']);
+			$airdropUsers = $this->get('payproapi.airdrop_service')->execute();
+
+		 	return $this->JWTResponse($user, ['info' => $airdropUsers]);
+		
+		}catch(EthereumException $e){
+			return $this->JWTResponse($user, ['ERROR' => $e->getErrorCode().": ".$e->getErrorMessage()], $e->getHttpCode());
+		}
+		 
 	}
 
 }
