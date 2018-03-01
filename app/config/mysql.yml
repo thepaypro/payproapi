@@ -1,0 +1,6 @@
+doctrine:
+    orm:
+        dql:
+            datetime_functions:
+                date_format: DoctrineExtensions\Query\Mysql\DateFormat
+                now: DoctrineExtensions\Query\Mysql\Now

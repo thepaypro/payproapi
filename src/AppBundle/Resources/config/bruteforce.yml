@@ -1,0 +1,20 @@
+services:
+  payproapi.brute_force:
+        class: AppBundle\Service\BruteForce
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '%brute_force_config%'
+
+    payproapi.event.authentication_failure_listener:
+        class: AppBundle\EventListener\AuthenticationFailureListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_failure, method: onAuthenticationFailureResponse }
+        arguments:
+            - '@payproapi.brute_force'
+
+    payproapi.access_control:
+        class: AppBundle\EventListener\AccessControlListener
+        arguments:
+            - '@payproapi.brute_force'
+        tags:
+            - { name: kernel.event_subscriber }
