@@ -54,8 +54,6 @@ class RegistrationController extends BaseRegistrationController
 
                     $userManager->updateUser($user);
 
-                    $user->setBitcoinAccount($this->get('payproapi.create_bitcoin_account_service')->execute($user->getId()));
-
                     $data['user'] = $user;
                     $data['token'] = $this->get('lexik_jwt_authentication.jwt_manager')->create($user);
                     $response = new JsonResponse($data);
