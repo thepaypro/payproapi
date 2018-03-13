@@ -33,12 +33,7 @@ parameters:
     contis_3des_pin_IV_key: 'F6DF6A373D5FE34D'
     contis_3des_pin_secret_key: 'BFF4D662DB1DF8B0442333123C964EFF'
 
-    user_administrator_email: someemail@email.com
-
-    bitcoin_wallet_api_host: 'http://whatever.com'
-    bitcoin_mock: true
-    bitcoin_mode_testnet: true
-    bitcoin_docker_compose_path: '/var/bitcoinWalletCLI/docker-compose.yml'
+    user_administrator_email: someemail@email.com  
 
     ethereum_host: http://192.168.1.110:7545
     brute_force_config:
