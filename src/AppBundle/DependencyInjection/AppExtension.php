@@ -19,12 +19,5 @@ class AppExtension extends Extension
         $loader->load('subscribers.yml');
         $loader->load('user.yml');
         $loader->load('ethereum.yml');
-        $loader->load('bitcoinTransaction.yml');
-        $loader->load('bitcoinWallet.yml');
-        $loader->load('bitcoinWalletApiClient.yml');
-
-        if ($container->getParameter('bitcoin_mock')) {
-            $loader->load('bitcoinWalletApiClientMock.yml');
-        }
     }
 }
