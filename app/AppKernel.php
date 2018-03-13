@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Nelmio\CorsBundle\NelmioCorsBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new RMS\PushNotificationsBundle\RMSPushNotificationsBundle(),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
 
             /* PayPro Bundles */
             new AppBundle\AppBundle(),

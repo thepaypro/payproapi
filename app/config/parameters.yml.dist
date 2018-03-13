@@ -29,5 +29,6 @@ parameters:
     user_administrator_email: someemail@email.com  
 
     ethereum_host: http://192.168.1.110:7545
+    
     brute_force_config:
         fails_username_hour: 6
