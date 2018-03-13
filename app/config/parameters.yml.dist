@@ -26,13 +26,6 @@ parameters:
     twilio_auth_token: '877ba70e2f95811f69586cd850fcc8fc'
     twilio_phone_number: '+16364863418'
 
-    contis_api_host: 'http://34.253.132.188/ContisCardAPI.svc/rest/'
-    contis_username: 'PAYPROStaging'
-    contis_password: 'P@ypr0$t@g!ng96'
-    contis_hash_pan_key: '7B016328DCBF6384'
-    contis_3des_pin_IV_key: 'F6DF6A373D5FE34D'
-    contis_3des_pin_secret_key: 'BFF4D662DB1DF8B0442333123C964EFF'
-
     user_administrator_email: someemail@email.com  
 
     ethereum_host: http://192.168.1.110:7545
