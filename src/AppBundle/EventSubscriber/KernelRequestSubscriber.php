@@ -12,14 +12,13 @@ class KernelRequestSubscriber implements EventSubscriberInterface
     {
         return [
             KernelEvents::REQUEST => [
-                ['formatRequest', 10]
+                ['formatRequest', 20]
             ]
         ];
     }
 
     public function formatRequest(GetResponseEvent $event)
     {
-        dump('formatRequest');
         $request = $event->getRequest();
         if ($request->getContent() && $request->headers->has('content-type') && $request->headers->get('content-type') === 'application/json') {
             foreach (json_decode($request->getContent(), true) as $key => $value) {

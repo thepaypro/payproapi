@@ -29,7 +29,6 @@ class BruteForce
     public function block($phone_number)
     {
 
-        var_dump('yeahhhh');die();
         $access_phone_number = $this->em->getRepository('AppBundle:AccessLog')->findUserLastHour($phone_number);
 
         if (count($access_phone_number) >= $this->brute_force['fails_username_hour']) {

@@ -25,9 +25,7 @@ class AccessControlListener implements EventSubscriberInterface
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-
         if ($request->attributes->get('_route') == 'fos_user_security_check') {
-            dump($request);die();
             if ($request->request->get('_username') != null) {
                 if ($this->BruteForce->block($request->request->get('_username')) == true) {
                     throw new HttpException('440','User blocked');
