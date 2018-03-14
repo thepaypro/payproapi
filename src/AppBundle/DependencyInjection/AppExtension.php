@@ -18,5 +18,6 @@ class AppExtension extends Extension
         $loader->load('notification.yml');
         $loader->load('subscribers.yml');
         $loader->load('user.yml');
+        $loader->load('bruteforce.yml');
     }
 }

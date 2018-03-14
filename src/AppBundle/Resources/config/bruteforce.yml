@@ -1,5 +1,5 @@
 services:
-  payproapi.brute_force:
+    payproapi.brute_force:
         class: AppBundle\Service\BruteForce
         arguments:
             - '@doctrine.orm.entity_manager'

@@ -17,8 +17,3 @@ services:
       - '@payproapi.twilio_short_message_service'
     tags:
       - { name: kernel.event_subscriber }
-
-  payproapi.authentication_subscriber:
-    class: AppBundle\EventSubscriber\AuthenticationSubscriber
-    tags:
-      - { name: kernel.event_subscriber }
